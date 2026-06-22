@@ -1,0 +1,252 @@
+.breadcrumbBanner {
+  background-color: #F5F5F5;
+  padding: 4rem 1.5rem;
+  text-align: center;
+}
+
+.breadcrumbTitle {
+  font-size: 2.8rem;
+  font-weight: 200;
+  color: var(--dark);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+  font-family: var(--font-sans);
+}
+
+.breadcrumbs {
+  font-size: 0.9rem;
+  font-weight: 300;
+  color: var(--gray);
+  letter-spacing: 0.02em;
+}
+
+.breadcrumbLink {
+  color: var(--gray);
+  transition: color var(--transition-fast);
+}
+
+.breadcrumbLink:hover {
+  color: var(--primary);
+}
+
+.breadcrumbSeparator {
+  margin: 0 0.5rem;
+  color: var(--border-color);
+}
+
+.aboutContentSection {
+  padding: 5rem 0 0.5rem 0;
+  background-color: var(--white);
+}
+
+.introGrid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 4.5rem;
+  align-items: center;
+  margin-bottom: 5rem;
+}
+
+.introImageWrapper {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  aspect-ratio: 1.35;
+  width: 100%;
+}
+
+.introImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.introText {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.introTitle {
+  font-size: 2.2rem;
+  font-weight: 200;
+  color: var(--dark);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.25rem;
+  position: relative;
+}
+
+.introParagraph {
+  font-size: 0.975rem;
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--dark-gray);
+}
+
+.ctaButton {
+  align-self: flex-start;
+  padding: 12px 28px;
+  background-color: var(--primary);
+  color: var(--white);
+  font-weight: 400;
+  font-size: 0.85rem;
+  border-radius: 30px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transition: all var(--transition-fast);
+  margin-top: 0.75rem;
+  box-shadow: 0 4px 15px rgba(255, 78, 42, 0.2);
+}
+
+.ctaButton:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 78, 42, 0.35);
+}
+
+.visionMissionSection {
+  margin-bottom: 0.5rem;
+}
+
+.darkCard {
+  background-color: #272727;
+  color: var(--white);
+  border-radius: 12px;
+  padding: 4.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  box-shadow: var(--shadow-lg);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  margin: 0;
+  width: 100%;
+}
+
+.badge {
+  align-self: flex-start;
+  background-color: var(--primary);
+  color: var(--white);
+  padding: 5px 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 3px;
+}
+
+.panelTitle {
+  font-size: 2.2rem;
+  font-weight: 200;
+  color: var(--white);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: -0.25rem;
+}
+
+.panelText {
+  font-size: 0.975rem;
+  font-weight: 300;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.panelList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  list-style: none;
+  padding: 0;
+  margin-top: 0.5rem;
+}
+
+.panelListItem {
+  font-size: 0.975rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.6;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.panelListItem::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--primary);
+  font-size: 1.4rem;
+  top: -2px;
+  line-height: 1;
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+  .introGrid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .darkCard {
+    padding: 3.5rem 2.5rem;
+    gap: 3.5rem;
+  }
+
+  .breadcrumbTitle {
+    font-size: 2.4rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .breadcrumbBanner {
+    padding: 3rem 1rem;
+  }
+
+  .aboutContentSection {
+    padding: 3.5rem 0;
+  }
+
+  .darkCard {
+    padding: 2.5rem 1.5rem;
+    gap: 3rem;
+  }
+
+  .introTitle {
+    font-size: 1.8rem;
+  }
+
+  .panelTitle {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .breadcrumbTitle {
+    font-size: 2rem;
+  }
+
+  .introTitle {
+    font-size: 1.6rem;
+  }
+
+  .panelTitle {
+    font-size: 1.6rem;
+  }
+
+  .ctaButton {
+    width: 100%;
+    text-align: center;
+  }
+}

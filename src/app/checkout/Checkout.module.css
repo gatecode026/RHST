@@ -1,0 +1,446 @@
+.checkoutSection {
+  padding: 4.5rem 0;
+  background-color: #ffffff;
+}
+
+.breadcrumbsHeader {
+  background-color: #f7f7f9;
+  text-align: center;
+  padding: 3rem 0;
+  border-bottom: 1px solid #e1e1e6;
+  margin-bottom: 4rem;
+}
+
+.breadcrumbsHeader h1 {
+  font-size: 2.6rem;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dark);
+  margin-bottom: 0.5rem;
+}
+
+.breadcrumbsHeader p {
+  font-size: 13px;
+  color: var(--gray);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.breadcrumbsHeader p a {
+  color: var(--gray);
+  transition: color var(--transition-fast);
+}
+
+.breadcrumbsHeader p a:hover {
+  color: var(--primary);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 4.5rem;
+  align-items: start;
+  margin-bottom: 5rem;
+}
+
+.colTitle {
+  font-size: 20px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--dark);
+  margin-bottom: 2rem;
+  letter-spacing: 0.03em;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.formRow3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.fieldGroupFull {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  grid-column: span 2;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--dark-gray);
+}
+
+.label span {
+  color: var(--primary);
+}
+
+.input, .textarea {
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: var(--dark);
+  background-color: var(--white);
+  transition: border-color var(--transition-fast);
+  width: 100%;
+}
+
+.input:focus, .textarea:focus {
+  border-color: var(--primary);
+}
+
+.textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+/* Order Summary Box */
+.summaryBox {
+  background-color: var(--light-gray);
+  border-radius: 12px;
+  padding: 2.5rem;
+  margin-top: 2rem;
+}
+
+.summaryTitle {
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.orderItemsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.orderItemRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: var(--dark-gray);
+}
+
+.orderItemName {
+  font-weight: 400;
+  max-width: 70%;
+}
+
+.orderItemQty {
+  color: var(--gray);
+  font-size: 12px;
+}
+
+.orderItemPrice {
+  font-weight: 500;
+}
+
+.totalsWrapper {
+  border-top: 1px solid var(--border-color);
+  padding-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: var(--gray);
+}
+
+.grandTotalRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--dark);
+  border-top: 1px dashed var(--border-color);
+  padding-top: 1rem;
+  margin-top: 0.5rem;
+}
+
+.couponSection {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.couponInput {
+  flex: 1;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 10px 14px;
+  font-size: 13px;
+  text-transform: uppercase;
+  background-color: var(--white);
+}
+
+.couponBtn {
+  background-color: var(--dark);
+  color: var(--white);
+  padding: 0 1.25rem;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.couponBtn:hover {
+  background-color: #232529;
+}
+
+.submitBtn {
+  width: 100%;
+  background-color: var(--primary);
+  color: var(--white);
+  padding: 14px 20px;
+  border-radius: 4px;
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
+  text-align: center;
+}
+
+.submitBtn:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.submitBtn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Success Confirmation layout */
+.successContainer {
+  max-width: 600px;
+  margin: 3rem auto;
+  text-align: center;
+  padding: 3.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background-color: var(--white);
+  box-shadow: var(--shadow-md);
+  animation: fadeIn 0.4s ease;
+}
+
+.successIcon {
+  color: #28a745;
+  margin-bottom: 2rem;
+}
+
+.successTitle {
+  font-size: 2.2rem;
+  font-weight: 300;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.successText {
+  color: var(--gray);
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.successOrderId {
+  display: inline-block;
+  font-size: 15px;
+  font-weight: 600;
+  background-color: #e2f0d9;
+  color: #385723;
+  padding: 8px 18px;
+  border-radius: 4px;
+  margin-bottom: 2.5rem;
+}
+
+.successHomeBtn {
+  display: inline-block;
+  background-color: var(--primary);
+  color: var(--white);
+  padding: 12px 30px;
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 14px;
+  transition: background-color var(--transition-fast);
+}
+
+.successHomeBtn:hover {
+  background-color: var(--primary-hover);
+}
+
+.categoriesWrapper :global(.section) {
+  padding-top: 1rem !important;
+}
+
+@media (max-width: 992px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .formRow, .formRow3 {
+    grid-template-columns: 1fr;
+  }
+  .fieldGroupFull {
+    grid-column: span 1;
+  }
+  .breadcrumbsHeader h1 {
+    font-size: 2.2rem;
+  }
+}
+
+/* Payment step styling */
+.paymentContainer {
+  max-width: 800px;
+  margin: 0 0 5rem 0; /* Left alignment */
+  background-color: var(--white);
+  padding: 1rem 0;
+}
+
+.paymentTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--dark-gray);
+  margin-bottom: 2rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.totalsTable {
+  margin-bottom: 2.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.totalsRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.totalsLabel {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--dark-gray);
+  letter-spacing: 0.03em;
+}
+
+.totalsValue {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.paymentMethods {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+  padding-left: 0.25rem;
+}
+
+.radioLabel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+  color: var(--dark-gray);
+  cursor: pointer;
+  user-select: none;
+}
+
+.radioInput {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.customRadio {
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  background-color: var(--white);
+  transition: all var(--transition-fast);
+}
+
+.radioInput:checked ~ .customRadio {
+  border-color: var(--primary);
+}
+
+.radioInput:checked ~ .customRadio::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  background-color: var(--primary);
+  border-radius: 50%;
+}
+
+.paymentPlaceOrderBtn {
+  background-color: var(--primary);
+  color: var(--white);
+  padding: 14px 35px;
+  border-radius: 50px; /* Pill-style rounded button matching mockup */
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
+  display: inline-block;
+}
+
+.paymentPlaceOrderBtn:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.paymentPlaceOrderBtn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}

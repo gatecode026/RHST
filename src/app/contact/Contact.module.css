@@ -1,0 +1,281 @@
+.breadcrumbBanner {
+  background-color: #F5F5F5;
+  padding: 4rem 1.5rem;
+  text-align: center;
+}
+
+.breadcrumbTitle {
+  font-size: 2.8rem;
+  font-weight: 200;
+  color: var(--dark);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+  font-family: var(--font-sans);
+}
+
+.breadcrumbs {
+  font-size: 0.95rem;
+  font-weight: 300;
+  color: var(--gray);
+  letter-spacing: 0.02em;
+}
+
+.breadcrumbLink {
+  color: var(--gray);
+  transition: color var(--transition-fast);
+}
+
+.breadcrumbLink:hover {
+  color: var(--primary);
+}
+
+.breadcrumbSeparator {
+  margin: 0 0.5rem;
+  color: var(--border-color);
+}
+
+/* Contact Main Section */
+.contactSection {
+  padding: 5rem 0;
+  background-color: var(--white);
+}
+
+.contactGrid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 4.5rem;
+  margin-bottom: 5rem;
+}
+
+.sectionTitle {
+  font-family: var(--font-sans);
+  font-size: 1.45rem;
+  font-weight: 300;
+  color: var(--dark-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+}
+
+.sectionDesc {
+  font-family: var(--font-sans);
+  font-size: 21px;
+  font-weight: 200;
+  letter-spacing: 0.01em;
+  line-height: 130%;
+  color: var(--dark-gray);
+  margin-bottom: 2rem;
+}
+
+/* Left Column Info */
+.infoCols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.infoCol {
+  display: flex;
+  flex-direction: column;
+}
+
+.infoTitle {
+  font-family: var(--font-sans);
+  font-size: 1.2rem;
+  font-weight: 300;
+  color: var(--dark-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+}
+
+.infoText {
+  font-family: var(--font-sans);
+  font-size: 21px;
+  font-weight: 200;
+  line-height: 1.4;
+  color: var(--dark-gray);
+  margin: 0 0 0.5rem 0;
+}
+
+/* Right Column Form */
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.input {
+  height: 55px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 0 1.25rem;
+  font-size: 21px;
+  font-weight: 200;
+  font-family: inherit;
+  color: var(--dark-gray);
+  transition: border-color var(--transition-fast);
+  background-color: var(--white);
+  width: 100%;
+}
+
+.inputField {
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.textarea {
+  height: 150px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 1.25rem;
+  font-size: 21px;
+  font-weight: 200;
+  font-family: inherit;
+  color: var(--dark-gray);
+  resize: none;
+  transition: border-color var(--transition-fast);
+  background-color: var(--white);
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: #999999;
+  opacity: 1;
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: var(--primary);
+}
+
+.submitBtn {
+  align-self: flex-start;
+  padding: 14px 48px;
+  background-color: var(--primary);
+  color: var(--white);
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 21px;
+  border-radius: 50px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  transition: all var(--transition-fast);
+  border: none;
+  cursor: pointer;
+}
+
+.submitBtn:hover {
+  background-color: var(--primary-hover);
+}
+
+/* Stores Grid Section */
+.storeGrid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 4.5rem;
+  align-items: center;
+  margin-top: 5rem;
+  border-top: 1px solid var(--border-color);
+  padding-top: 5rem;
+}
+
+.storeImageWrapper {
+  border-radius: 20px;
+  overflow: hidden;
+  aspect-ratio: 1.5;
+  width: 100%;
+  box-shadow: var(--shadow-md);
+}
+
+.storeImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.storeContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.storeName {
+  font-family: var(--font-sans);
+  font-size: 1.35rem;
+  font-weight: 300;
+  color: var(--dark-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Spacing adjustment for components below */
+.reviewsSection {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.ourBlogSection {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+  .contactGrid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    margin-bottom: 3.5rem;
+  }
+
+  .storeGrid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    margin-top: 3.5rem;
+    padding-top: 3.5rem;
+  }
+
+  .breadcrumbTitle {
+    font-size: 2.2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .contactSection {
+    padding: 3.5rem 0;
+  }
+
+  .infoCols {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .formRow {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    margin-bottom: 0;
+  }
+
+  .formRow .input {
+    margin-bottom: 1.25rem;
+  }
+
+  .submitBtn {
+    width: 100%;
+    text-align: center;
+  }
+}

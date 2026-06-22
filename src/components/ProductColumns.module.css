@@ -1,0 +1,183 @@
+.sectionContainer {
+  background-color: #ffffff;
+  padding: 5rem 0 3rem 0;
+  width: 100%;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.column {
+  background-color: #ffffff;
+  border: 1px solid #e1e1e6;
+  border-radius: 12px;
+  padding: 1.75rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  /* allows shrinking */
+}
+
+.columnTitle {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #333333;
+  margin: 0;
+}
+
+.divider {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.8rem;
+  color: #e1e1e6;
+  letter-spacing: 1.5px;
+  overflow: hidden;
+  white-space: nowrap;
+  margin: 0.5rem 0 1.5rem 0;
+  user-select: none;
+  opacity: 0.7;
+}
+
+.productList {
+  display: flex;
+  flex-direction: column;
+}
+
+.productRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  min-width: 0;
+  padding: 1rem 0;
+  border-bottom: 1px solid #ededf2;
+}
+
+.productRow:first-child {
+  padding-top: 0;
+}
+
+.productRow:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.imageWrapper {
+  width: 68px;
+  height: 68px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-fast, 0.2s);
+}
+
+.productRow:hover .image {
+  transform: scale(1.05);
+}
+
+.info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+  /* allows text truncation/containment */
+}
+
+.name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 300;
+  color: #333333;
+  margin: 0;
+  line-height: 1.25;
+  transition: color var(--transition-fast, 0.2s);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* elegant name truncation if too tight */
+}
+
+.productRow:hover .name {
+  color: var(--primary, #ff6f61);
+}
+
+.priceRow {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.price {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--primary, #ff6f61);
+}
+
+.oldPrice {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 300;
+  color: #a0a0a0;
+  text-decoration: line-through;
+}
+
+/* Responsive Media Queries */
+@media (max-width: 1200px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .column {
+    padding: 1.75rem 1.25rem;
+  }
+}
+
+.addCartIconBtn {
+  margin-left: auto;
+  background-color: #ffffff;
+  border: 1px solid #e1e1e6;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  line-height: 1;
+  color: #666;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  z-index: 5;
+}
+
+.addCartIconBtn:hover {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+}
