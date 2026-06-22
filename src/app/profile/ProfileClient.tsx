@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './Profile.module.css';
+import { useCart } from '@/context/CartContext';
 
 interface Order {
   orderId: string;
@@ -22,6 +23,7 @@ interface Order {
 
 export default function ProfileClient() {
   const router = useRouter();
+  const { logoutCleanup } = useCart();
   
   // Navigation tabs
   const [activeTab, setActiveTab] = useState<'account' | 'orders' | 'address' | 'settings'>('account');
@@ -143,7 +145,7 @@ export default function ProfileClient() {
   // Handle Logout
   const handleLogout = () => {
     localStorage.removeItem('currentUser');
-    localStorage.removeItem('rhst_cart');
+    logoutCleanup();
     setCurrentUser(null);
     router.push('/');
     // Force a page refresh to clear layout states

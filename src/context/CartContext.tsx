@@ -25,6 +25,7 @@ interface CartContextType {
   removeFromCart: (id: string | number) => void;
   updateQty: (id: string | number, qty: number) => void;
   clearCart: () => void;
+  logoutCleanup: () => void;
   isCartOpen: boolean;
   setIsCartOpen: (isOpen: boolean) => void;
   isSearchOpen: boolean;
@@ -47,9 +48,30 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
+  // Helper to determine active localStorage keys based on currentUser session
+  const getActiveKeys = () => {
+    if (typeof window === 'undefined') return { cartKey: 'rhst_cart', wishlistKey: 'rhst_wishlist' };
+    const savedUser = localStorage.getItem('currentUser');
+    if (savedUser) {
+      try {
+        const u = JSON.parse(savedUser);
+        if (u && u.email) {
+          return {
+            cartKey: `rhst_cart_${u.email}`,
+            wishlistKey: `rhst_wishlist_${u.email}`
+          };
+        }
+      } catch (e) {
+        console.error('Failed to parse currentUser for cart key', e);
+      }
+    }
+    return { cartKey: 'rhst_cart', wishlistKey: 'rhst_wishlist' };
+  };
+
   // Load cart and wishlist from localStorage on mount
   useEffect(() => {
-    const savedCart = localStorage.getItem('rhst_cart');
+    const { cartKey, wishlistKey } = getActiveKeys();
+    const savedCart = localStorage.getItem(cartKey);
     if (savedCart) {
       try {
         setCartItems(JSON.parse(savedCart));
@@ -58,7 +80,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       }
     }
 
-    const savedWishlist = localStorage.getItem('rhst_wishlist');
+    const savedWishlist = localStorage.getItem(wishlistKey);
     if (savedWishlist) {
       try {
         setWishlistItems(JSON.parse(savedWishlist));
@@ -71,13 +93,19 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   // Save cart to localStorage on change
   const saveCart = (items: CartItem[]) => {
     setCartItems(items);
-    localStorage.setItem('rhst_cart', JSON.stringify(items));
+    if (typeof window !== 'undefined') {
+      const { cartKey } = getActiveKeys();
+      localStorage.setItem(cartKey, JSON.stringify(items));
+    }
   };
 
   // Save wishlist to localStorage on change
   const saveWishlist = (items: WishlistItem[]) => {
     setWishlistItems(items);
-    localStorage.setItem('rhst_wishlist', JSON.stringify(items));
+    if (typeof window !== 'undefined') {
+      const { wishlistKey } = getActiveKeys();
+      localStorage.setItem(wishlistKey, JSON.stringify(items));
+    }
   };
 
   const addToCart = (newItem: Omit<CartItem, 'qty'>) => {
@@ -143,6 +171,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     saveCart([]);
   };
 
+  const logoutCleanup = () => {
+    setCartItems([]);
+    setWishlistItems([]);
+  };
+
   const addToWishlist = (item: WishlistItem) => {
     if (!wishlistItems.some((i) => i.id === item.id)) {
       saveWishlist([...wishlistItems, item]);
@@ -175,6 +208,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         removeFromCart,
         updateQty,
         clearCart,
+        logoutCleanup,
         isCartOpen,
         setIsCartOpen,
         isSearchOpen,
