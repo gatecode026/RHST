@@ -4,29 +4,43 @@ import React, { useState, useEffect } from 'react';
 import styles from './PromoBanner.module.css';
 
 export default function PromoBanner() {
-  // Set initial countdown values matching the user's screenshot
+  const [banner, setBanner] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const [timeLeft, setTimeLeft] = useState({
-    days: 21,
-    hours: 22,
-    minutes: 19,
-    seconds: 30
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0
   });
 
   useEffect(() => {
-    // Set target time: 21 days, 22 hours, 19 minutes, and 30 seconds from mount
-    const targetTime = Date.now() + 
-      (21 * 24 * 60 * 60 * 1000) + 
-      (22 * 60 * 60 * 1000) + 
-      (19 * 60 * 1000) + 
-      (30 * 1000);
+    const fetchBanner = async () => {
+      try {
+        const res = await fetch('/api/promo-banner?t=' + Date.now(), { cache: 'no-store' });
+        const data = await res.json();
+        if (data.success && data.banner) {
+          setBanner(data.banner);
+        }
+      } catch (err) {
+        console.error('Failed to fetch promo banner:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBanner();
+  }, []);
 
-    const interval = setInterval(() => {
+  useEffect(() => {
+    if (!banner || !banner.expiryDate || !banner.isActive) return;
+
+    const targetTime = new Date(banner.expiryDate).getTime();
+
+    const updateTimer = () => {
       const difference = targetTime - Date.now();
 
       if (difference <= 0) {
-        clearInterval(interval);
         setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-        return;
+        return false;
       }
 
       const d = Math.floor(difference / (1000 * 60 * 60 * 24));
@@ -35,10 +49,25 @@ export default function PromoBanner() {
       const s = Math.floor((difference / 1000) % 60);
 
       setTimeLeft({ days: d, hours: h, minutes: m, seconds: s });
+      return true;
+    };
+
+    const hasActiveTimer = updateTimer();
+    if (!hasActiveTimer) return;
+
+    const interval = setInterval(() => {
+      const stillActive = updateTimer();
+      if (!stillActive) {
+        clearInterval(interval);
+      }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [banner]);
+
+  if (loading || !banner || !banner.isActive) {
+    return null;
+  }
 
   return (
     <section id="deals" className={styles.bannerSection}>
@@ -47,17 +76,47 @@ export default function PromoBanner() {
           {/* Image Column */}
           <div className={styles.imageCol}>
             <img 
-              src="/images/promo_apple.png" 
-              alt="Apple Collection" 
+              src={banner.imageUrl || "/images/promo_apple.png"} 
+              alt={banner.title} 
               className={styles.promoImage} 
             />
           </div>
 
           {/* Info Column */}
           <div className={styles.infoCol}>
-            <h2 className={styles.title}>
-              30% DISCOUNT ON<br />APPLE COLLECTION
+            {banner.badgeText && (
+              <span style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                backgroundColor: 'var(--primary)',
+                color: 'white',
+                padding: '4px 12px',
+                borderRadius: '50px',
+                fontSize: '12px',
+                fontWeight: 600,
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                marginBottom: '-0.5rem',
+                alignSelf: 'flex-start'
+              }}>
+                {banner.badgeText}
+              </span>
+            )}
+            <h2 className={styles.title} style={{ textTransform: 'none', fontWeight: 300 }}>
+              {banner.title}
             </h2>
+            {banner.description && (
+              <p style={{
+                color: '#555',
+                fontSize: '15px',
+                lineHeight: '1.6',
+                margin: 0,
+                fontWeight: 300,
+                maxWidth: '500px'
+              }}>
+                {banner.description}
+              </p>
+            )}
 
             {/* Countdown Timer */}
             <div className={styles.countdown}>
@@ -82,8 +141,8 @@ export default function PromoBanner() {
               </div>
             </div>
 
-            <a href="/#products" className={styles.shopBtn}>
-              SHOP COLLECTION
+            <a href={banner.buttonLink || "/#products"} className={styles.shopBtn}>
+              {banner.buttonText || "SHOP COLLECTION"}
             </a>
           </div>
         </div>

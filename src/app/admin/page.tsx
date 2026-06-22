@@ -155,6 +155,7 @@ const ADMIN_MODULES = [
   { key: 'Categories', icon: '🗂' },
   { key: 'Orders', icon: '🛒' },
   { key: 'Coupons', icon: '🏷' },
+  { key: 'Homepage Banner', icon: '🖼' },
   { key: 'Blogs', icon: '📝' },
   { key: 'Blog Categories', icon: '📂' },
 ];
@@ -179,7 +180,7 @@ export default function AdminDashboardPage() {
 
   // Active navigation tab
   const [activeTab, setActiveTab] = useState<
-    'dashboard' | 'categories' | 'products' | 'orders' | 'customers' | 'coupons' | 'queries' | 'analytics' | 'activity-logs' | 'admin-manager' | 'settings' | 'brands' | 'blogs'
+    'dashboard' | 'categories' | 'products' | 'orders' | 'customers' | 'coupons' | 'queries' | 'analytics' | 'activity-logs' | 'admin-manager' | 'settings' | 'brands' | 'blogs' | 'promo-banner'
   >('dashboard');
 
   // Database State lists
@@ -287,6 +288,17 @@ export default function AdminDashboardPage() {
   const [newCouponMinPurchase, setNewCouponMinPurchase] = useState('0');
   const [newCouponUsageLimit, setNewCouponUsageLimit] = useState('100');
   const [newCouponExpiryDate, setNewCouponExpiryDate] = useState('');
+
+  // Promo Banner Form States
+  const [promoBadgeText, setPromoBadgeText] = useState('⚡ Limited Time Offer');
+  const [promoTitle, setPromoTitle] = useState('Summer Gaming Upgrade Sale');
+  const [promoDescription, setPromoDescription] = useState('Get up to 40% off on all RTX 40-series graphics cards and premium gaming peripherals.');
+  const [promoButtonText, setPromoButtonText] = useState('Shop the Sale');
+  const [promoButtonLink, setPromoButtonLink] = useState('/shop');
+  const [promoImageUrl, setPromoImageUrl] = useState('https://images.unsplash.com/photo-15872023775-e29f172b9d7a');
+  const [promoExpiryDate, setPromoExpiryDate] = useState('2026-05-27T07:58');
+  const [promoIsActive, setPromoIsActive] = useState(true);
+  const [isSavingPromo, setIsSavingPromo] = useState(false);
 
   // Validation error states
   const [productMrpError, setProductMrpError] = useState('');
@@ -501,7 +513,8 @@ export default function AdminDashboardPage() {
         fetchLogs(),
         fetchSettings(),
         fetchAdmins(),
-        fetchBlogs()
+        fetchBlogs(),
+        fetchPromoBanner()
       ]);
     } catch (e) {
       console.error('Error fetching dashboard listings', e);
@@ -550,6 +563,68 @@ export default function AdminDashboardPage() {
     const res = await fetch('/api/admin/coupons');
     const data = await res.json();
     if (data.success) setCoupons(data.coupons);
+  };
+
+  const fetchPromoBanner = async () => {
+    try {
+      const res = await fetch('/api/admin/promo-banner');
+      const data = await res.json();
+      if (data.success && data.banner) {
+        setPromoBadgeText(data.banner.badgeText || '');
+        setPromoTitle(data.banner.title || '');
+        setPromoDescription(data.banner.description || '');
+        setPromoButtonText(data.banner.buttonText || '');
+        setPromoButtonLink(data.banner.buttonLink || '');
+        setPromoImageUrl(data.banner.imageUrl || '');
+        if (data.banner.expiryDate) {
+          const date = new Date(data.banner.expiryDate);
+          const tzOffset = date.getTimezoneOffset() * 60000;
+          const localISOTime = (new Date(date.getTime() - tzOffset)).toISOString().slice(0, 16);
+          setPromoExpiryDate(localISOTime);
+        } else {
+          setPromoExpiryDate('');
+        }
+        setPromoIsActive(data.banner.isActive !== false);
+      }
+    } catch (err) {
+      console.error('Error fetching promo banner:', err);
+    }
+  };
+
+  const handleSavePromoBanner = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSavingPromo(true);
+    try {
+      const expiryUTC = promoExpiryDate ? new Date(promoExpiryDate).toISOString() : '';
+      const res = await fetch('/api/admin/promo-banner', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          badgeText: promoBadgeText,
+          title: promoTitle,
+          description: promoDescription,
+          buttonText: promoButtonText,
+          buttonLink: promoButtonLink,
+          imageUrl: promoImageUrl,
+          expiryDate: expiryUTC,
+          isActive: promoIsActive
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert('Promo banner changes saved successfully!');
+        fetchLogs();
+      } else {
+        alert(data.error || 'Failed to save changes.');
+      }
+    } catch (err) {
+      console.error('Error saving promo banner:', err);
+      alert('An error occurred while saving.');
+    } finally {
+      setIsSavingPromo(false);
+    }
   };
 
   const fetchBlogs = async () => {
@@ -2240,6 +2315,20 @@ export default function AdminDashboardPage() {
               <line x1="7" y1="7" x2="7.01" y2="7" />
             </svg>
             {!sidebarCollapsed && <span>Coupons</span>}
+          </button>
+
+          {/* Homepage Banner */}
+          <button
+            onClick={() => handleTabChange('promo-banner')}
+            className={`${styles.sidebarItem} ${activeTab === 'promo-banner' ? styles.sidebarItemActive : ''}`}
+            title={sidebarCollapsed ? "Homepage Banner" : undefined}
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+              <circle cx="9" cy="9" r="2" />
+              <path d="M21 15l-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
+            </svg>
+            {!sidebarCollapsed && <span>Homepage Banner</span>}
           </button>
 
           {/* Orders */}
@@ -4081,6 +4170,261 @@ export default function AdminDashboardPage() {
                           </tbody>
                         </table>
                       )}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* === HOMEPAGE PROMO BANNER TAB === */}
+              {activeTab === 'promo-banner' && (
+                <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '1rem' }}>
+                  {/* Header Row */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+                    <div>
+                      <h2 style={{ fontSize: '32px', fontWeight: 700, margin: 0, color: '#1a1a1a', fontFamily: "'Outfit', sans-serif" }}>Homepage Banner</h2>
+                      <p style={{ margin: '4px 0 0 0', color: '#666', fontSize: '15px' }}>Manage the promotional banner on your store's homepage.</p>
+                    </div>
+                    <button
+                      onClick={handleSavePromoBanner}
+                      disabled={isSavingPromo}
+                      style={{
+                        backgroundColor: '#00a8b5',
+                        color: 'white',
+                        padding: '10px 24px',
+                        border: 'none',
+                        borderRadius: '30px',
+                        fontSize: '15px',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        boxShadow: '0 4px 12px rgba(0, 168, 181, 0.2)',
+                        transition: 'all 0.2s'
+                      }}
+                    >
+                      {isSavingPromo ? 'Saving...' : 'Save Changes'}
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                        <polyline points="17 21 17 13 7 13 7 21" />
+                        <polyline points="7 3 7 8 15 8" />
+                      </svg>
+                    </button>
+                  </div>
+
+                  {/* Main Grid */}
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+                    {/* Left Column: Settings Form */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                      {/* Card 1: Content Settings */}
+                      <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                          <span style={{ fontSize: '18px', color: '#00a8b5', fontWeight: 'bold' }}>T</span>
+                          <h4 style={{ margin: 0, fontSize: '16px', fontWeight: 600, color: '#333' }}>Content Settings</h4>
+                        </div>
+                        <p style={{ margin: '0 0 1rem 0', fontSize: '13px', color: '#666' }}>Update the text content of your promotional banner.</p>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                          <div>
+                            <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: '#4a5568', marginBottom: '6px' }}>Badge Text</label>
+                            <input
+                              type="text"
+                              value={promoBadgeText}
+                              onChange={(e) => setPromoBadgeText(e.target.value)}
+                              placeholder="e.g. ⚡ Limited Time Offer"
+                              style={{ width: '100%', padding: '10px 14px', border: '1px solid #cbd5e0', borderRadius: '8px', fontSize: '14px', color: '#333', backgroundColor: '#fff' }}
+                            />
+                          </div>
+
+                          <div>
+                            <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: '#4a5568', marginBottom: '6px' }}>Banner Title</label>
+                            <input
+                              type="text"
+                              value={promoTitle}
+                              onChange={(e) => setPromoTitle(e.target.value)}
+                              placeholder="e.g. Summer Gaming Upgrade Sale"
+                              style={{ width: '100%', padding: '10px 14px', border: '1px solid #cbd5e0', borderRadius: '8px', fontSize: '14px', color: '#333', backgroundColor: '#fff' }}
+                            />
+                          </div>
+
+                          <div>
+                            <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: '#4a5568', marginBottom: '6px' }}>Description Text</label>
+                            <textarea
+                              value={promoDescription}
+                              onChange={(e) => setPromoDescription(e.target.value)}
+                              placeholder="Describe your promotion details..."
+                              rows={4}
+                              style={{ width: '100%', padding: '10px 14px', border: '1px solid #cbd5e0', borderRadius: '8px', fontSize: '14px', resize: 'vertical', color: '#333', backgroundColor: '#fff' }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Card 2: Action Button */}
+                      <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                          <span style={{ fontSize: '18px', color: '#00a8b5' }}>🔗</span>
+                          <h4 style={{ margin: 0, fontSize: '16px', fontWeight: 600, color: '#333' }}>Action Button</h4>
+                        </div>
+                        <p style={{ margin: '0 0 1rem 0', fontSize: '13px', color: '#666' }}>Configure where the banner leads your customers.</p>
+
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                          <div>
+                            <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: '#4a5568', marginBottom: '6px' }}>Button Text</label>
+                            <input
+                              type="text"
+                              value={promoButtonText}
+                              onChange={(e) => setPromoButtonText(e.target.value)}
+                              placeholder="Shop the Sale"
+                              style={{ width: '100%', padding: '10px 14px', border: '1px solid #cbd5e0', borderRadius: '8px', fontSize: '14px', color: '#333', backgroundColor: '#fff' }}
+                            />
+                          </div>
+                          <div>
+                            <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: '#4a5568', marginBottom: '6px' }}>Button Link</label>
+                            <input
+                              type="text"
+                              value={promoButtonLink}
+                              onChange={(e) => setPromoButtonLink(e.target.value)}
+                              placeholder="/shop"
+                              style={{ width: '100%', padding: '10px 14px', border: '1px solid #cbd5e0', borderRadius: '8px', fontSize: '14px', color: '#333', backgroundColor: '#fff' }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Right Column: Visuals, Timer & Preview */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                      {/* Card 3: Visuals & Timer */}
+                      <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                          <span style={{ fontSize: '18px', color: '#00a8b5' }}>🖼️</span>
+                          <h4 style={{ margin: 0, fontSize: '16px', fontWeight: 600, color: '#333' }}>Visuals & Timer</h4>
+                        </div>
+                        <p style={{ margin: '0 0 1rem 0', fontSize: '13px', color: '#666' }}>Manage the image and countdown timer.</p>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                          <div>
+                            <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: '#4a5568', marginBottom: '6px' }}>Image URL</label>
+                            <input
+                              type="text"
+                              value={promoImageUrl}
+                              onChange={(e) => setPromoImageUrl(e.target.value)}
+                              placeholder="Image URL"
+                              style={{ width: '100%', padding: '10px 14px', border: '1px solid #cbd5e0', borderRadius: '8px', fontSize: '14px', color: '#333', backgroundColor: '#fff' }}
+                            />
+                          </div>
+
+                          <div>
+                            <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: '#4a5568', marginBottom: '6px' }}>Expiry Date (for Countdown)</label>
+                            <input
+                              type="datetime-local"
+                              value={promoExpiryDate}
+                              onChange={(e) => setPromoExpiryDate(e.target.value)}
+                              style={{ width: '100%', padding: '10px 14px', border: '1px solid #cbd5e0', borderRadius: '8px', fontSize: '14px', color: '#333', backgroundColor: '#fff' }}
+                            />
+                          </div>
+
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '8px' }}>
+                            <div>
+                              <h5 style={{ margin: 0, fontSize: '14px', fontWeight: 600, color: '#333' }}>Banner Status</h5>
+                              <p style={{ margin: '2px 0 0 0', fontSize: '12px', color: '#666' }}>Visible on the homepage when active.</p>
+                            </div>
+                            <div
+                              onClick={() => setPromoIsActive(v => !v)}
+                              style={{
+                                width: '48px', height: '26px', borderRadius: '20px', cursor: 'pointer',
+                                backgroundColor: promoIsActive ? '#00a8b5' : '#cbd5e0',
+                                position: 'relative', transition: 'all 0.2s'
+                              }}
+                            >
+                              <div style={{
+                                width: '20px', height: '20px', borderRadius: '50%', backgroundColor: 'white',
+                                position: 'absolute', top: '3px', left: promoIsActive ? '25px' : '3px',
+                                transition: 'all 0.2s', boxShadow: '0 1px 3px rgba(0,0,0,0.15)'
+                              }} />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Card 4: Live Preview */}
+                      <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1rem' }}>
+                          <span style={{ fontSize: '18px', color: '#00a8b5' }}>👁️</span>
+                          <h4 style={{ margin: 0, fontSize: '16px', fontWeight: 600, color: '#333' }}>Live Preview (Stylized)</h4>
+                        </div>
+
+                        {/* Styled Preview Container */}
+                        <div style={{
+                          background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
+                          color: '#fff',
+                          padding: '1.5rem',
+                          borderRadius: '10px',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: '12px',
+                          boxShadow: '0 10px 25px rgba(15, 23, 42, 0.3)',
+                          border: '1px solid rgba(255, 255, 255, 0.08)'
+                        }}>
+                          {promoBadgeText && (
+                            <span style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                              padding: '3px 10px',
+                              borderRadius: '4px',
+                              fontSize: '11px',
+                              fontWeight: 600,
+                              textTransform: 'uppercase',
+                              letterSpacing: '0.05em',
+                              alignSelf: 'flex-start'
+                            }}>
+                              {promoBadgeText}
+                            </span>
+                          )}
+
+                          <h3 style={{ margin: 0, fontSize: '20px', fontWeight: 700, letterSpacing: '0.02em', color: '#fff' }}>
+                            {promoTitle || 'Your Banner Title'}
+                          </h3>
+
+                          {promoDescription && (
+                            <p style={{ margin: 0, fontSize: '12.5px', color: '#94a3b8', lineHeight: '1.5', fontWeight: 300 }}>
+                              {promoDescription}
+                            </p>
+                          )}
+
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '8px', borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '12px' }}>
+                            {/* Stylized Mock Timer */}
+                            <div style={{
+                              backgroundColor: 'rgba(0,0,0,0.3)',
+                              padding: '5px 12px',
+                              borderRadius: '6px',
+                              fontSize: '12.5px',
+                              fontWeight: 600,
+                              fontFamily: 'monospace',
+                              letterSpacing: '1px',
+                              color: '#94a3b8',
+                              border: '1px solid rgba(255, 255, 255, 0.05)'
+                            }}>
+                              05 : 12 : 45
+                            </div>
+
+                            {/* Stylized Button */}
+                            <div style={{
+                              backgroundColor: '#2563eb',
+                              color: 'white',
+                              padding: '7px 18px',
+                              borderRadius: '6px',
+                              fontSize: '12px',
+                              fontWeight: 600,
+                              letterSpacing: '0.02em'
+                            }}>
+                              {promoButtonText || 'Shop the Sale'}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
