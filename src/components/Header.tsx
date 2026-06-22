@@ -16,6 +16,7 @@ export default function Header() {
     removeFromCart,
     updateQty,
     clearCart,
+    logoutCleanup,
     isCartOpen,
     setIsCartOpen,
     isSearchOpen,
@@ -1034,7 +1035,7 @@ export default function Header() {
                     onClick={() => {
                       setCurrentUser(null);
                       localStorage.removeItem('currentUser');
-                      clearCart();
+                      logoutCleanup();
                       setProfileMode('signup');
                       router.push('/');
                       setTimeout(() => {
