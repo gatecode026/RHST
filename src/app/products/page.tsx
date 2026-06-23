@@ -106,6 +106,7 @@ function ProductsCatalogContent() {
   const allProducts = useMemo(() => {
     return dbProducts.map(p => ({
       id: p.id,
+      slug: p.slug || p.name.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-'),
       name: p.name,
       price: parsePrice(p.price),
       image: p.image,
@@ -327,13 +328,13 @@ function ProductsCatalogContent() {
                   <div className={styles.productsGrid}>
                     {paginatedProducts.map((prod) => (
                       <div key={prod.id} className={styles.card}>
-                        <Link href={`/products/${prod.id}`} className={styles.imageLink}>
+                        <Link href={`/products/${prod.slug || prod.id}`} className={styles.imageLink}>
                           <div className={styles.imageWrapper}>
                             <img src={prod.image} alt={prod.name} className={styles.image} />
                           </div>
                         </Link>
                         <div className={styles.info}>
-                          <Link href={`/products/${prod.id}`} className={styles.nameLink}>
+                          <Link href={`/products/${prod.slug || prod.id}`} className={styles.nameLink}>
                             <h3 className={styles.name}>{prod.name}</h3>
                           </Link>
                           <span className={styles.price}>₹{prod.price.toLocaleString()}</span>

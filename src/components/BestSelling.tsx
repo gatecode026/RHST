@@ -7,6 +7,7 @@ import styles from './BestSelling.module.css';
 
 interface Product {
   id: string | number;
+  slug?: string;
   name: string;
   price: string;
   image: string;
@@ -92,7 +93,7 @@ export default function BestSelling() {
           <div className={styles.sliderContainer}>
             <div ref={scrollContainerRef} className={styles.grid}>
               {products.map((prod) => (
-                <Link key={prod.id} href={`/products/${prod.id}`} className={styles.card}>
+                <Link key={prod.id} href={`/products/${prod.slug || prod.id}`} className={styles.card}>
                   <div className={styles.imageWrapper}>
                     <img src={prod.image} alt={prod.name} className={styles.image} />
                   </div>

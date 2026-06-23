@@ -13,6 +13,7 @@ export interface CartItem {
 
 export interface WishlistItem {
   id: string | number;
+  slug?: string;
   name: string;
   price: number;
   image: string;

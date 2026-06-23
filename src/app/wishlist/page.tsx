@@ -98,14 +98,14 @@ export default function WishlistPage() {
                       {/* Image & Title Column */}
                       <td>
                         <div className={styles.productInfoCol}>
-                          <Link href={`/products/${item.id}`}>
+                          <Link href={`/products/${item.slug || item.id}`}>
                             <img
                               src={item.image}
                               alt={item.name}
                               className={styles.productImg}
                             />
                           </Link>
-                          <Link href={`/products/${item.id}`} className={styles.productNameLink}>
+                          <Link href={`/products/${item.slug || item.id}`} className={styles.productNameLink}>
                             {item.name}
                           </Link>
                         </div>

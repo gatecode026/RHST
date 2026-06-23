@@ -191,7 +191,7 @@ export default function Header() {
       name: p.name,
       price: typeof p.price === 'number' ? p.price : (parseInt(String(p.price).replace(/[^\d]/g, ''), 10) || 0),
       image: p.image,
-      link: `/products/${p.id}`,
+      link: `/products/${p.slug || p.id}`,
       stock: p.stock !== undefined ? p.stock : 12
     }));
   };
@@ -695,7 +695,7 @@ export default function Header() {
                               type="button"
                               onClick={() => {
                                 setIsCartOpen(false);
-                                router.push('/checkout');
+                                router.push(`/checkout?buyNow=${item.id}`);
                               }}
                               className={styles.buyNowCartBtn}
                             >
@@ -914,7 +914,7 @@ export default function Header() {
                   {searchResults.map((prod) => (
                     <div key={prod.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #f9f9f9', paddingBottom: '8px' }}>
                       <Link
-                        href={`/products/${prod.id}`}
+                        href={prod.link}
                         onClick={() => setIsSearchOpen(false)}
                         style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer', textDecoration: 'none' }}
                       >

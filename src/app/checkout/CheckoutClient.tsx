@@ -3,12 +3,22 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useCart } from '@/context/CartContext';
+import { useSearchParams } from 'next/navigation';
 import Categories from '@/components/Categories';
 import Brands from '@/components/Brands';
 import styles from './Checkout.module.css';
 
 export default function CheckoutClient() {
-  const { cartItems, subtotal, clearCart } = useCart();
+  const { cartItems: contextCartItems, clearCart, removeFromCart } = useCart();
+  const searchParams = useSearchParams();
+  const buyNowId = searchParams ? searchParams.get('buyNow') : null;
+
+  // Filter items if checking out a single product via "Buy Now"
+  const cartItems = buyNowId 
+    ? contextCartItems.filter(item => String(item.id) === buyNowId)
+    : contextCartItems;
+
+  const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0);
 
   // Authentication check states
   const [checkingAuth, setCheckingAuth] = useState(true);
@@ -211,12 +221,18 @@ export default function CheckoutClient() {
           paymentMethod
         })
       });
-
       const data = await res.json();
       if (data.success && data.orderId) {
         setOrderId(data.orderId);
         setCheckoutStatus('success');
-        clearCart();
+        if (buyNowId) {
+          const itemToRemove = contextCartItems.find(item => String(item.id) === buyNowId);
+          if (itemToRemove) {
+            removeFromCart(itemToRemove.id);
+          }
+        } else {
+          clearCart();
+        }
       } else {
         setErrorMessage(data.error || 'Failed to place your order. Please check your inputs.');
         setCheckoutStatus('error');

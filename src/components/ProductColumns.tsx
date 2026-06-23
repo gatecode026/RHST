@@ -7,6 +7,7 @@ import styles from './ProductColumns.module.css';
 
 interface Product {
   id: string | number;
+  slug?: string;
   name: string;
   price: string | number;
   oldPrice?: string;
@@ -145,7 +146,7 @@ export default function ProductColumns() {
               </div>
               <div className={styles.productList}>
                 {col.products.map((prod, pIdx) => (
-                  <Link key={`${prod.id}-${pIdx}`} href={`/products/${prod.id}`} className={styles.productRow}>
+                  <Link key={`${prod.id}-${pIdx}`} href={`/products/${prod.slug || prod.id}`} className={styles.productRow}>
                     <div className={styles.imageWrapper}>
                       <img src={prod.image} alt={prod.name} className={styles.image} />
                     </div>

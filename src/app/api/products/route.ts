@@ -324,6 +324,7 @@ export async function GET() {
     const products = await collection.find().toArray();
     const formatted = products.map(doc => ({
       id: doc._id.toString(),
+      slug: doc.slug || doc.name.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-'),
       name: doc.name,
       price: doc.price,
       image: doc.image,

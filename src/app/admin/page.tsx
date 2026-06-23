@@ -65,6 +65,7 @@ interface Brand {
 interface Product {
   id: string;
   name: string;
+  slug?: string;
   price: string;
   image: string;
   link: string;
@@ -361,6 +362,7 @@ export default function AdminDashboardPage() {
   // Edit Product Modal States
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [editProdName, setEditProdName] = useState('');
+  const [editProdSlug, setEditProdSlug] = useState('');
   const [editProdImage, setEditProdImage] = useState('');
   const [editProdCategory, setEditProdCategory] = useState('');
   const [editProdBrand, setEditProdBrand] = useState('');
@@ -1391,6 +1393,7 @@ export default function AdminDashboardPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: newProdName,
+          slug: newProdSlug,
           mrp: newProdMrp,
           discount: newProdDiscount,
           image: newProdImage,
@@ -1445,6 +1448,7 @@ export default function AdminDashboardPage() {
   const handleEditProduct = (prod: Product) => {
     setEditingProduct(prod);
     setEditProdName(prod.name);
+    setEditProdSlug(prod.slug || prod.name.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-'));
     setEditProdImage(prod.image);
     setEditProdCategory(prod.category);
     setEditProdBrand(prod.brand || '');
@@ -1554,6 +1558,7 @@ export default function AdminDashboardPage() {
         body: JSON.stringify({
           id: editingProduct.id,
           name: editProdName,
+          slug: editProdSlug,
           mrp: editProdMrp,
           discount: editProdDiscount,
           image: editProdImage,
@@ -6207,7 +6212,7 @@ export default function AdminDashboardPage() {
                           value={newProdName}
                           onChange={(e) => {
                             setNewProdName(e.target.value);
-                            setNewProdSlug('#' + e.target.value.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-'));
+                            setNewProdSlug(e.target.value.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-'));
                           }}
                           required
                         />
@@ -6225,13 +6230,13 @@ export default function AdminDashboardPage() {
                     </div>
 
                     <div className={styles.formGroup}>
-                      <label className={styles.formLabel}>Slug Link (Auto-Generated)</label>
+                      <label className={styles.formLabel}>Slug (URL identifier)</label>
                       <input
                         type="text"
+                        placeholder="e.g. asus-rog-strix-b550-f"
                         className={styles.loginInput}
                         value={newProdSlug}
-                        readOnly
-                        style={{ backgroundColor: '#f5f5f7', cursor: 'not-allowed' }}
+                        onChange={(e) => setNewProdSlug(e.target.value)}
                       />
                     </div>
 
@@ -6468,8 +6473,21 @@ export default function AdminDashboardPage() {
                         placeholder="e.g. Logitech MX Master 3S"
                         className={styles.loginInput}
                         value={editProdName}
-                        onChange={(e) => setEditProdName(e.target.value)}
+                        onChange={(e) => {
+                          setEditProdName(e.target.value);
+                          setEditProdSlug(e.target.value.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-'));
+                        }}
                         required
+                      />
+                    </div>
+                    <div className={styles.formGroup}>
+                      <label className={styles.formLabel}>Slug (URL identifier)</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. logitech-mx-master-3s"
+                        className={styles.loginInput}
+                        value={editProdSlug}
+                        onChange={(e) => setEditProdSlug(e.target.value)}
                       />
                     </div>
                     <div className={styles.formGroup}>

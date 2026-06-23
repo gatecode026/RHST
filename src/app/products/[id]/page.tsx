@@ -80,7 +80,7 @@ const DEFAULT_REVIEWS = [
   }
 ];
 
-// Server helper to load product by ID directly
+// Server helper to load product by ID or slug directly
 async function getProduct(id: string) {
   let product: any = null;
 
@@ -94,14 +94,28 @@ async function getProduct(id: string) {
     'bs-6': 'Wireless Headphones'
   }[id] : null;
 
-  if (isObjectId || bsName) {
+  if (isObjectId || bsName || (!id.startsWith('cat-') && !id.startsWith('col-'))) {
     try {
       const db = await getDb();
-      const query = bsName ? { name: bsName } : { _id: new ObjectId(id) };
+      let query: any = {};
+      if (isObjectId) {
+        query = { _id: new ObjectId(id) };
+      } else if (bsName) {
+        query = { name: bsName };
+      } else {
+        query = {
+          $or: [
+            { slug: id },
+            { slug: id.toLowerCase() },
+            { name: { $regex: new RegExp('^' + id.replace(/-/g, ' ').replace(/[^\w\s]/g, '') + '$', 'i') } }
+          ]
+        };
+      }
       const dbProduct = await db.collection('products').findOne(query);
       if (dbProduct) {
         product = {
           id: dbProduct._id.toString(),
+          slug: dbProduct.slug || dbProduct.name.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-'),
           name: dbProduct.name,
           price: parsePrice(dbProduct.price),
           image: dbProduct.image,

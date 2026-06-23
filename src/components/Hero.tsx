@@ -20,7 +20,7 @@ const FALLBACK_SLIDES: Slide[] = [
     ctaText: 'Shop Collection',
     image: 'https://ik.imagekit.io/zp0tch54w/RHST/IMG.png?updatedAt=1781696174888',
     theme: 'light',
-    link: '#products'
+    link: '/products'
   },
   {
     title: 'Immersive Gaming with the Play Station 5',
@@ -28,15 +28,15 @@ const FALLBACK_SLIDES: Slide[] = [
     ctaText: 'Explore Gaming',
     image: 'https://ik.imagekit.io/zp0tch54w/RHST/IMG.png?updatedAt=1781696174888',
     theme: 'light',
-    link: '#products'
+    link: '/products'
   },
   {
     title: 'Studio Quality Audio Wherever You Go',
     subtitle: 'Step into premium sound with wireless noise-cancelling headphones tuned to perfection.',
-    ctaText: 'Discover Headsets',
+    ctaText: 'Discover Television',
     image: 'https://ik.imagekit.io/zp0tch54w/RHST/IMG.png?updatedAt=1781696174888',
     theme: 'light',
-    link: '#products'
+    link: '/products?category=Television'
   }
 ];
 
@@ -82,8 +82,8 @@ export default function Hero() {
     <section className={styles.heroSection}>
       <div className={styles.sliderContainer}>
         {slides.map((slide, idx) => (
-          <div 
-            key={slide.id || idx} 
+          <div
+            key={slide.id || idx}
             className={`${styles.slide} ${idx === current ? styles.active : ''} ${slide.theme === 'dark' ? styles.darkTheme : ''}`}
           >
             <div className="container">
@@ -92,18 +92,18 @@ export default function Hero() {
                 <div className={styles.textContent}>
                   <h1 className={styles.title}>{slide.title}</h1>
                   <p className={styles.description}>{slide.subtitle}</p>
-                  <a href={slide.link || '#products'} className={styles.ctaButton}>
+                  <a href={slide.link || '/products'} className={styles.ctaButton}>
                     {slide.ctaText || 'Shop Collection'}
                   </a>
                 </div>
-                
+
                 {/* Image Right */}
                 <div className={styles.imageContent}>
                   <div className={styles.imageWrapper}>
-                    <img 
-                      src={slide.image} 
-                      alt={slide.title} 
-                      className={styles.heroImage} 
+                    <img
+                      src={slide.image}
+                      alt={slide.title}
+                      className={styles.heroImage}
                     />
                     <div className={styles.circleBg} />
                   </div>

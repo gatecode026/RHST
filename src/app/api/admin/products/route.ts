@@ -10,6 +10,7 @@ export async function GET() {
     
     const formatted = products.map(doc => ({
       id: doc._id.toString(),
+      slug: doc.slug || doc.name.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-'),
       name: doc.name,
       price: doc.price,
       image: doc.image,
@@ -39,6 +40,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     const {
       name,
+      slug,
       mrp,
       discount,
       image,
@@ -74,13 +76,15 @@ export async function POST(request: Request) {
 
     const generatedSku = sku ? sku.toUpperCase().trim() : ('SKU-' + Math.random().toString(36).substring(3, 8).toUpperCase() + '-' + Math.floor(100 + Math.random() * 900));
 
+    const calculatedSlug = slug ? slug.trim().toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-') : name.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-');
     const newProduct = {
       name,
       mrp: calculatedMrp,
       discount: calculatedDiscount,
       price: formattedPrice,
       image: image || '/images/default_product.png',
-      link: '#' + name.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-'),
+      link: '#' + calculatedSlug,
+      slug: calculatedSlug,
       category,
       brand: brand || 'Dell',
       sku: generatedSku,
@@ -116,6 +120,7 @@ export async function PUT(request: Request) {
     const {
       id,
       name,
+      slug,
       mrp,
       discount,
       image,
@@ -153,13 +158,15 @@ export async function PUT(request: Request) {
     const sellPriceVal = calculatedMrp - (calculatedMrp * calculatedDiscount / 100);
     const formattedPrice = '₹' + Math.round(sellPriceVal).toLocaleString();
 
+    const calculatedSlug = slug ? slug.trim().toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-') : name.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-');
     const updateData = {
       name,
       mrp: calculatedMrp,
       discount: calculatedDiscount,
       price: formattedPrice,
       image: image || '/images/default_product.png',
-      link: '#' + name.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-'),
+      link: '#' + calculatedSlug,
+      slug: calculatedSlug,
       category,
       brand: brand || 'Dell',
       sku: sku ? sku.toUpperCase().trim() : ('SKU-' + id.substring(18).toUpperCase()),
