@@ -113,7 +113,18 @@ export async function GET(
           ]
         };
       }
-      const dbProduct = await db.collection('products').findOne(query);
+      let dbProduct = await db.collection('products').findOne(query);
+
+      // Robust fallback matching by generated slug in memory
+      if (!dbProduct && !isObjectId && !bsName) {
+        const allDbProducts = await db.collection('products').find().toArray();
+        const matched = allDbProducts.find(p => {
+          const genSlug = p.slug || p.name.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-');
+          return genSlug === id.toLowerCase();
+        });
+        dbProduct = matched || null;
+      }
+
       if (dbProduct) {
         product = {
           id: dbProduct._id.toString(),
@@ -135,28 +146,32 @@ export async function GET(
       }
     }
 
-    // Lookup in Mock catalogs if not found
+    // Lookup in Mock catalogs if not found (matching ID or slug)
     if (!product) {
-      if (id.startsWith('cat-')) {
-        const mockProd = CATALOG_PRODUCTS.find(p => p.id === id);
-        if (mockProd) {
+      const mockCatProd = CATALOG_PRODUCTS.find(p => 
+        p.id === id || 
+        p.name.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-') === id.toLowerCase()
+      );
+      if (mockCatProd) {
+        product = {
+          ...mockCatProd,
+          price: parsePrice(mockCatProd.price),
+          mrp: parsePrice(mockCatProd.price) * 1.15,
+          discount: 12,
+          warranty: 12,
+          os: 'Windows 11 Home',
+          designType: mockCatProd.category === 'Hardware' ? 'Personal Computer' : 'Accessory'
+        };
+      } else {
+        const mockColProd = COLUMN_PRODUCTS.find(p => 
+          p.id === id || 
+          p.name.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-') === id.toLowerCase()
+        );
+        if (mockColProd) {
           product = {
-            ...mockProd,
-            price: parsePrice(mockProd.price),
-            mrp: parsePrice(mockProd.price) * 1.15,
-            discount: 12,
-            warranty: 12,
-            os: 'Windows 11 Home',
-            designType: mockProd.category === 'Hardware' ? 'Personal Computer' : 'Accessory'
-          };
-        }
-      } else if (id.startsWith('col-')) {
-        const mockProd = COLUMN_PRODUCTS.find(p => p.id === id);
-        if (mockProd) {
-          product = {
-            ...mockProd,
-            price: parsePrice(mockProd.price),
-            mrp: parsePrice(mockProd.price) * 1.15,
+            ...mockColProd,
+            price: parsePrice(mockColProd.price),
+            mrp: parsePrice(mockColProd.price) * 1.15,
             discount: 15,
             warranty: 12,
             os: 'Windows 11 Home',
