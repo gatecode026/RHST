@@ -25,7 +25,13 @@ export default function CheckoutPage() {
           </div>
         </div>
 
-        <CheckoutClient />
+        <React.Suspense fallback={
+          <div className={styles.checkoutSection} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
+            <div style={{ fontSize: '16px', color: '#666', fontFamily: 'var(--font-sans)', fontWeight: 300 }}>Loading checkout...</div>
+          </div>
+        }>
+          <CheckoutClient />
+        </React.Suspense>
       </main>
       <Footer />
     </>

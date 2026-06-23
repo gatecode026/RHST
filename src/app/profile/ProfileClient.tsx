@@ -34,6 +34,7 @@ export default function ProfileClient() {
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState('');
   const [editPhone, setEditPhone] = useState('');
+  const [editImage, setEditImage] = useState('');
   const [profileMessage, setProfileMessage] = useState('');
   const [profileError, setProfileError] = useState('');
 
@@ -73,6 +74,7 @@ export default function ProfileClient() {
               setCurrentUser(data.user);
               setEditName(data.user.name || '');
               setEditPhone(data.user.phone || '');
+              setEditImage(data.user.image || '');
               
               if (data.user.address) {
                 setAddressStreet(data.user.address.street || '');
@@ -89,6 +91,7 @@ export default function ProfileClient() {
               setCurrentUser(parsedUser);
               setEditName(parsedUser.name || '');
               setEditPhone(parsedUser.phone || '');
+              setEditImage(parsedUser.image || '');
             }
           } catch (err) {
             console.error('Failed to sync user details with backend:', err);
@@ -96,6 +99,7 @@ export default function ProfileClient() {
             setCurrentUser(parsedUser);
             setEditName(parsedUser.name || '');
             setEditPhone(parsedUser.phone || '');
+            setEditImage(parsedUser.image || '');
           } finally {
             setIsLoading(false);
           }
@@ -164,6 +168,22 @@ export default function ProfileClient() {
     }
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        setProfileError('Image size should be less than 2MB.');
+        return;
+      }
+      setProfileError('');
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setEditImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   // Profile Save Changes
   const handleProfileSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -182,13 +202,14 @@ export default function ProfileClient() {
         body: JSON.stringify({
           email: currentUser.email,
           name: editName,
-          phone: editPhone
+          phone: editPhone,
+          image: editImage
         })
       });
       const data = await res.json();
       if (data.success) {
         // Update session storage
-        const updatedSession = { ...currentUser, name: editName, phone: editPhone };
+        const updatedSession = { ...currentUser, name: editName, phone: editPhone, image: editImage };
         setCurrentUser(updatedSession);
         localStorage.setItem('currentUser', JSON.stringify(updatedSession));
 
@@ -399,7 +420,7 @@ export default function ProfileClient() {
                     Edit Profile
                   </button>
                 ) : (
-                  <button className={styles.editBtn} style={{ borderColor: 'var(--gray)', color: 'var(--gray)' }} onClick={() => { setIsEditing(false); setProfileError(''); setProfileMessage(''); }}>
+                  <button className={styles.editBtn} style={{ borderColor: 'var(--gray)', color: 'var(--gray)' }} onClick={() => { setIsEditing(false); setProfileError(''); setProfileMessage(''); setEditImage(currentUser.image || ''); }}>
                     Cancel
                   </button>
                 )}
@@ -411,10 +432,16 @@ export default function ProfileClient() {
               {/* Profile Overview Card */}
               <div className={styles.profileOverviewBox}>
                 <div className={styles.avatarCircle}>
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#777785" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                    <circle cx="12" cy="7" r="4" />
-                  </svg>
+                  {editImage ? (
+                    <img src={editImage} alt="Profile" />
+                  ) : currentUser.image ? (
+                    <img src={currentUser.image} alt={currentUser.name || 'User'} />
+                  ) : (
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#777785" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                      <circle cx="12" cy="7" r="4" />
+                    </svg>
+                  )}
                 </div>
                 <div className={styles.avatarText}>
                   <span className={styles.memberBadge}>MEMBER SINCE 2026</span>
@@ -471,6 +498,19 @@ export default function ProfileClient() {
                         placeholder="e.g. 9876543210"
                       />
                     </div>
+
+                    {isEditing && (
+                      <div className={styles.formGroup} style={{ gridColumn: 'span 2' }}>
+                        <label className={styles.formLabel}>PROFILE PHOTO</label>
+                        <input 
+                          type="file" 
+                          accept="image/*"
+                          className={styles.formInput} 
+                          onChange={handleImageChange}
+                        />
+                        <span className={styles.formLabelTip}>Upload profile photo (Max 2MB)</span>
+                      </div>
+                    )}
                   </div>
 
                   {isEditing && (

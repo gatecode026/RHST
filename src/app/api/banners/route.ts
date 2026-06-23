@@ -10,7 +10,7 @@ const DEFAULT_BANNERS = [
     ctaText: 'Shop Collection',
     image: 'https://ik.imagekit.io/zp0tch54w/RHST/IMG.png?updatedAt=1781696174888',
     theme: 'light',
-    link: '#products'
+    link: '/products'
   },
   {
     title: 'Immersive Gaming with the Play Station 5',
@@ -18,15 +18,15 @@ const DEFAULT_BANNERS = [
     ctaText: 'Explore Gaming',
     image: 'https://ik.imagekit.io/zp0tch54w/RHST/IMG.png?updatedAt=1781696174888',
     theme: 'light',
-    link: '#products'
+    link: '/products'
   },
   {
     title: 'Studio Quality Audio Wherever You Go',
     subtitle: 'Step into premium sound with wireless noise-cancelling headphones tuned to perfection.',
-    ctaText: 'Discover Headsets',
+    ctaText: 'Discover Television',
     image: 'https://ik.imagekit.io/zp0tch54w/RHST/IMG.png?updatedAt=1781696174888',
     theme: 'light',
-    link: '#products'
+    link: '/products?category=Television'
   }
 ];
 
@@ -45,6 +45,16 @@ export async function GET() {
       await collection.updateMany(
         { image: '/images/laptop.png' },
         { $set: { image: 'https://ik.imagekit.io/zp0tch54w/RHST/IMG.png?updatedAt=1781696174888' } }
+      );
+      // Migrate existing links from #products anchor to the /products page
+      await collection.updateMany(
+        { link: '#products' },
+        { $set: { link: '/products' } }
+      );
+      // Migrate Discover Headsets and Discove Television to Discover Television with specific category link
+      await collection.updateMany(
+        { ctaText: { $in: ['Discover Headsets', 'Discove Television'] } },
+        { $set: { ctaText: 'Discover Television', link: '/products?category=Television' } }
       );
     }
 

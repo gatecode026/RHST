@@ -141,7 +141,7 @@ export default function PromoBanner() {
               </div>
             </div>
 
-            <a href={banner.buttonLink || "/#products"} className={styles.shopBtn}>
+            <a href={banner.buttonLink || "/products"} className={styles.shopBtn}>
               {banner.buttonText || "SHOP COLLECTION"}
             </a>
           </div>

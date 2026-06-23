@@ -25,7 +25,8 @@ export async function GET(request: Request) {
           name: user.name,
           email: user.email,
           phone: user.phone,
-          address: user.address || null
+          address: user.address || null,
+          image: user.image || null
         }
       });
     } else {

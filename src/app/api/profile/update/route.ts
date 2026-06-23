@@ -4,7 +4,7 @@ import { getDb } from '@/lib/mongodb';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { email, name, phone } = body;
+    const { email, name, phone, image } = body;
 
     if (!email || !name || !phone) {
       return NextResponse.json(
@@ -14,9 +14,14 @@ export async function POST(request: Request) {
     }
 
     const db = await getDb();
+    const updateFields: any = { name: name.trim(), phone: phone.trim() };
+    if (image !== undefined) {
+      updateFields.image = image;
+    }
+
     const result = await db.collection('users').updateOne(
       { email: email.toLowerCase().trim() },
-      { $set: { name: name.trim(), phone: phone.trim() } }
+      { $set: updateFields }
     );
 
     if (result.matchedCount > 0) {

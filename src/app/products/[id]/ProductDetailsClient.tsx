@@ -16,6 +16,7 @@ interface Review {
 
 interface ProductDetails {
   id: string;
+  slug?: string;
   name: string;
   price: number;
   image: string;
@@ -152,7 +153,7 @@ export default function ProductDetailsClient({ initialProduct }: { initialProduc
             <button
               type="button"
               className={`${styles.wishlistBtnOverImage} ${isWishlisted ? styles.wishlistBtnOverImageActive : ''}`}
-              onClick={() => toggleWishlist({ id: product.id, name: product.name, price: product.price, image: product.image, stock: product.stock })}
+              onClick={() => toggleWishlist({ id: product.id, slug: product.slug, name: product.name, price: product.price, image: product.image, stock: product.stock })}
               aria-label="Add to Wishlist"
             >
               <svg width="22" height="22" viewBox="0 0 24 24" fill={isWishlisted ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.5">
