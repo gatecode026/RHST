@@ -307,11 +307,15 @@ export async function GET() {
       // Seed products non-destructively
       for (const p of DEFAULT_PRODUCTS) {
         const exists = await collection.findOne({ name: p.name });
+        const slug = p.name.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-');
         if (!exists) {
           await collection.insertOne({
             ...p,
+            slug,
             createdAt: new Date()
           });
+        } else if (!exists.slug) {
+          await collection.updateOne({ _id: exists._id }, { $set: { slug } });
         }
       }
       await seedingMeta.updateOne(
@@ -319,6 +323,17 @@ export async function GET() {
         { $set: { key: 'extended_seeded', value: true } },
         { upsert: true }
       );
+    }
+
+    // Run migration for any other products in DB that are missing slug field
+    try {
+      const missingSlugs = await collection.find({ slug: { $exists: false } }).toArray();
+      for (const doc of missingSlugs) {
+        const slug = doc.name.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-');
+        await collection.updateOne({ _id: doc._id }, { $set: { slug } });
+      }
+    } catch (migErr) {
+      console.warn("Products slug migration failed:", migErr);
     }
 
     const products = await collection.find().toArray();
