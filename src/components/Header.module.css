@@ -613,6 +613,10 @@
     right: -100%;
   }
 
+  .drawerOpen {
+    right: 0 !important;
+  }
+
   .searchTitle {
     font-size: 1.6rem;
   }
