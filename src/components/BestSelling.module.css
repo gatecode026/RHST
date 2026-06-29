@@ -181,20 +181,57 @@
 
 @media (max-width: 768px) {
   .grid {
-    margin: 0 -1.5rem;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+    margin: 0 -1.25rem;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
   }
 
   .card {
-    flex: 0 0 260px;
+    flex: 0 0 250px;
     /* fixed size scrollable on mobile */
-    min-height: 340px;
+    min-height: 330px;
     padding: 1.75rem 1.25rem;
   }
 
   .imageWrapper {
-    height: 160px;
+    height: 150px;
     margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 375px) {
+  .grid {
+    margin: 0 -0.75rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    gap: 0.75rem;
+  }
+
+  .card {
+    flex: 0 0 200px;
+    min-height: 290px;
+    padding: 1.25rem 1rem;
+  }
+
+  .imageWrapper {
+    height: 120px;
+  }
+  
+  .name {
+    font-size: 15px;
+  }
+  
+  .price {
+    font-size: 17px;
+  }
+}
+
+@media (max-width: 320px) {
+  .card {
+    flex: 0 0 170px;
+    min-height: 270px;
+  }
+  .imageWrapper {
+    height: 100px;
   }
 }

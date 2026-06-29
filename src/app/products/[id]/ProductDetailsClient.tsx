@@ -138,7 +138,7 @@ export default function ProductDetailsClient({ initialProduct }: { initialProduc
   };
 
   return (
-    <div className={styles.container}>
+    <div className="container">
       {/* Breadcrumbs */}
       <div className={styles.breadcrumbs}>
         <a href="/">Home</a> / <a href="/products">Products</a> / <span>{product.name}</span>

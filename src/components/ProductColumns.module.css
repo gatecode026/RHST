@@ -157,6 +157,43 @@
   }
 }
 
+@media (max-width: 425px) {
+  .column {
+    padding: 1.25rem 1rem;
+  }
+  .imageWrapper {
+    width: 56px;
+    height: 56px;
+  }
+  .name {
+    font-size: 0.9rem;
+  }
+  .price, .oldPrice {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .column {
+    padding: 1rem 0.75rem;
+  }
+  .imageWrapper {
+    width: 48px;
+    height: 48px;
+  }
+  .name {
+    font-size: 0.85rem;
+  }
+  .price, .oldPrice {
+    font-size: 0.85rem;
+  }
+  .addCartIconBtn {
+    width: 24px;
+    height: 24px;
+    font-size: 0.95rem;
+  }
+}
+
 .addCartIconBtn {
   margin-left: auto;
   background-color: #ffffff;

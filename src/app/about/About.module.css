@@ -250,3 +250,34 @@
     text-align: center;
   }
 }
+
+@media (max-width: 425px) {
+  .breadcrumbTitle {
+    font-size: 1.7rem;
+  }
+  .introTitle {
+    font-size: 1.4rem;
+  }
+  .panelTitle {
+    font-size: 1.4rem;
+  }
+  .darkCard {
+    padding: 2rem 1rem;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .breadcrumbTitle {
+    font-size: 1.4rem;
+  }
+  .introTitle {
+    font-size: 1.2rem;
+  }
+  .panelTitle {
+    font-size: 1.2rem;
+  }
+  .darkCard {
+    padding: 1.5rem 0.75rem;
+  }
+}

@@ -159,3 +159,61 @@
     gap: 1rem;
   }
 }
+
+@media (max-width: 425px) {
+  .title {
+    font-size: 1.6rem;
+  }
+  .timeVal {
+    font-size: 1.6rem;
+  }
+  .separator {
+    font-size: 1.3rem;
+  }
+  .countdown {
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 375px) {
+  .title {
+    font-size: 1.4rem;
+  }
+  .timeVal {
+    font-size: 1.4rem;
+  }
+  .separator {
+    font-size: 1.1rem;
+  }
+  .countdown {
+    gap: 0.5rem;
+  }
+  .timeLabel {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .title {
+    font-size: 1.25rem;
+  }
+  .timeVal {
+    font-size: 1.2rem;
+  }
+  .separator {
+    font-size: 0.9rem;
+  }
+  .countdown {
+    gap: 0.4rem;
+  }
+  .timeBox {
+    min-width: 32px;
+  }
+  .timeLabel {
+    font-size: 0.75rem;
+  }
+  .shopBtn {
+    padding: 0.8rem 2rem;
+    font-size: 0.85rem;
+  }
+}

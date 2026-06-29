@@ -192,3 +192,27 @@
     padding: 2rem 0;
   }
 }
+
+@media (max-width: 768px) {
+  .lastUpdated,
+  .introParagraph,
+  .text,
+  .listItem,
+  .orderedListItem,
+  .trustText {
+    font-size: 16px !important;
+    line-height: 24px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .lastUpdated,
+  .introParagraph,
+  .text,
+  .listItem,
+  .orderedListItem,
+  .trustText {
+    font-size: 15px !important;
+    line-height: 22px !important;
+  }
+}

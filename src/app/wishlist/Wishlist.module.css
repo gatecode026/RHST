@@ -240,6 +240,12 @@
 
 /* Mobile View responsiveness */
 @media (max-width: 768px) {
+  .wishlistTable,
+  .wishlistTable tbody {
+    display: block;
+    width: 100%;
+  }
+
   .wishlistTable th {
     display: none;
   }
