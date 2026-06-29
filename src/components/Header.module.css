@@ -450,7 +450,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(255, 255, 255, 0.97);
+  background-color: #ffffff;
   z-index: 10000;
   opacity: 0;
   visibility: hidden;
@@ -512,6 +512,7 @@
   font-size: 1.5rem;
   font-weight: 500;
   color: var(--dark);
+  min-width: 0;
 }
 
 .searchInput::placeholder {
@@ -561,7 +562,7 @@
   }
 }
 
-@media (max-width: 960px) {
+@media (max-width: 1024px) {
   .navLinks {
     display: none;
   }
@@ -613,11 +614,73 @@
   }
 
   .searchTitle {
-    font-size: 1.75rem;
+    font-size: 1.6rem;
   }
 
   .searchInput {
     font-size: 1.1rem;
+  }
+
+  .searchContainer {
+    padding: 1.25rem;
+  }
+
+  .closeSearchBtn {
+    top: 1.25rem;
+    right: 1.25rem;
+  }
+
+  .searchSubmitBtn {
+    padding: 0.5rem 1rem;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .navWrapper {
+    gap: 1rem;
+  }
+  .actions {
+    gap: 1rem;
+  }
+  .logoImage {
+    height: 34px;
+  }
+}
+
+@media (max-width: 425px) {
+  .navWrapper {
+    gap: 0.75rem;
+  }
+  .actions {
+    gap: 0.75rem;
+  }
+  .logoImage {
+    height: 30px;
+  }
+}
+
+@media (max-width: 375px) {
+  .navWrapper {
+    gap: 0.5rem;
+  }
+  .actions {
+    gap: 0.6rem;
+  }
+  .logoImage {
+    height: 26px;
+  }
+}
+
+@media (max-width: 320px) {
+  .navWrapper {
+    gap: 0.4rem;
+  }
+  .actions {
+    gap: 0.5rem;
+  }
+  .logoImage {
+    height: 24px;
   }
 }
 

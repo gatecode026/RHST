@@ -680,3 +680,53 @@
   font-family: var(--font-sans);
   font-weight: 300;
 }
+
+@media (max-width: 768px) {
+  .articleBody p,
+  .pointText,
+  .pointTitle,
+  .calloutContent p,
+  .tagItem,
+  .shareLabel,
+  .commentAuthor,
+  .commentDate,
+  .commentText,
+  .replyBtn,
+  .formSubtitle,
+  .textarea,
+  .input,
+  .checkboxRow,
+  .submitBtn,
+  .bulletListItem {
+    font-size: 16px !important;
+  }
+
+  .quoteText {
+    font-size: 32px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .articleBody p,
+  .pointText,
+  .pointTitle,
+  .calloutContent p,
+  .tagItem,
+  .shareLabel,
+  .commentAuthor,
+  .commentDate,
+  .commentText,
+  .replyBtn,
+  .formSubtitle,
+  .textarea,
+  .input,
+  .checkboxRow,
+  .submitBtn,
+  .bulletListItem {
+    font-size: 15px !important;
+  }
+
+  .quoteText {
+    font-size: 24px !important;
+  }
+}

@@ -298,3 +298,42 @@
     max-width: 250px;
   }
 }
+
+@media (max-width: 425px) {
+  .title {
+    font-size: 1.7rem;
+  }
+  .imageWrapper {
+    max-width: 220px;
+  }
+  .description {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 375px) {
+  .title {
+    font-size: 1.5rem;
+  }
+  .imageWrapper {
+    max-width: 200px;
+  }
+  .description {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .title {
+    font-size: 1.35rem;
+  }
+  .imageWrapper {
+    max-width: 170px;
+  }
+  .description {
+    font-size: 0.85rem;
+  }
+  .heroSection {
+    padding: 2.5rem 0 2rem 0;
+  }
+}

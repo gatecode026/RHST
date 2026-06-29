@@ -261,3 +261,23 @@
     gap: 1rem;
   }
 }
+
+@media (max-width: 425px) {
+  .cardLogos {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  
+  .footer {
+    font-size: 0.85rem;
+  }
+  
+  .aboutText, .contactText, .emailLink, .phoneVal, .links a {
+    font-size: 0.85rem !important;
+  }
+  
+  .copyright {
+    font-size: 0.8rem;
+  }
+}

@@ -49,6 +49,7 @@ function ProductsCatalogContent() {
   const [activePriceRange, setActivePriceRange] = useState<string | null>(null);
   const [sortOption, setSortOption] = useState('default');
   const [currentPage, setCurrentPage] = useState(1);
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
   // Sync category with URL query parameter
   useEffect(() => {
@@ -284,7 +285,17 @@ function ProductsCatalogContent() {
                     Showing {paginatedProducts.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0}–
                     {Math.min(currentPage * itemsPerPage, filteredProducts.length)} of {filteredProducts.length} results
                   </div>
-                  <div>
+                  <div className={styles.headerActionsWrapper}>
+                    <button
+                      type="button"
+                      className={styles.mobileFilterToggleBtn}
+                      onClick={() => setIsMobileFilterOpen(true)}
+                    >
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '6px' }}>
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+                      </svg>
+                      Filter
+                    </button>
                     <select
                       className={styles.sortSelect}
                       value={sortOption}
@@ -552,6 +563,123 @@ function ProductsCatalogContent() {
 
       {/* Structured Dark Footer */}
       <Footer />
+
+      {/* Mobile Filters Drawer Overlay */}
+      <div
+        className={`${styles.mobileFilterDrawerOverlay} ${isMobileFilterOpen ? styles.mobileFilterDrawerOpen : ''}`}
+        onClick={() => setIsMobileFilterOpen(false)}
+      />
+      <div className={`${styles.mobileFilterDrawer} ${isMobileFilterOpen ? styles.mobileFilterDrawerOpen : ''}`}>
+        <div className={styles.mobileFilterHeader}>
+          <h3>Filters</h3>
+          <button onClick={() => setIsMobileFilterOpen(false)} className={styles.mobileFilterCloseBtn} aria-label="Close Filters">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div className={styles.mobileFilterContent}>
+          {/* Search widget */}
+          <form
+            onSubmit={(e) => {
+              handleSearchSubmit(e);
+              setIsMobileFilterOpen(false);
+            }}
+            className={styles.searchBox}
+          >
+            <input
+              type="text"
+              placeholder="Search products..."
+              className={styles.sidebarInput}
+              value={typedSearch}
+              onChange={(e) => setTypedSearch(e.target.value)}
+            />
+            <button type="submit" className={styles.sidebarSearchBtn} aria-label="Search button">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+            </button>
+          </form>
+
+          {/* Categories Widget */}
+          <div className={styles.widget}>
+            <h3 className={styles.widgetTitle}>Categories</h3>
+            <ul className={styles.widgetList}>
+              {categoriesList.map((cat) => (
+                <li
+                  key={cat.key}
+                  className={`${styles.widgetItem} ${activeCategory === cat.key ? styles.activeWidgetItem : ''}`}
+                  onClick={() => {
+                    setActiveCategory(cat.key);
+                    setCurrentPage(1);
+                    setIsMobileFilterOpen(false);
+                  }}
+                >
+                  <span>{cat.display}</span>
+                  <span className={styles.itemCount}>{getCategoryCount(cat.key)}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Brands Widget */}
+          <div className={styles.widget}>
+            <h3 className={styles.widgetTitle}>Brands</h3>
+            <ul className={styles.widgetList}>
+              {brandsList.map((brand) => (
+                <li
+                  key={brand.key}
+                  className={`${styles.widgetItem} ${activeBrand === brand.key ? styles.activeWidgetItem : ''}`}
+                  onClick={() => {
+                    setActiveBrand(brand.key);
+                    setCurrentPage(1);
+                    setIsMobileFilterOpen(false);
+                  }}
+                >
+                  <span>{brand.display}</span>
+                  {brand.key !== 'All' && (
+                    <span className={styles.itemCount}>{getBrandCount(brand.key)}</span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Filter By Price Widget */}
+          <div className={styles.widget}>
+            <h3 className={styles.widgetTitle}>Filter By Price</h3>
+            <ul className={styles.widgetList}>
+              {[
+                { key: 'All', display: 'All Prices' },
+                { key: 'less15', display: 'Less than 15,000' },
+                { key: '15_25', display: '15,000 - 25,000' },
+                { key: '25_50', display: '25,000 - 50,000' },
+                { key: '50_75', display: '50,000 - 75,000' },
+                { key: '75_100', display: '75,000 - 100,000' },
+                { key: '100_125', display: '100,000 - 125,000' }
+              ].map((range) => {
+                const isActive = range.key === 'All' ? activePriceRange === null : activePriceRange === range.key;
+                return (
+                  <li
+                    key={range.key}
+                    className={`${styles.widgetItem} ${isActive ? styles.activeWidgetItem : ''}`}
+                    onClick={() => {
+                      setActivePriceRange(range.key === 'All' ? null : range.key);
+                      setCurrentPage(1);
+                      setIsMobileFilterOpen(false);
+                    }}
+                  >
+                    <span>{range.display}</span>
+                    <span className={styles.itemCount}>{getPriceRangeCount(range.key)}</span>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </div>
+      </div>
     </>
   );
 }
