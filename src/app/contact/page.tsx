@@ -11,7 +11,7 @@ import styles from './Contact.module.css';
 
 export const metadata: Metadata = {
   title: 'Contact Us | RHST E-commerce & IT Solutions',
-  description: 'Get in touch with RHST. Contact our office or management teams, locate our stores in Rajasthan, or send us your questions and inquiries online.',
+  description: 'Get in touch with RHST. Contact our office or management teams, locate our store in Brooklyn, NY, or send us your questions and inquiries online.',
 };
 
 export default function ContactPage() {
@@ -48,13 +48,13 @@ export default function ContactPage() {
                 <div className={styles.infoCols}>
                   <div className={styles.infoCol}>
                     <h3 className={styles.infoTitle}>OFFICE</h3>
-                    <p className={styles.infoText}>412, Sumer Nagar, Mansarovar, Jaipur - 302020, Rajasthan.</p>
+                    <p className={styles.infoText}>625 Atlantic Ave, Brooklyn, NY 11217, United States</p>
                     <p className={styles.infoText}>+91-8587634520</p>
                     <p className={styles.infoText}>rhst@gmail.com</p>
                   </div>
                   <div className={styles.infoCol}>
                     <h3 className={styles.infoTitle}>MANAGEMENT</h3>
-                    <p className={styles.infoText}>412, Sumer Nagar, Mansarovar, Jaipur - 302020, Rajasthan.</p>
+                    <p className={styles.infoText}>625 Atlantic Ave, Brooklyn, NY 11217, United States</p>
                     <p className={styles.infoText}>+91-8587634520</p>
                     <p className={styles.infoText}>rhst@gmail.com</p>
                   </div>
@@ -87,8 +87,8 @@ export default function ContactPage() {
                 <p className={styles.sectionDesc} style={{ marginBottom: '1.5rem' }}>
                   You can also directly buy products from our stores.
                 </p>
-                <h3 className={styles.storeName}>RAJASTHAN</h3>
-                <p className={styles.infoText}>412, Sumer Nagar, Mansarovar, Jaipur, (302020)</p>
+                <h3 className={styles.storeName}>BROOKLYN</h3>
+                <p className={styles.infoText}>625 Atlantic Ave, Brooklyn, NY 11217, United States</p>
                 <p className={styles.infoText}>+91-8587634520</p>
                 <p className={styles.infoText}>rhst@gmail.com</p>
               </div>

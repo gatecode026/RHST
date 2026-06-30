@@ -65,8 +65,6 @@ export default function Footer() {
                 <li><Link href="/">HOME</Link></li>
                 <li><Link href="/products">PRODUCTS</Link></li>
                 <li><Link href="/#categories">CATEGORIES</Link></li>
-                <li><Link href="/products">COMPARE</Link></li>
-                <li><Link href="/#brands">BRANDS</Link></li>
                 <li><Link href="/#services">SERVICES</Link></li>
                 <li><Link href="/about">ABOUT</Link></li>
                 <li><Link href="/#deals">DEALS/OFFERS</Link></li>

@@ -98,43 +98,52 @@ export default function OurBlog({ className = '' }: { className?: string }) {
         {/* Blog Grid/Slider Row */}
         <div className={styles.sliderContainer}>
           <div ref={scrollContainerRef} className={styles.grid}>
-            {renderData.map((post) => (
-              <div key={post.id || post._id} className={styles.card}>
-                <div className={styles.imageWrapper}>
-                  <img 
-                    src={post.image} 
-                    alt={post.title} 
-                    className={styles.image} 
-                    onError={(e) => {
-                      e.currentTarget.onerror = null;
-                      e.currentTarget.src = '/images/bestselling_ipad.png';
-                    }}
-                  />
-                  <span className={styles.badge}>{post.tag || post.category}</span>
-                </div>
-                <div className={styles.info}>
-                  <h3 className={styles.name} style={{
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    height: '52px'
-                  }}>{post.title}</h3>
-                  <p className={styles.excerpt} style={{
-                    display: '-webkit-box',
-                    WebkitLineClamp: 3,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    height: '66px'
-                  }}>{post.excerpt}</p>
-                  <Link href={post.link || `/blog/${post.id}`} className={styles.readMore}>
-                    Read More
+            {renderData.map((post) => {
+              const blogUrl = post.link || `/blog/${post.id || post._id}`;
+              return (
+                <div key={post.id || post._id} className={styles.card}>
+                  <Link href={blogUrl} style={{ display: 'block', width: '100%' }}>
+                    <div className={styles.imageWrapper}>
+                      <img 
+                        src={post.image} 
+                        alt={post.title} 
+                        className={styles.image} 
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = '/images/bestselling_ipad.png';
+                        }}
+                      />
+                      <span className={styles.badge}>{post.tag || post.category}</span>
+                    </div>
                   </Link>
+                  <div className={styles.info}>
+                    <h3 className={styles.name} style={{
+                      display: '-webkit-box',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      height: '52px'
+                    }}>
+                      <Link href={blogUrl} style={{ color: 'inherit', textDecoration: 'none' }}>
+                        {post.title}
+                      </Link>
+                    </h3>
+                    <p className={styles.excerpt} style={{
+                      display: '-webkit-box',
+                      WebkitLineClamp: 3,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      height: '66px'
+                    }}>{post.excerpt}</p>
+                    <Link href={blogUrl} className={styles.readMore}>
+                      Read More
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>

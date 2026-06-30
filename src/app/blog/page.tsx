@@ -223,44 +223,53 @@ export default function BlogPage() {
                       <button onClick={clearFilters} style={{ marginTop: '1rem', padding: '8px 20px', borderRadius: '20px', border: 'none', backgroundColor: 'var(--primary)', color: '#fff', cursor: 'pointer' }}>Reset Filter</button>
                     </div>
                   ) : (
-                    paginatedBlogs.map((post) => (
-                      <article key={post.id} className={styles.card}>
-                        <div className={styles.imageWrapper}>
-                          <img 
-                            src={post.image} 
-                            alt={post.title} 
-                            className={styles.image}
-                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                            onError={(e) => {
-                              e.currentTarget.onerror = null;
-                              e.currentTarget.src = '/images/bestselling_ipad.png';
-                            }}
-                          />
-                          <span className={styles.badge}>{post.tag}</span>
-                        </div>
-                        <div className={styles.info}>
-                          <h3 className={styles.name} style={{
-                            display: '-webkit-box',
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: 'vertical',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            height: '52px'
-                          }}>{post.title}</h3>
-                          <p className={styles.excerpt} style={{
-                            display: '-webkit-box',
-                            WebkitLineClamp: 3,
-                            WebkitBoxOrient: 'vertical',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            height: '66px'
-                          }}>{post.excerpt || 'Read details of this post.'}</p>
-                          <Link href={post.link} className={styles.readMore}>
-                            Read More
+                    paginatedBlogs.map((post) => {
+                      const blogUrl = post.link || `/blog/${post.id || post._id}`;
+                      return (
+                        <article key={post.id || post._id} className={styles.card}>
+                          <Link href={blogUrl} style={{ display: 'block', width: '100%' }}>
+                            <div className={styles.imageWrapper}>
+                              <img 
+                                src={post.image} 
+                                alt={post.title} 
+                                className={styles.image}
+                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                onError={(e) => {
+                                  e.currentTarget.onerror = null;
+                                  e.currentTarget.src = '/images/bestselling_ipad.png';
+                                }}
+                              />
+                              <span className={styles.badge}>{post.tag}</span>
+                            </div>
                           </Link>
-                        </div>
-                      </article>
-                    ))
+                          <div className={styles.info}>
+                            <h3 className={styles.name} style={{
+                              display: '-webkit-box',
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: 'vertical',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              height: '52px'
+                            }}>
+                              <Link href={blogUrl} style={{ color: 'inherit', textDecoration: 'none' }}>
+                                {post.title}
+                              </Link>
+                            </h3>
+                            <p className={styles.excerpt} style={{
+                              display: '-webkit-box',
+                              WebkitLineClamp: 3,
+                              WebkitBoxOrient: 'vertical',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              height: '66px'
+                            }}>{post.excerpt || 'Read details of this post.'}</p>
+                            <Link href={blogUrl} className={styles.readMore}>
+                              Read More
+                            </Link>
+                          </div>
+                        </article>
+                      );
+                    })
                   )}
                 </div>
 

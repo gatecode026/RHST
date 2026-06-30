@@ -88,7 +88,7 @@ export default function ProductDetailsClient({ initialProduct }: { initialProduc
 
     handleAddToCart();
     setIsCartOpen(false);
-    router.push('/checkout');
+    router.push(`/checkout?buyNow=${product.id}`);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {

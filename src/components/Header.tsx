@@ -572,7 +572,6 @@ export default function Header() {
           </div>
 
           <Link href="/#categories" onClick={() => setIsMobileMenuOpen(false)}>CATEGORIES</Link>
-          <Link href="/products" onClick={() => setIsMobileMenuOpen(false)}>COMPARE</Link>
           <Link href="/#brands" onClick={() => setIsMobileMenuOpen(false)}>BRANDS</Link>
 
           <div className={styles.mobileNavGroup}>
