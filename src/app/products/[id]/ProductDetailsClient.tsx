@@ -77,7 +77,17 @@ export default function ProductDetailsClient({ initialProduct }: { initialProduc
   };
 
   const handleOrderNow = () => {
+    const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('currentUser') : null;
+    if (!isLoggedIn) {
+      const accountBtn = document.querySelector('[aria-label="Account"]') as HTMLElement;
+      if (accountBtn) {
+        accountBtn.click();
+      }
+      return;
+    }
+
     handleAddToCart();
+    setIsCartOpen(false);
     router.push('/checkout');
   };
 
