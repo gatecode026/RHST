@@ -21,10 +21,10 @@ const DEFAULT_BANNERS = [
     link: '/products'
   },
   {
-    title: 'Studio Quality Audio Wherever You Go',
-    subtitle: 'Step into premium sound with wireless noise-cancelling headphones tuned to perfection.',
-    ctaText: 'Discover Television',
-    image: 'https://ik.imagekit.io/zp0tch54w/RHST/IMG.png?updatedAt=1781696174888',
+    title: 'Dominate Every Frame with Crystal-Clear Precision',
+    subtitle: 'Dominate every game with vibrant colors, fluid motion, and ultra-low latency designed for peak performance.',
+    ctaText: 'Discover Monitors',
+    image: 'https://ik.imagekit.io/zp0tch54w/RHST/image%20191.png',
     theme: 'light',
     link: '/products?category=Television'
   }
