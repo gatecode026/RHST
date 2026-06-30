@@ -26,7 +26,14 @@ export default function CheckoutClient() {
 
   // Multi-step checkout states
   const [step, setStep] = useState<'billing' | 'payment'>('billing');
-  const [paymentMethod, setPaymentMethod] = useState<'Direct bank transfer' | 'Check payments' | 'Cash on delivery' | 'PayPal'>('Direct bank transfer');
+  const [paymentMethod, setPaymentMethod] = useState<'Direct bank transfer' | 'Cash on delivery' | 'PayPal'>('Direct bank transfer');
+
+  // Custom bank/card & upi states matching user request
+  const [cardNumber, setCardNumber] = useState('');
+  const [cardNickname, setCardNickname] = useState('VIBHU SHARMA');
+  const [cardExpiryMonth, setCardExpiryMonth] = useState('01');
+  const [cardExpiryYear, setCardExpiryYear] = useState('2026');
+  const [upiId, setUpiId] = useState('');
 
   // Form Field States matching the billing template details exactly
   const [firstName, setFirstName] = useState('');
@@ -185,6 +192,27 @@ export default function CheckoutClient() {
       setErrorMessage('Your cart is empty. Add products to cart first.');
       setCheckoutStatus('error');
       return;
+    }
+
+    if (paymentMethod === 'Direct bank transfer') {
+      if (!cardNumber || cardNumber.length < 16) {
+        setErrorMessage('Please enter a valid 16-digit card number.');
+        setCheckoutStatus('error');
+        return;
+      }
+      if (!cardNickname.trim()) {
+        setErrorMessage('Please enter a card nickname.');
+        setCheckoutStatus('error');
+        return;
+      }
+    }
+
+    if (paymentMethod === 'PayPal') {
+      if (!upiId.trim()) {
+        setErrorMessage('Please enter your UPI ID.');
+        setCheckoutStatus('error');
+        return;
+      }
     }
 
     setCheckoutStatus('loading');
@@ -535,21 +563,84 @@ export default function CheckoutClient() {
             <div className={styles.paymentMethods}>
               {[
                 { id: 'bank', label: 'Direct bank transfer' },
-                { id: 'check', label: 'Check payments' },
                 { id: 'cod', label: 'Cash on delivery' },
                 { id: 'paypal', label: 'PayPal' }
               ].map(method => (
-                <label key={method.id} className={styles.radioLabel}>
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    className={styles.radioInput}
-                    checked={paymentMethod === method.label}
-                    onChange={() => setPaymentMethod(method.label as any)}
-                  />
-                  <span className={styles.customRadio}></span>
-                  <span>{method.label}</span>
-                </label>
+                <div key={method.id} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1.25rem' }}>
+                  <label className={styles.radioLabel} style={{ marginBottom: 0 }}>
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      className={styles.radioInput}
+                      checked={paymentMethod === method.label}
+                      onChange={() => setPaymentMethod(method.label as any)}
+                    />
+                    <span className={styles.customRadio}></span>
+                    <span>{method.label}</span>
+                  </label>
+
+                  {/* If Direct bank transfer is selected, show card details matching 2nd image */}
+                  {method.id === 'bank' && paymentMethod === 'Direct bank transfer' && (
+                    <div className={styles.paymentSubForm}>
+                      <label className={styles.subFormLabel}>Card number</label>
+                      <input 
+                        type="text" 
+                        placeholder="Enter 16-digit card number"
+                        value={cardNumber}
+                        onChange={(e) => setCardNumber(e.target.value.replace(/[^\d]/g, '').slice(0, 16))}
+                        className={styles.subFormInput}
+                        maxLength={16}
+                      />
+
+                      <label className={styles.subFormLabel}>Nickname</label>
+                      <input 
+                        type="text" 
+                        placeholder="Enter nickname"
+                        value={cardNickname}
+                        onChange={(e) => setCardNickname(e.target.value)}
+                        className={styles.subFormInput}
+                      />
+
+                      <label className={styles.subFormLabel}>Expiry date</label>
+                      <div className={styles.subFormSelectGroup}>
+                        <select 
+                          value={cardExpiryMonth} 
+                          onChange={(e) => setCardExpiryMonth(e.target.value)}
+                          className={styles.subFormSelect}
+                        >
+                          {Array.from({ length: 12 }).map((_, idx) => {
+                            const m = String(idx + 1).padStart(2, '0');
+                            return <option key={m} value={m}>{m}</option>;
+                          })}
+                        </select>
+                        <select 
+                          value={cardExpiryYear} 
+                          onChange={(e) => setCardExpiryYear(e.target.value)}
+                          className={styles.subFormSelect}
+                        >
+                          {Array.from({ length: 10 }).map((_, idx) => {
+                            const y = String(2026 + idx);
+                            return <option key={y} value={y}>{y}</option>;
+                          })}
+                        </select>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* If PayPal is selected, show UPI ID field */}
+                  {method.id === 'paypal' && paymentMethod === 'PayPal' && (
+                    <div className={styles.paymentSubForm}>
+                      <label className={styles.subFormLabel}>UPI ID</label>
+                      <input 
+                        type="text" 
+                        placeholder="e.g. username@upi"
+                        value={upiId}
+                        onChange={(e) => setUpiId(e.target.value)}
+                        className={styles.subFormInput}
+                      />
+                    </div>
+                  )}
+                </div>
               ))}
             </div>
 
