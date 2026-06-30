@@ -527,7 +527,7 @@ function ProductsCatalogContent() {
                   textTransform: 'uppercase',
                   letterSpacing: '0.05em',
                   marginBottom: '0.5rem',
-                  textAlign: 'left'
+                  textAlign: 'center'
                 }}
               >
                 ANY QUESTIONS?
@@ -538,7 +538,7 @@ function ProductsCatalogContent() {
                   fontSize: '1.05rem',
                   fontWeight: 300,
                   color: 'var(--gray)',
-                  textAlign: 'left',
+                  textAlign: 'center',
                   marginBottom: '3rem'
                 }}
               >
