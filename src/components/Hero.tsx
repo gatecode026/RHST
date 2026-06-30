@@ -31,8 +31,8 @@ const FALLBACK_SLIDES: Slide[] = [
     link: '/products'
   },
   {
-    title: 'Studio Quality Audio Wherever You Go',
-    subtitle: 'Step into premium sound with wireless noise-cancelling headphones tuned to perfection.',
+    title: 'Dominate Every Frame with Crystal-Clear Precision',
+    subtitle: 'Dominate every game with vibrant colors, fluid motion, and ultra-low latency designed for peak performance.',
     ctaText: 'Discover Television',
     image: 'https://ik.imagekit.io/zp0tch54w/RHST/IMG.png?updatedAt=1781696174888',
     theme: 'light',
