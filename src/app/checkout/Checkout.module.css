@@ -445,6 +445,87 @@
   transform: none;
 }
 
+/* Card & UPI Sub-forms */
+.paymentSubForm {
+  padding-left: 2.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  display: grid;
+  grid-template-columns: 120px minmax(200px, 320px);
+  align-items: center;
+  gap: 0.75rem;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.subFormLabel {
+  font-weight: 600;
+  font-size: 14.5px;
+  color: #000;
+}
+
+.subFormInput {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14.5px;
+  outline: none;
+  background-color: #fff;
+  color: #333;
+  width: 100%;
+}
+
+.subFormSelectGroup {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.subFormSelect {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14.5px;
+  cursor: pointer;
+  outline: none;
+  background-color: #fff;
+  color: #333;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 480px) {
+  .paymentSubForm {
+    padding-left: 1rem;
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+  }
+  
+  .couponSection {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+  
+  .couponBtn {
+    padding: 12px;
+    text-align: center;
+    width: 100%;
+  }
+
+  .paymentPlaceOrderBtn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
 @media (max-width: 425px) {
   .breadcrumbsHeader {
     padding: 2rem 0;
@@ -473,13 +554,5 @@
   }
   .summaryBox {
     padding: 1rem;
-  }
-  .couponSection {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .couponBtn {
-    padding: 10px;
-    text-align: center;
   }
 }
