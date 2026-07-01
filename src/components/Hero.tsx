@@ -13,7 +13,7 @@ interface Slide {
   link: string;
 }
 
-const FALLBACK_SLIDES: Slide[] = [
+const STATIC_SLIDES: Slide[] = [
   {
     title: 'Powering Your Digital World With Reliable IT Solutions',
     subtitle: 'Limited stocks available. Grab it now!',
@@ -34,33 +34,15 @@ const FALLBACK_SLIDES: Slide[] = [
     title: 'Dominate Every Frame with Crystal-Clear Precision',
     subtitle: 'Dominate every game with vibrant colors, fluid motion, and ultra-low latency designed for peak performance.',
     ctaText: 'Discover Television',
-    image: 'https://ik.imagekit.io/zp0tch54w/RHST/IMG.png?updatedAt=1781696174888',
+    image: 'https://ik.imagekit.io/zp0tch54w/RHST/image%20191.png',
     theme: 'light',
     link: '/products?category=Television'
   }
 ];
 
 export default function Hero() {
-  const [slides, setSlides] = useState<Slide[]>(FALLBACK_SLIDES);
+  const slides = STATIC_SLIDES;
   const [current, setCurrent] = useState(0);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchBanners = async () => {
-      try {
-        const res = await fetch('/api/banners?t=' + Date.now(), { cache: 'no-store' });
-        const data = await res.json();
-        if (data.success && data.banners && data.banners.length > 0) {
-          setSlides(data.banners);
-        }
-      } catch (err) {
-        console.error('Failed to load dynamic banners, using local defaults', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchBanners();
-  }, []);
 
   const nextSlide = () => {
     setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));

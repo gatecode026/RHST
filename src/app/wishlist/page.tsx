@@ -20,6 +20,25 @@ export default function WishlistPage() {
     });
   };
 
+  // Restore scroll position on wishlist page mount
+  React.useEffect(() => {
+    const saved = sessionStorage.getItem('scroll_pos_before_product_detail');
+    if (saved) {
+      try {
+        const { path, scrollY } = JSON.parse(saved);
+        if (path === window.location.pathname) {
+          const timer = setTimeout(() => {
+            window.scrollTo(0, scrollY);
+            sessionStorage.removeItem('scroll_pos_before_product_detail');
+          }, 50);
+          return () => clearTimeout(timer);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, []);
+
   return (
     <>
       {/* Header component at the top */}
@@ -98,14 +117,31 @@ export default function WishlistPage() {
                       {/* Image & Title Column */}
                       <td>
                         <div className={styles.productInfoCol}>
-                          <Link href={`/products/${item.slug || item.id}`}>
+                          <Link 
+                            href={`/products/${item.slug || item.id}`}
+                            onClick={() => {
+                              sessionStorage.setItem('scroll_pos_before_product_detail', JSON.stringify({
+                                path: window.location.pathname,
+                                scrollY: window.scrollY
+                              }));
+                            }}
+                          >
                             <img
                               src={item.image}
                               alt={item.name}
                               className={styles.productImg}
                             />
                           </Link>
-                          <Link href={`/products/${item.slug || item.id}`} className={styles.productNameLink}>
+                          <Link 
+                            href={`/products/${item.slug || item.id}`} 
+                            className={styles.productNameLink}
+                            onClick={() => {
+                              sessionStorage.setItem('scroll_pos_before_product_detail', JSON.stringify({
+                                path: window.location.pathname,
+                                scrollY: window.scrollY
+                              }));
+                            }}
+                          >
                             {item.name}
                           </Link>
                         </div>
