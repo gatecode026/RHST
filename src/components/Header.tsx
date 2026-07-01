@@ -914,7 +914,13 @@ export default function Header() {
                     <div key={prod.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #f9f9f9', paddingBottom: '8px' }}>
                       <Link
                         href={prod.link}
-                        onClick={() => setIsSearchOpen(false)}
+                        onClick={() => {
+                          setIsSearchOpen(false);
+                          sessionStorage.setItem('scroll_pos_before_product_detail', JSON.stringify({
+                            path: window.location.pathname,
+                            scrollY: window.scrollY
+                          }));
+                        }}
                         style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer', textDecoration: 'none' }}
                       >
                         <img src={prod.image} alt={prod.name} style={{ width: '45px', height: '45px', objectFit: 'contain', borderRadius: '4px', border: '1px solid #eee' }} />

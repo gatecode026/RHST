@@ -93,7 +93,17 @@ export default function BestSelling() {
           <div className={styles.sliderContainer}>
             <div ref={scrollContainerRef} className={styles.grid}>
               {products.map((prod) => (
-                <Link key={prod.id} href={`/products/${prod.slug || prod.id}`} className={styles.card}>
+                <Link 
+                  key={prod.id} 
+                  href={`/products/${prod.slug || prod.id}`} 
+                  className={styles.card}
+                  onClick={() => {
+                    sessionStorage.setItem('scroll_pos_before_product_detail', JSON.stringify({
+                      path: window.location.pathname,
+                      scrollY: window.scrollY
+                    }));
+                  }}
+                >
                   <div className={styles.imageWrapper}>
                     <img src={prod.image} alt={prod.name} className={styles.image} />
                   </div>

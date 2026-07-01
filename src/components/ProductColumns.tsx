@@ -46,6 +46,27 @@ export default function ProductColumns() {
     fetchProducts();
   }, []);
 
+  // Restore scroll position on home page after content is loaded
+  useEffect(() => {
+    if (!loading) {
+      const saved = sessionStorage.getItem('scroll_pos_before_product_detail');
+      if (saved) {
+        try {
+          const { path, scrollY } = JSON.parse(saved);
+          if (path === window.location.pathname) {
+            const timer = setTimeout(() => {
+              window.scrollTo(0, scrollY);
+              sessionStorage.removeItem('scroll_pos_before_product_detail');
+            }, 150);
+            return () => clearTimeout(timer);
+          }
+        } catch (e) {
+          console.error('Failed to restore scroll position:', e);
+        }
+      }
+    }
+  }, [loading]);
+
   const parsePrice = (priceVal: any): number => {
     if (typeof priceVal === 'number') return priceVal;
     if (typeof priceVal === 'string') {
@@ -146,7 +167,17 @@ export default function ProductColumns() {
               </div>
               <div className={styles.productList}>
                 {col.products.map((prod, pIdx) => (
-                  <Link key={`${prod.id}-${pIdx}`} href={`/products/${prod.slug || prod.id}`} className={styles.productRow}>
+                  <Link 
+                    key={`${prod.id}-${pIdx}`} 
+                    href={`/products/${prod.slug || prod.id}`} 
+                    className={styles.productRow}
+                    onClick={() => {
+                      sessionStorage.setItem('scroll_pos_before_product_detail', JSON.stringify({
+                        path: window.location.pathname,
+                        scrollY: window.scrollY
+                      }));
+                    }}
+                  >
                     <div className={styles.imageWrapper}>
                       <img src={prod.image} alt={prod.name} className={styles.image} />
                     </div>

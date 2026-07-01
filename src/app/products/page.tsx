@@ -162,11 +162,42 @@ function ProductsCatalogContent() {
 
   // Scroll to top of window when current page changes
   useEffect(() => {
+    // Only scroll to top if we are NOT restoring scroll from a product detail view
+    const saved = sessionStorage.getItem('scroll_pos_before_product_detail');
+    if (saved) {
+      try {
+        const { path } = JSON.parse(saved);
+        if (path === window.location.pathname) {
+          return;
+        }
+      } catch (e) {}
+    }
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
     });
   }, [currentPage]);
+
+  // Restore scroll position after loading completes
+  useEffect(() => {
+    if (!loading) {
+      const saved = sessionStorage.getItem('scroll_pos_before_product_detail');
+      if (saved) {
+        try {
+          const { path, scrollY } = JSON.parse(saved);
+          if (path === window.location.pathname) {
+            const timer = setTimeout(() => {
+              window.scrollTo(0, scrollY);
+              sessionStorage.removeItem('scroll_pos_before_product_detail');
+            }, 100);
+            return () => clearTimeout(timer);
+          }
+        } catch (e) {
+          console.error('Failed to restore scroll position:', e);
+        }
+      }
+    }
+  }, [loading]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -339,13 +370,31 @@ function ProductsCatalogContent() {
                   <div className={styles.productsGrid}>
                     {paginatedProducts.map((prod) => (
                       <div key={prod.id} className={styles.card}>
-                        <Link href={`/products/${prod.slug || prod.id}`} className={styles.imageLink}>
+                        <Link 
+                          href={`/products/${prod.slug || prod.id}`} 
+                          className={styles.imageLink}
+                          onClick={() => {
+                            sessionStorage.setItem('scroll_pos_before_product_detail', JSON.stringify({
+                              path: window.location.pathname,
+                              scrollY: window.scrollY
+                            }));
+                          }}
+                        >
                           <div className={styles.imageWrapper}>
                             <img src={prod.image} alt={prod.name} className={styles.image} />
                           </div>
                         </Link>
                         <div className={styles.info}>
-                          <Link href={`/products/${prod.slug || prod.id}`} className={styles.nameLink}>
+                          <Link 
+                            href={`/products/${prod.slug || prod.id}`} 
+                            className={styles.nameLink}
+                            onClick={() => {
+                              sessionStorage.setItem('scroll_pos_before_product_detail', JSON.stringify({
+                                path: window.location.pathname,
+                                scrollY: window.scrollY
+                              }));
+                            }}
+                          >
                             <h3 className={styles.name}>{prod.name}</h3>
                           </Link>
                           <span className={styles.price}>₹{prod.price.toLocaleString()}</span>
