@@ -37,7 +37,7 @@ export default function ContactPage() {
         <section className={styles.contactSection}>
           <div className="container">
             <div className={styles.contactGrid}>
-              
+
               {/* Left Column: Contact Info */}
               <div>
                 <h2 className={styles.sectionTitle}>CONTACT INFO</h2>
@@ -48,13 +48,13 @@ export default function ContactPage() {
                 <div className={styles.infoCols}>
                   <div className={styles.infoCol}>
                     <h3 className={styles.infoTitle}>OFFICE</h3>
-                    <p className={styles.infoText}>625 Atlantic Ave, Brooklyn, NY 11217, United States</p>
+                    <p className={styles.infoText}>Jaipur,Rajasthan,India</p>
                     <p className={styles.infoText}>+91-8587634520</p>
                     <p className={styles.infoText}>rhst@gmail.com</p>
                   </div>
                   <div className={styles.infoCol}>
                     <h3 className={styles.infoTitle}>MANAGEMENT</h3>
-                    <p className={styles.infoText}>625 Atlantic Ave, Brooklyn, NY 11217, United States</p>
+                    <p className={styles.infoText}>Jaipur,Rajasthan,India</p>
                     <p className={styles.infoText}>+91-8587634520</p>
                     <p className={styles.infoText}>rhst@gmail.com</p>
                   </div>
@@ -76,9 +76,9 @@ export default function ContactPage() {
             {/* Store Grid Section */}
             <div className={styles.storeGrid}>
               <div className={styles.storeImageWrapper}>
-                <img 
-                  src="/images/our_store.png" 
-                  alt="RHST Showroom Store Rajasthan" 
+                <img
+                  src="https://ik.imagekit.io/zp0tch54w/RHST/Contact%20Img.png"
+                  alt="RHST Showroom Store Rajasthan"
                   className={styles.storeImage}
                 />
               </div>
@@ -87,8 +87,8 @@ export default function ContactPage() {
                 <p className={styles.sectionDesc} style={{ marginBottom: '1.5rem' }}>
                   You can also directly buy products from our stores.
                 </p>
-                <h3 className={styles.storeName}>BROOKLYN</h3>
-                <p className={styles.infoText}>625 Atlantic Ave, Brooklyn, NY 11217, United States</p>
+                <h3 className={styles.storeName}>India</h3>
+                <p className={styles.infoText}>Jaipur,Rajasthan,India</p>
                 <p className={styles.infoText}>+91-8587634520</p>
                 <p className={styles.infoText}>rhst@gmail.com</p>
               </div>

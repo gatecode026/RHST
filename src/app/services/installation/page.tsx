@@ -22,18 +22,6 @@ export default function InstallationServicesPage() {
         {/* Hero Banner Section */}
         <section className={styles.heroBanner}>
           <div className={styles.heroOverlay} />
-
-          <button className={styles.heroArrowLeft} aria-label="Previous Slide">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
-          </button>
-
-          <button className={styles.heroArrowRight} aria-label="Next Slide">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M9 18l6-6-6-6" />
-            </svg>
-          </button>
         </section>
 
         {/* Introduction Section */}
@@ -304,15 +292,10 @@ export default function InstallationServicesPage() {
               <div className={styles.imageCol}>
                 <div className={styles.splitImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1548345680-f5475ea5df84?w=600&q=80"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20297%20(1).png"
                     alt="Business IT Setup Services"
                     className={styles.splitImg}
                   />
-                  <div className={styles.playBtn}>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                      <polygon points="5 3 19 12 5 21 5 3" />
-                    </svg>
-                  </div>
                 </div>
               </div>
 
@@ -387,96 +370,144 @@ export default function InstallationServicesPage() {
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=500&q=80"
-                    alt="Expert Technicians"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20299.png"
+                    alt="Latest Technology Knowledge"
                     className={styles.benefitImg}
                   />
                 </div>
-                <h3 className={styles.benefitName}>Expert Technicians</h3>
+                <h3 className={styles.benefitName}>Latest Technology Knowledge</h3>
               </div>
 
               {/* Benefit 2 */}
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=500&q=80"
-                    alt="Time-Saving Solutions"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20300.png"
+                    alt="Reduced Maintenance Problems"
                     className={styles.benefitImg}
                   />
                 </div>
-                <h3 className={styles.benefitName}>Time-Saving Solutions</h3>
+                <h3 className={styles.benefitName}>Reduced Maintenance Problems</h3>
               </div>
 
               {/* Benefit 3 */}
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1531482615713-2afd69097998?w=500&q=80"
-                    alt="Proper Configuration"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20301.png"
+                    alt="Transparent Service Process"
                     className={styles.benefitImg}
                   />
                 </div>
-                <h3 className={styles.benefitName}>Proper Configuration</h3>
+                <h3 className={styles.benefitName}>Transparent Service Process</h3>
               </div>
 
               {/* Benefit 4 */}
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=500&q=80"
-                    alt="Reliable Support"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20302.png"
+                    alt="Affordable & Reliable Solutions"
                     className={styles.benefitImg}
                   />
                 </div>
-                <h3 className={styles.benefitName}>Reliable Support</h3>
+                <h3 className={styles.benefitName}>Affordable & Reliable Solutions</h3>
               </div>
 
               {/* Benefit 5 */}
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1563986768609-322da13575f3?w=500&q=80"
-                    alt="Hassle-Free Experience"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20303.png"
+                    alt="On-Site & Remote Assistance"
                     className={styles.benefitImg}
                   />
                 </div>
-                <h3 className={styles.benefitName}>Hassle-Free Experience</h3>
+                <h3 className={styles.benefitName}>On-Site & Remote Assistance</h3>
               </div>
 
               {/* Benefit 6 */}
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=500&q=80"
-                    alt="Startups"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20304.png"
+                    alt="Long-Term Technology Support"
                     className={styles.benefitImg}
                   />
                 </div>
-                <h3 className={styles.benefitName}>Startups</h3>
+                <h3 className={styles.benefitName}>Long-Term Technology Support</h3>
               </div>
 
               {/* Benefit 7 */}
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&q=80"
-                    alt="Manufacturing Companies"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20305.png"
+                    alt="Customer Satisfaction Focus"
                     className={styles.benefitImg}
                   />
                 </div>
-                <h3 className={styles.benefitName}>Manufacturing Companies</h3>
+                <h3 className={styles.benefitName}>Customer Satisfaction Focus</h3>
               </div>
 
               {/* Benefit 8 */}
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=500&q=80"
-                    alt="Service Providers"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20306.png"
+                    alt="Business Growth Support"
                     className={styles.benefitImg}
                   />
                 </div>
-                <h3 className={styles.benefitName}>Service Providers</h3>
+                <h3 className={styles.benefitName}>Business Growth Support</h3>
+              </div>
+
+              {/* Benefit 9 */}
+              <div className={styles.benefitCard}>
+                <div className={styles.benefitImgWrapper}>
+                  <img
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20310%20(1).png"
+                    alt="Installation Testing & Quality Check"
+                    className={styles.benefitImg}
+                  />
+                </div>
+                <h3 className={styles.benefitName}>Installation Testing & Quality Check</h3>
+              </div>
+
+              {/* Benefit 10 */}
+              <div className={styles.benefitCard}>
+                <div className={styles.benefitImgWrapper}>
+                  <img
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20311.png"
+                    alt="Professional & Accurate Installation"
+                    className={styles.benefitImg}
+                  />
+                </div>
+                <h3 className={styles.benefitName}>Professional & Accurate Installation</h3>
+              </div>
+
+              {/* Benefit 11 */}
+              <div className={styles.benefitCard}>
+                <div className={styles.benefitImgWrapper}>
+                  <img
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20312.png"
+                    alt="Experienced IT Professionals"
+                    className={styles.benefitImg}
+                  />
+                </div>
+                <h3 className={styles.benefitName}>Experienced IT Professionals</h3>
+              </div>
+
+              {/* Benefit 12 */}
+              <div className={styles.benefitCard}>
+                <div className={styles.benefitImgWrapper}>
+                  <img
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20313.png"
+                    alt="Quick & Efficient Service"
+                    className={styles.benefitImg}
+                  />
+                </div>
+                <h3 className={styles.benefitName}>Quick & Efficient Service</h3>
               </div>
 
             </div>

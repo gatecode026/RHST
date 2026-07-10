@@ -22,18 +22,6 @@ export default function ITSupportPage() {
         {/* Hero Banner Section */}
         <section className={styles.heroBanner}>
           <div className={styles.heroOverlay} />
-
-          <button className={styles.heroArrowLeft} aria-label="Previous Slide">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
-          </button>
-
-          <button className={styles.heroArrowRight} aria-label="Next Slide">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M9 18l6-6-6-6" />
-            </svg>
-          </button>
         </section>
 
         {/* Introduction Section */}
@@ -180,15 +168,10 @@ export default function ITSupportPage() {
               <div className={styles.imageCol}>
                 <div className={styles.splitImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1548345680-f5475ea5df84?w=600&q=80"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20297.png"
                     alt="Remote IT Support"
                     className={styles.splitImg}
                   />
-                  <div className={styles.playBtn}>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                      <polygon points="5 3 19 12 5 21 5 3" />
-                    </svg>
-                  </div>
                 </div>
               </div>
 
@@ -218,15 +201,10 @@ export default function ITSupportPage() {
               <div className={styles.imageCol}>
                 <div className={styles.splitImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=600&q=80"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20298.png"
                     alt="On-Site IT Support"
                     className={styles.splitImg}
                   />
-                  <div className={styles.playBtn}>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                      <polygon points="5 3 19 12 5 21 5 3" />
-                    </svg>
-                  </div>
                 </div>
               </div>
 
@@ -311,7 +289,7 @@ export default function ITSupportPage() {
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=500&q=80"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20299%20(1).png"
                     alt="Small Businesses"
                     className={styles.benefitImg}
                   />
@@ -323,7 +301,7 @@ export default function ITSupportPage() {
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=500&q=80"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20300%20(1).png"
                     alt="Corporate Offices"
                     className={styles.benefitImg}
                   />
@@ -335,7 +313,7 @@ export default function ITSupportPage() {
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=500&q=80"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20301%20(1).png"
                     alt="Educational Institutions"
                     className={styles.benefitImg}
                   />
@@ -347,7 +325,7 @@ export default function ITSupportPage() {
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1538108149393-fdfd81690935?w=500&q=80"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20302%20(1).png"
                     alt="Healthcare Organisations"
                     className={styles.benefitImg}
                   />
@@ -359,7 +337,7 @@ export default function ITSupportPage() {
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=500&q=80"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20303%20(1).png"
                     alt="Retail Businesses"
                     className={styles.benefitImg}
                   />
@@ -371,7 +349,7 @@ export default function ITSupportPage() {
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=500&q=80"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20304%20(1).png"
                     alt="Startups"
                     className={styles.benefitImg}
                   />
@@ -383,7 +361,7 @@ export default function ITSupportPage() {
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&q=80"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20305%20(1).png"
                     alt="Manufacturing Companies"
                     className={styles.benefitImg}
                   />
@@ -395,7 +373,7 @@ export default function ITSupportPage() {
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=500&q=80"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20306%20(1).png"
                     alt="Service Providers"
                     className={styles.benefitImg}
                   />

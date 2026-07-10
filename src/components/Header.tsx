@@ -173,6 +173,18 @@ export default function Header() {
     }
   }, [currentUser]);
 
+  // Lock body scroll when any overlay/drawer is open to prevent background scrolling/bleeding
+  useEffect(() => {
+    if (isCartOpen || isMobileMenuOpen || isSearchOpen || isProfileOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isCartOpen, isMobileMenuOpen, isSearchOpen, isProfileOpen]);
+
   // Focus search input when modal opens
   useEffect(() => {
     if (isSearchOpen && searchInputRef.current) {

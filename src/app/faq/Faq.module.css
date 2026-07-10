@@ -1,6 +1,6 @@
 .breadcrumbBanner {
   background-color: #F5F5F5;
-  padding: 6rem 1.5rem;
+  padding: 8rem 1.5rem;
   text-align: center;
 }
 
@@ -261,7 +261,7 @@
   }
 
   .breadcrumbBanner {
-    padding: 4rem 1.5rem;
+    padding: 3rem 1rem;
   }
 
   .stillQuestionsBox {

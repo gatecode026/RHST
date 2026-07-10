@@ -407,6 +407,35 @@ export default function AdminDashboardPage() {
     sessionStorage.setItem('admin_active_tab', activeTab);
   }, [activeTab]);
 
+  // Lock body scroll when any admin modal is open to prevent background scrolling/bleeding
+  useEffect(() => {
+    const isAnyModalOpen =
+      isAddCategoryOpen ||
+      isAddBrandOpen ||
+      isAddProductOpen ||
+      isAddCouponOpen ||
+      isBlogModalOpen ||
+      isUpdateStatusModalOpen ||
+      isAddAdminOpen;
+
+    if (isAnyModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [
+    isAddCategoryOpen,
+    isAddBrandOpen,
+    isAddProductOpen,
+    isAddCouponOpen,
+    isBlogModalOpen,
+    isUpdateStatusModalOpen,
+    isAddAdminOpen
+  ]);
+
   // Apply theme color to CSS variables across the whole admin panel
   useEffect(() => {
     const PALETTE: Record<string, { primary: string; hover: string; light: string }> = {

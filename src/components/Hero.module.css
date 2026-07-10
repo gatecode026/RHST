@@ -1,7 +1,7 @@
 .heroSection {
   position: relative;
   width: 100%;
-  height: 400px;
+  height: 530px;
   overflow: hidden;
   background-color: #fcfcfd;
 }
@@ -226,7 +226,7 @@
 /* Responsive Media Queries */
 @media (max-width: 1024px) {
   .heroSection {
-    height: 450px;
+    height: 480px;
   }
 
   .title {
@@ -234,7 +234,7 @@
   }
 
   .imageWrapper {
-    max-width: 340px;
+    max-width: 380px;
   }
 }
 
@@ -308,6 +308,12 @@
   }
   .description {
     font-size: 0.95rem;
+  }
+  .textContent {
+    order: 2;
+  }
+  .imageContent {
+    order: 1;
   }
 }
 

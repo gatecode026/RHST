@@ -26,7 +26,7 @@ const STATIC_SLIDES: Slide[] = [
     title: 'Immersive Gaming with the Play Station 5',
     subtitle: 'Experience lightning-fast load times, 3D audio, and an all-new generation of incredible games.',
     ctaText: 'Explore Gaming',
-    image: 'https://ik.imagekit.io/zp0tch54w/RHST/IMG.png?updatedAt=1781696174888',
+    image: 'https://ik.imagekit.io/zp0tch54w/RHST/Home%20page%20banner%2004=3%201.png',
     theme: 'light',
     link: '/products'
   },
