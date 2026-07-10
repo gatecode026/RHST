@@ -1,13 +1,33 @@
 .breadcrumbBanner {
-  background-color: #F5F5F5;
-  padding: 4rem 1.5rem;
+  background-image: url('https://ik.imagekit.io/zp0tch54w/RHST/Contact%20us%20banner%201%20(1).png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 11.5rem 1.5rem;
   text-align: center;
+  position: relative;
+}
+
+.breadcrumbBanner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.45);
+  z-index: 1;
+}
+
+.breadcrumbBanner>div {
+  position: relative;
+  z-index: 2;
 }
 
 .breadcrumbTitle {
   font-size: 2.8rem;
-  font-weight: 200;
-  color: var(--dark);
+  font-weight: 300;
+  color: #ffffff;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: 0.5rem;
@@ -17,22 +37,23 @@
 .breadcrumbs {
   font-size: 0.95rem;
   font-weight: 300;
-  color: var(--gray);
+  color: rgba(255, 255, 255, 0.85);
   letter-spacing: 0.02em;
 }
 
 .breadcrumbLink {
-  color: var(--gray);
+  color: rgba(255, 255, 255, 0.85);
   transition: color var(--transition-fast);
+  text-decoration: none;
 }
 
 .breadcrumbLink:hover {
-  color: var(--primary);
+  color: #ffffff;
 }
 
 .breadcrumbSeparator {
   margin: 0 0.5rem;
-  color: var(--border-color);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 /* Contact Main Section */
@@ -253,6 +274,10 @@
 }
 
 @media (max-width: 768px) {
+  .breadcrumbBanner {
+    padding: 3rem 1rem;
+  }
+
   .contactSection {
     padding: 3.5rem 0;
   }
@@ -281,6 +306,7 @@
 }
 
 @media (max-width: 768px) {
+
   .sectionDesc,
   .infoText,
   .input,
@@ -291,6 +317,7 @@
 }
 
 @media (max-width: 480px) {
+
   .sectionDesc,
   .infoText,
   .input,

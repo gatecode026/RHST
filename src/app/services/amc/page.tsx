@@ -22,18 +22,6 @@ export default function AMCPage() {
         {/* Hero Banner Section */}
         <section className={styles.heroBanner}>
           <div className={styles.heroOverlay} />
-
-          <button className={styles.heroArrowLeft} aria-label="Previous Slide">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
-          </button>
-
-          <button className={styles.heroArrowRight} aria-label="Next Slide">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M9 18l6-6-6-6" />
-            </svg>
-          </button>
         </section>
 
         {/* Introduction Section */}
@@ -144,7 +132,7 @@ export default function AMCPage() {
                   <svg width="40" height="40" viewBox="0 0 24 24" fill="none" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="12" cy="10" r="3" stroke="#111111" strokeWidth="1.5" />
                     <path d="M6 18c0-2.5 2.5-4.5 6-4.5s6 2 6 4.5" stroke="#111111" strokeWidth="1.5" />
-                    <rect x="9" y="16" width="6" height="4" rx="0.5" fill="#3a90f3" stroke="#3a90f3" strokeWidth="1" fillOpacity="0.8"/>
+                    <rect x="9" y="16" width="6" height="4" rx="0.5" fill="#3a90f3" stroke="#3a90f3" strokeWidth="1" fillOpacity="0.8" />
                     <line x1="8" y1="20" x2="16" y2="20" stroke="#3a90f3" strokeWidth="1.5" />
                     <path d="M12 4v3M3 10h3M18 10h3M12 16v2" stroke="#3a90f3" strokeWidth="1.5" />
                     <circle cx="12" cy="3" r="1.5" fill="#3a90f3" />
@@ -182,7 +170,7 @@ export default function AMCPage() {
 
               <div className={styles.textCol}>
                 <h2 className={styles.splitTitle}>Types of AMC Plans</h2>
-                
+
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                   <div>
                     <h3 className={styles.benefitsHeading} style={{ fontSize: '1.25rem', marginBottom: '0.75rem', fontWeight: 600, color: 'var(--dark)' }}>
@@ -217,11 +205,6 @@ export default function AMCPage() {
                     alt="AMC Plans Support"
                     className={styles.splitImg}
                   />
-                  <div className={styles.playBtn}>
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="#ffffff" style={{ transform: 'translateX(2px)' }}>
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
-                  </div>
                 </div>
               </div>
 
@@ -296,7 +279,7 @@ export default function AMCPage() {
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=500&q=80"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20305%20(2).png"
                     alt="Reduced Downtime"
                     className={styles.benefitImg}
                   />
@@ -308,7 +291,7 @@ export default function AMCPage() {
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=500&q=80"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20300%20(3).png"
                     alt="Cost Savings"
                     className={styles.benefitImg}
                   />
@@ -320,7 +303,7 @@ export default function AMCPage() {
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="/images/amc_benefit_students.png"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20301%20(3).png"
                     alt="Better System Performance"
                     className={styles.benefitImg}
                   />
@@ -332,7 +315,7 @@ export default function AMCPage() {
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="/images/amc_benefit_doctors.png"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20299%20(2).png?updatedAt=1783511107228"
                     alt="Expert Technical Support"
                     className={styles.benefitImg}
                   />
@@ -344,7 +327,7 @@ export default function AMCPage() {
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="/images/amc_benefit_security.png"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20303%20(3).png"
                     alt="Improved Security"
                     className={styles.benefitImg}
                   />
@@ -356,7 +339,7 @@ export default function AMCPage() {
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=500&q=80"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20304%20(3).png"
                     alt="Proactive Issue Detection"
                     className={styles.benefitImg}
                   />
@@ -368,7 +351,7 @@ export default function AMCPage() {
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&q=80"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20305%20(3).png"
                     alt="Priority Service Support"
                     className={styles.benefitImg}
                   />
@@ -380,7 +363,7 @@ export default function AMCPage() {
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="/images/amc_benefit_management.png"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20306%20(3).png"
                     alt="Complete IT Management"
                     className={styles.benefitImg}
                   />

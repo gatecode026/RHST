@@ -22,18 +22,6 @@ export default function ConsultationServicesPage() {
         {/* Hero Banner Section */}
         <section className={styles.heroBanner}>
           <div className={styles.heroOverlay} />
-
-          <button className={styles.heroArrowLeft} aria-label="Previous Slide">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
-          </button>
-
-          <button className={styles.heroArrowRight} aria-label="Next Slide">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M9 18l6-6-6-6" />
-            </svg>
-          </button>
         </section>
 
         {/* Introduction Section */}
@@ -280,11 +268,6 @@ export default function ConsultationServicesPage() {
                     alt="IT Consulting Process"
                     className={styles.splitImg}
                   />
-                  <div className={styles.playBtn}>
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="#ffffff" style={{ transform: 'translateX(2px)' }}>
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
-                  </div>
                 </div>
               </div>
 
@@ -359,7 +342,7 @@ export default function ConsultationServicesPage() {
               <div className={styles.whoNeedsCard}>
                 <div className={styles.whoNeedsImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=500&q=80"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20299%20(3).png"
                     alt="Small & Medium Businesses"
                     className={styles.whoNeedsImg}
                   />
@@ -371,7 +354,7 @@ export default function ConsultationServicesPage() {
               <div className={styles.whoNeedsCard}>
                 <div className={styles.whoNeedsImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=500&q=80"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20300%20(4).png"
                     alt="Corporate Organizations"
                     className={styles.whoNeedsImg}
                   />
@@ -383,7 +366,7 @@ export default function ConsultationServicesPage() {
               <div className={styles.whoNeedsCard}>
                 <div className={styles.whoNeedsImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=500&q=80"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20301%20(4).png"
                     alt="Startups"
                     className={styles.whoNeedsImg}
                   />
@@ -395,7 +378,7 @@ export default function ConsultationServicesPage() {
               <div className={styles.whoNeedsCard}>
                 <div className={styles.whoNeedsImgWrapper}>
                   <img
-                    src="/images/amc_benefit_students.png"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20302%20(3).png"
                     alt="Educational Institutions"
                     className={styles.whoNeedsImg}
                   />
@@ -407,7 +390,7 @@ export default function ConsultationServicesPage() {
               <div className={styles.whoNeedsCard}>
                 <div className={styles.whoNeedsImgWrapper}>
                   <img
-                    src="/images/amc_benefit_doctors.png"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20303%20(4).png"
                     alt="Healthcare Sector"
                     className={styles.whoNeedsImg}
                   />
@@ -419,7 +402,7 @@ export default function ConsultationServicesPage() {
               <div className={styles.whoNeedsCard}>
                 <div className={styles.whoNeedsImgWrapper}>
                   <img
-                    src="/images/amc_benefit_security.png"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20304%20(4).png"
                     alt="Retail Businesses"
                     className={styles.whoNeedsImg}
                   />
@@ -431,7 +414,7 @@ export default function ConsultationServicesPage() {
               <div className={styles.whoNeedsCard}>
                 <div className={styles.whoNeedsImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&q=80"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20305%20(4).png"
                     alt="Growing Enterprises"
                     className={styles.whoNeedsImg}
                   />
@@ -443,7 +426,7 @@ export default function ConsultationServicesPage() {
               <div className={styles.whoNeedsCard}>
                 <div className={styles.whoNeedsImgWrapper}>
                   <img
-                    src="/images/amc_benefit_management.png"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20306%20(5).png"
                     alt="Government Sector"
                     className={styles.whoNeedsImg}
                   />

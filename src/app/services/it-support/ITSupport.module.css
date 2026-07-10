@@ -2,7 +2,7 @@
   position: relative;
   width: 100%;
   height: 480px;
-  background-image: url('https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=1600&q=80');
+  background-image: url('https://ik.imagekit.io/zp0tch54w/RHST/IT%20Support%20(Service%20page%201)%201.png');
   background-size: cover;
   background-position: center;
   display: flex;
@@ -10,12 +10,7 @@
 }
 
 .heroOverlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.4);
+  display: none;
 }
 
 .heroArrowLeft,

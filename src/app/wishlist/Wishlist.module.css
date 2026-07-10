@@ -7,7 +7,7 @@
 .breadcrumbsHeader {
   background-color: #f7f7f9;
   text-align: center;
-  padding: 3rem 0;
+  padding: 8rem 0;
   border-bottom: 1px solid #e1e1e6;
   margin-bottom: 4rem;
 }
@@ -240,6 +240,11 @@
 
 /* Mobile View responsiveness */
 @media (max-width: 768px) {
+  .breadcrumbsHeader {
+    padding: 3rem 0;
+    margin-bottom: 2rem;
+  }
+
   .wishlistTable,
   .wishlistTable tbody {
     display: block;
@@ -264,6 +269,15 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
+  }
+
+  .wishlistItemRow td:last-child {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 0;
+    width: auto;
   }
 
   .productInfoCol {
@@ -285,6 +299,6 @@
   }
 
   .removeBtn {
-    margin-top: 0.5rem;
+    margin-top: 0;
   }
 }

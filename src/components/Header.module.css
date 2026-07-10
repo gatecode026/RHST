@@ -223,11 +223,13 @@
   z-index: 99;
   max-height: 0;
   overflow-y: auto;
-  transition: max-height var(--transition-normal);
+  transition: max-height var(--transition-normal), visibility var(--transition-normal);
+  visibility: hidden;
 }
 
 .mobileMenuOpen {
   max-height: 80vh;
+  visibility: visible;
 }
 
 .mobileNavGroup {

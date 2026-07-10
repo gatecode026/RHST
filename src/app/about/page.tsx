@@ -43,7 +43,7 @@ export default function AboutPage() {
             <div className={styles.introGrid}>
               <div className={styles.introImageWrapper}>
                 <img
-                  src="/images/about_team.png"
+                  src="https://ik.imagekit.io/zp0tch54w/RHST/igor-miske-CwVE4xCAA8Y-unsplash.png"
                   alt="RHST Team Collaborating"
                   className={styles.introImage}
                 />

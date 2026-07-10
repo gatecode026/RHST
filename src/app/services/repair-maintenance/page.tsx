@@ -22,18 +22,6 @@ export default function RepairMaintenancePage() {
         {/* Hero Banner Section */}
         <section className={styles.heroBanner}>
           <div className={styles.heroOverlay} />
-
-          <button className={styles.heroArrowLeft} aria-label="Previous Slide">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
-          </button>
-
-          <button className={styles.heroArrowRight} aria-label="Next Slide">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M9 18l6-6-6-6" />
-            </svg>
-          </button>
         </section>
 
         {/* Introduction Section */}
@@ -249,11 +237,6 @@ export default function RepairMaintenancePage() {
                     alt="IT Maintenance Services"
                     className={styles.splitImg}
                   />
-                  <div className={styles.playBtn}>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                      <polygon points="5 3 19 12 5 21 5 3" />
-                    </svg>
-                  </div>
                 </div>
               </div>
 
@@ -328,7 +311,7 @@ export default function RepairMaintenancePage() {
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=500&q=80"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20299%20(2).png"
                     alt="Expert Technical Team"
                     className={styles.benefitImg}
                   />
@@ -340,7 +323,7 @@ export default function RepairMaintenancePage() {
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=500&q=80"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20301.png?updatedAt=1783327127090"
                     alt="Fast & Reliable Service"
                     className={styles.benefitImg}
                   />
@@ -352,7 +335,7 @@ export default function RepairMaintenancePage() {
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1531482615713-2afd69097998?w=500&q=80"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20301%20(2).png"
                     alt="Complete IT Problem Solutions"
                     className={styles.benefitImg}
                   />
@@ -364,7 +347,7 @@ export default function RepairMaintenancePage() {
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=500&q=80"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20302%20(2).png"
                     alt="Preventive Maintenance Support"
                     className={styles.benefitImg}
                   />
@@ -376,7 +359,7 @@ export default function RepairMaintenancePage() {
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1563986768609-322da13575f3?w=500&q=80"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20303%20(2).png"
                     alt="Improved Device Performance"
                     className={styles.benefitImg}
                   />
@@ -388,7 +371,7 @@ export default function RepairMaintenancePage() {
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=500&q=80"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20304%20(2).png"
                     alt="Cost-Effective IT Solutions"
                     className={styles.benefitImg}
                   />
@@ -400,7 +383,7 @@ export default function RepairMaintenancePage() {
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&q=80"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20305%20(2).png"
                     alt="Reduced Business Downtime"
                     className={styles.benefitImg}
                   />
@@ -412,7 +395,7 @@ export default function RepairMaintenancePage() {
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=500&q=80"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20306%20(2).png"
                     alt="Customized Maintenance Plans"
                     className={styles.benefitImg}
                   />
