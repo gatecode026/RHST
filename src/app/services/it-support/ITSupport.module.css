@@ -446,11 +446,11 @@
     flex-direction: column;
     gap: 3rem;
   }
-  
+
   .benefitsGrid {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .heroBanner {
     height: 380px;
   }
@@ -460,12 +460,12 @@
   .servicesGrid {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .formRow {
     flex-direction: column;
     gap: 1.5rem;
   }
-  
+
   .submitBtn {
     width: 100%;
     text-align: center;
@@ -476,7 +476,7 @@
   .servicesGrid {
     grid-template-columns: 1fr;
   }
-  
+
   .benefitsGrid {
     grid-template-columns: 1fr;
   }

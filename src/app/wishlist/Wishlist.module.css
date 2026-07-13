@@ -147,10 +147,10 @@
 .productImg {
   width: 80px;
   height: 80px;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 8px;
   border: 1px solid var(--border-color);
-  background-color: #f9f9f9;
+  background-color: var(--white, #ffffff);
 }
 
 .productNameLink {

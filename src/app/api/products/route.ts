@@ -9,7 +9,7 @@ const DEFAULT_PRODUCTS = [
     mrp: 135000,
     discount: 7,
     price: '₹1,25,000',
-    image: '/images/bestselling_ipad.png',
+    image: 'https://ik.imagekit.io/zp0tch54w/RHST/wmremove-transformed.png',
     link: '#ipad',
     category: 'Hardware',
     brand: 'Dell',

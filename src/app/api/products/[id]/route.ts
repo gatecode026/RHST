@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic';
 
 // Mock data catalogs to resolve mock IDs
 const BASE_CATALOG_PRODUCTS = [
-  { name: 'Ipad 9th Gen', price: 125000, image: '/images/bestselling_ipad.png', category: 'Hardware', brand: 'Dell' },
+  { name: 'Ipad 9th Gen', price: 125000, image: 'https://ik.imagekit.io/zp0tch54w/RHST/wmremove-transformed.png', category: 'Hardware', brand: 'Dell' },
   { name: 'Drone With Camera', price: 42000, image: '/images/drone.png', category: 'Hardware', brand: 'Samsung' },
   { name: 'Watch Stylist', price: 15000, image: '/images/bestselling_watch.png', category: 'Hardware', brand: 'Dell' },
   { name: 'Ultra HD TV', price: 75000, image: '/images/bestselling_tv.png', category: 'Office Equipment', brand: 'Samsung' },
@@ -148,8 +148,8 @@ export async function GET(
 
     // Lookup in Mock catalogs if not found (matching ID or slug)
     if (!product) {
-      const mockCatProd = CATALOG_PRODUCTS.find(p => 
-        p.id === id || 
+      const mockCatProd = CATALOG_PRODUCTS.find(p =>
+        p.id === id ||
         p.name.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-') === id.toLowerCase()
       );
       if (mockCatProd) {
@@ -163,8 +163,8 @@ export async function GET(
           designType: mockCatProd.category === 'Hardware' ? 'Personal Computer' : 'Accessory'
         };
       } else {
-        const mockColProd = COLUMN_PRODUCTS.find(p => 
-          p.id === id || 
+        const mockColProd = COLUMN_PRODUCTS.find(p =>
+          p.id === id ||
           p.name.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-') === id.toLowerCase()
         );
         if (mockColProd) {

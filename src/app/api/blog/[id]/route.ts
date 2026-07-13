@@ -28,7 +28,7 @@ export async function GET(
       tag: blog.tag || 'Laptops & Computers',
       title: blog.title,
       excerpt: blog.excerpt || '',
-      image: blog.image || '/images/bestselling_ipad.png',
+      image: blog.image || 'https://ik.imagekit.io/zp0tch54w/RHST/wmremove-transformed.png',
       status: blog.status || 'Published',
       featured: blog.featured || false,
       category: blog.category || 'Laptops & Computers',
