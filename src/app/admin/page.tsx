@@ -223,7 +223,7 @@ export default function AdminDashboardPage() {
   // Active form state for blogs
   const [blogTitle, setBlogTitle] = useState('');
   const [blogExcerpt, setBlogExcerpt] = useState('');
-  const [blogCoverImage, setBlogCoverImage] = useState('/images/bestselling_ipad.png');
+  const [blogCoverImage, setBlogCoverImage] = useState('https://ik.imagekit.io/zp0tch54w/RHST/wmremove-transformed.png');
   const [blogStatus, setBlogStatus] = useState<'Published' | 'Draft' | 'Scheduled'>('Draft');
   const [blogFeatured, setBlogFeatured] = useState(false);
   const [blogCategory, setBlogCategory] = useState('Laptops & Computers');
@@ -439,18 +439,18 @@ export default function AdminDashboardPage() {
   // Apply theme color to CSS variables across the whole admin panel
   useEffect(() => {
     const PALETTE: Record<string, { primary: string; hover: string; light: string }> = {
-      blue:    { primary: '#3b82f6', hover: '#2563eb', light: '#eff6ff' },
+      blue: { primary: '#3b82f6', hover: '#2563eb', light: '#eff6ff' },
       emerald: { primary: '#10b981', hover: '#059669', light: '#ecfdf5' },
-      violet:  { primary: '#8b5cf6', hover: '#7c3aed', light: '#f5f3ff' },
-      rose:    { primary: '#f43f5e', hover: '#e11d48', light: '#fff1f2' },
-      amber:   { primary: '#f59e0b', hover: '#d97706', light: '#fffbeb' },
-      orange:  { primary: '#f97316', hover: '#ea580c', light: '#fff7ed' },
-      indigo:  { primary: '#4f46e5', hover: '#4338ca', light: '#eef2ff' },
-      cyan:    { primary: '#06b6d4', hover: '#0891b2', light: '#ecfeff' },
-      teal:    { primary: '#0d9488', hover: '#0f766e', light: '#f0fdfa' },
-      pink:    { primary: '#ec4899', hover: '#db2777', light: '#fdf2f8' },
-      lime:    { primary: '#84cc16', hover: '#65a30d', light: '#f7fee7' },
-      slate:   { primary: '#64748b', hover: '#475569', light: '#f8fafc' },
+      violet: { primary: '#8b5cf6', hover: '#7c3aed', light: '#f5f3ff' },
+      rose: { primary: '#f43f5e', hover: '#e11d48', light: '#fff1f2' },
+      amber: { primary: '#f59e0b', hover: '#d97706', light: '#fffbeb' },
+      orange: { primary: '#f97316', hover: '#ea580c', light: '#fff7ed' },
+      indigo: { primary: '#4f46e5', hover: '#4338ca', light: '#eef2ff' },
+      cyan: { primary: '#06b6d4', hover: '#0891b2', light: '#ecfeff' },
+      teal: { primary: '#0d9488', hover: '#0f766e', light: '#f0fdfa' },
+      pink: { primary: '#ec4899', hover: '#db2777', light: '#fdf2f8' },
+      lime: { primary: '#84cc16', hover: '#65a30d', light: '#f7fee7' },
+      slate: { primary: '#64748b', hover: '#475569', light: '#f8fafc' },
     };
     const chosen = PALETTE[themeColor] || PALETTE['cyan'];
     const root = document.documentElement;
@@ -867,7 +867,7 @@ export default function AdminDashboardPage() {
       setEditingBlog(blogToEdit);
       setBlogTitle(blogToEdit.title || '');
       setBlogExcerpt(blogToEdit.excerpt || '');
-      setBlogCoverImage(blogToEdit.image || '/images/bestselling_ipad.png');
+      setBlogCoverImage(blogToEdit.image || 'https://ik.imagekit.io/zp0tch54w/RHST/wmremove-transformed.png');
       setBlogStatus(blogToEdit.status || 'Draft');
       setBlogFeatured(blogToEdit.featured || false);
       setBlogCategory(blogToEdit.category || 'Laptops & Computers');
@@ -882,7 +882,7 @@ export default function AdminDashboardPage() {
       setEditingBlog(null);
       setBlogTitle('');
       setBlogExcerpt('');
-      setBlogCoverImage('/images/bestselling_ipad.png');
+      setBlogCoverImage('https://ik.imagekit.io/zp0tch54w/RHST/wmremove-transformed.png');
       setBlogStatus('Draft');
       setBlogFeatured(false);
       setBlogCategory('Laptops & Computers');
@@ -1182,7 +1182,7 @@ export default function AdminDashboardPage() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.setAttribute('href', url);
-    link.setAttribute('download', `orders_export_${new Date().toISOString().slice(0,10)}.csv`);
+    link.setAttribute('download', `orders_export_${new Date().toISOString().slice(0, 10)}.csv`);
     link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();
@@ -1208,7 +1208,7 @@ export default function AdminDashboardPage() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.setAttribute('href', url);
-    link.setAttribute('download', `customers_export_${new Date().toISOString().slice(0,10)}.csv`);
+    link.setAttribute('download', `customers_export_${new Date().toISOString().slice(0, 10)}.csv`);
     link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();
@@ -1980,7 +1980,7 @@ export default function AdminDashboardPage() {
     let action = 'View';
     let color = '#3b82f6';
     let bgColor = '#eff6ff';
-    
+
     // Determine Module
     if (actionLower.includes('product')) {
       module = 'Products';
@@ -2047,15 +2047,15 @@ export default function AdminDashboardPage() {
   // Filter logs list
   const filteredLogs = logs.filter(log => {
     // 1. Search Query filter (matches action, details or username)
-    const matchesSearch = 
+    const matchesSearch =
       (log.action || '').toLowerCase().includes(logsSearchQuery.toLowerCase()) ||
       (log.details || '').toLowerCase().includes(logsSearchQuery.toLowerCase()) ||
       'admin user'.includes(logsSearchQuery.toLowerCase()) ||
       'super admin'.includes(logsSearchQuery.toLowerCase());
 
     // 2. Admin filter
-    const matchesAdmin = logsAdminFilter === 'All' || 
-                         (logsAdminFilter === 'admin' && (log.details || '').toLowerCase().includes('admin'));
+    const matchesAdmin = logsAdminFilter === 'All' ||
+      (logsAdminFilter === 'admin' && (log.details || '').toLowerCase().includes('admin'));
 
     const parsed = parseLogAction(log.action);
 
@@ -2070,13 +2070,13 @@ export default function AdminDashboardPage() {
     if (log.timestamp) {
       const logDate = new Date(log.timestamp);
       logDate.setHours(0, 0, 0, 0);
-      
+
       if (logsStartDate) {
         const start = new Date(logsStartDate);
         start.setHours(0, 0, 0, 0);
         if (logDate < start) matchesDate = false;
       }
-      
+
       if (logsEndDate) {
         const end = new Date(logsEndDate);
         end.setHours(23, 59, 59, 999);
@@ -2097,7 +2097,7 @@ export default function AdminDashboardPage() {
 
 
   const filteredOrdersList = orders.filter(order => {
-    const matchesSearch = 
+    const matchesSearch =
       (order.orderId || '').toLowerCase().includes(ordersSearchQuery.toLowerCase()) ||
       (order.customer && (order.customer.name || '').toLowerCase().includes(ordersSearchQuery.toLowerCase())) ||
       (order.customer && (order.customer.email || '').toLowerCase().includes(ordersSearchQuery.toLowerCase()));
@@ -2216,14 +2216,14 @@ export default function AdminDashboardPage() {
               >
                 {showPassword ? (
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
-                    <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
-                    <line x1="1" y1="1" x2="23" y2="23"/>
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
+                    <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
+                    <line x1="1" y1="1" x2="23" y2="23" />
                   </svg>
                 ) : (
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                    <circle cx="12" cy="12" r="3" />
                   </svg>
                 )}
               </button>
@@ -2249,8 +2249,8 @@ export default function AdminDashboardPage() {
               <span className={styles.sidebarTitle}>Admin Panel</span>
             </>
           )}
-          <button 
-            className={styles.sidebarCollapseBtn} 
+          <button
+            className={styles.sidebarCollapseBtn}
             onClick={() => setSidebarCollapsed(p => !p)}
             title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
@@ -2492,16 +2492,16 @@ export default function AdminDashboardPage() {
               {darkMode ? (
                 /* Moon icon */
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
                 </svg>
               ) : (
                 /* Sun icon */
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="5"/>
-                  <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
-                  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-                  <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
-                  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                  <circle cx="12" cy="12" r="5" />
+                  <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                  <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
                 </svg>
               )}
             </button>
@@ -2789,8 +2789,8 @@ export default function AdminDashboardPage() {
                   {isBlogModalOpen ? (
                     <div style={{ backgroundColor: '#fff', borderRadius: '12px', border: '1px solid #e2e2e8', padding: '2rem' }}>
                       <div style={{ marginBottom: '1.5rem' }}>
-                        <button 
-                          type="button" 
+                        <button
+                          type="button"
                           onClick={() => { setIsBlogModalOpen(false); setEditingBlog(null); }}
                           style={{ background: 'none', border: 'none', color: '#00a8b5', cursor: 'pointer', fontWeight: 600, fontSize: '14.5px', display: 'flex', alignItems: 'center', gap: '6px', padding: 0 }}
                         >
@@ -2800,21 +2800,21 @@ export default function AdminDashboardPage() {
 
                       <h4 style={{ margin: 0, fontSize: '22px', fontWeight: 700 }}>{editingBlog ? 'Edit Blog Post' : 'New Blog Post'}</h4>
                       <p style={{ color: '#666', fontSize: '13.5px', marginTop: '4px', marginBottom: '2rem' }}>Configure details and rich-block content below.</p>
-                      
+
                       <form onSubmit={handleSubmitBlog}>
                         <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', textAlign: 'left' }}>
                           {/* Left Column (Main Editor) */}
                           <div style={{ flex: '1 1 65%', minWidth: '320px', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                            
+
                             {/* Cover Image Upload Area */}
                             <div style={{ border: '1px solid #e2e2e8', borderRadius: '12px', padding: '1.25rem', backgroundColor: '#fafafa' }}>
                               <label style={{ fontWeight: 600, display: 'block', fontSize: '14px', marginBottom: '8px' }}>Cover Image</label>
                               <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                                <img 
-                                  src={blogCoverImage || '/images/bestselling_ipad.png'} 
-                                  alt="Preview" 
+                                <img
+                                  src={blogCoverImage || 'https://ik.imagekit.io/zp0tch54w/RHST/wmremove-transformed.png'}
+                                  alt="Preview"
                                   style={{ width: '120px', height: '80px', objectFit: 'cover', borderRadius: '6px', border: '1px solid #ddd' }}
-                                  onError={(e) => { e.currentTarget.src = '/images/bestselling_ipad.png'; }}
+                                  onError={(e) => { e.currentTarget.src = 'https://ik.imagekit.io/zp0tch54w/RHST/wmremove-transformed.png'; }}
                                 />
                                 <div style={{ flex: 1 }}>
                                   <input
@@ -2833,7 +2833,7 @@ export default function AdminDashboardPage() {
                             {/* Post Details Card */}
                             <div style={{ border: '1px solid #e2e2e8', borderRadius: '12px', padding: '1.25rem', backgroundColor: '#fff' }}>
                               <h5 style={{ margin: '0 0 1rem 0', fontSize: '15px', fontWeight: 700, borderBottom: '1px solid #eee', paddingBottom: '8px' }}>Post Details</h5>
-                              
+
                               <div className={styles.formGroup} style={{ marginBottom: '1rem' }}>
                                 <label className={styles.formLabel}>Title *</label>
                                 <input
@@ -2891,9 +2891,9 @@ export default function AdminDashboardPage() {
                                             <button type="button" onClick={() => moveBlockDown(idx)} disabled={idx === blogBlocks.length - 1} style={{ padding: '2px 4px', fontSize: '10px', border: '1px solid #ddd', background: '#fff', borderRadius: '3px', cursor: idx === blogBlocks.length - 1 ? 'not-allowed' : 'pointer' }}>↓</button>
                                           </div>
                                         </div>
-                                        <button 
-                                          type="button" 
-                                          onClick={() => removeBlock(b.id)} 
+                                        <button
+                                          type="button"
+                                          onClick={() => removeBlock(b.id)}
                                           style={{ border: 'none', background: 'transparent', color: '#ff4d4f', fontSize: '18px', fontWeight: 'bold', cursor: 'pointer', padding: '0 4px' }}
                                         >
                                           ×
@@ -3073,14 +3073,14 @@ export default function AdminDashboardPage() {
                                       key={btn.type}
                                       type="button"
                                       onClick={() => addBlock(btn.type)}
-                                      style={{ 
-                                        padding: '5px 10px', 
-                                        fontSize: '11px', 
-                                        fontWeight: 600, 
-                                        border: 'none', 
-                                        borderRadius: '4px', 
-                                        backgroundColor: btn.bg, 
-                                        color: btn.color, 
+                                      style={{
+                                        padding: '5px 10px',
+                                        fontSize: '11px',
+                                        fontWeight: 600,
+                                        border: 'none',
+                                        borderRadius: '4px',
+                                        backgroundColor: btn.bg,
+                                        color: btn.color,
                                         cursor: 'pointer',
                                         transition: 'transform 0.1s'
                                       }}
@@ -3097,11 +3097,11 @@ export default function AdminDashboardPage() {
 
                           {/* Right Column (Publish/Author sidebar) */}
                           <div style={{ width: '340px', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                            
+
                             {/* Publish Settings */}
                             <div style={{ border: '1px solid #e2e2e8', borderRadius: '12px', padding: '1.25rem', backgroundColor: '#fff' }}>
                               <h5 style={{ margin: '0 0 1rem 0', fontSize: '15px', fontWeight: 700, borderBottom: '1px solid #eee', paddingBottom: '8px' }}>Publish</h5>
-                              
+
                               <div style={{ marginBottom: '1.25rem' }}>
                                 <label style={{ fontWeight: 600, display: 'block', fontSize: '13px', marginBottom: '8px' }}>Status</label>
                                 <div style={{ display: 'flex', gap: '6px' }}>
@@ -3145,7 +3145,7 @@ export default function AdminDashboardPage() {
                             {/* Classification settings */}
                             <div style={{ border: '1px solid #e2e2e8', borderRadius: '12px', padding: '1.25rem', backgroundColor: '#fff' }}>
                               <h5 style={{ margin: '0 0 1rem 0', fontSize: '15px', fontWeight: 700, borderBottom: '1px solid #eee', paddingBottom: '8px' }}>Classification</h5>
-                              
+
                               <div className={styles.formGroup} style={{ marginBottom: '1rem' }}>
                                 <label className={styles.formLabel}>Category</label>
                                 <select
@@ -3193,7 +3193,7 @@ export default function AdminDashboardPage() {
                             {/* Author Settings Card */}
                             <div style={{ border: '1px solid #e2e2e8', borderRadius: '12px', padding: '1.25rem', backgroundColor: '#fff' }}>
                               <h5 style={{ margin: '0 0 1rem 0', fontSize: '15px', fontWeight: 700, borderBottom: '1px solid #eee', paddingBottom: '8px' }}>Author Details</h5>
-                              
+
                               <div className={styles.formGroup} style={{ marginBottom: '1rem' }}>
                                 <label className={styles.formLabel}>Author Name</label>
                                 <input
@@ -3304,12 +3304,12 @@ export default function AdminDashboardPage() {
                                   <tr key={blog.id} className={styles.tr}>
                                     <td className={styles.td} style={{ width: '80px' }}>
                                       <img
-                                        src={blog.image || '/images/bestselling_ipad.png'}
+                                        src={blog.image || 'https://ik.imagekit.io/zp0tch54w/RHST/wmremove-transformed.png'}
                                         alt={blog.title}
                                         style={{ width: '60px', height: '40px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #eee' }}
                                         onError={(e) => {
                                           e.currentTarget.onerror = null;
-                                          e.currentTarget.src = '/images/bestselling_ipad.png';
+                                          e.currentTarget.src = 'https://ik.imagekit.io/zp0tch54w/RHST/wmremove-transformed.png';
                                         }}
                                       />
                                     </td>
@@ -3587,7 +3587,7 @@ export default function AdminDashboardPage() {
                           onChange={(e) => setOrdersSearchQuery(e.target.value)}
                         />
                       </div>
-                      
+
                       <div style={{ display: 'flex', gap: '8px' }}>
                         <select
                           className={styles.filterBtn}
@@ -3640,11 +3640,10 @@ export default function AdminDashboardPage() {
                                     ₹{order.subtotal.toLocaleString()}
                                   </td>
                                   <td className={styles.td}>
-                                    <span className={`${styles.statusBadge} ${
-                                      orderStatus === 'Pending' ? styles.statusBadgePending :
-                                      orderStatus === 'Shipped' ? styles.statusBadgeShipped :
-                                      orderStatus === 'Completed' ? styles.statusBadgeCompleted : styles.statusBadgeCancelled
-                                    }`}>
+                                    <span className={`${styles.statusBadge} ${orderStatus === 'Pending' ? styles.statusBadgePending :
+                                        orderStatus === 'Shipped' ? styles.statusBadgeShipped :
+                                          orderStatus === 'Completed' ? styles.statusBadgeCompleted : styles.statusBadgeCancelled
+                                      }`}>
                                       {orderStatus === 'Pending' && '🕒 '}
                                       {orderStatus === 'Shipped' && '🚚 '}
                                       {orderStatus === 'Completed' && '☑️ '}
@@ -3653,9 +3652,8 @@ export default function AdminDashboardPage() {
                                     </span>
                                   </td>
                                   <td className={styles.td}>
-                                    <span className={`${styles.paymentBadge} ${
-                                      paymentStatus === 'COMPLETED' ? styles.paymentBadgeCompleted : styles.paymentBadgePending
-                                    }`}>
+                                    <span className={`${styles.paymentBadge} ${paymentStatus === 'COMPLETED' ? styles.paymentBadgeCompleted : styles.paymentBadgePending
+                                      }`}>
                                       {paymentStatus}
                                     </span>
                                   </td>
@@ -3665,13 +3663,13 @@ export default function AdminDashboardPage() {
                                         •••
                                       </button>
                                       <div className={styles.actionDropdown}>
-                                        <button 
-                                          className={styles.actionItem} 
+                                        <button
+                                          className={styles.actionItem}
                                           onClick={() => setSelectedOrder(order)}
                                         >
                                           👁️ View Details
                                         </button>
-                                        <button 
+                                        <button
                                           className={styles.actionItem}
                                           onClick={() => {
                                             setUpdatingOrder(order);
@@ -3682,13 +3680,13 @@ export default function AdminDashboardPage() {
                                         >
                                           🚚 Update Status
                                         </button>
-                                        <button 
+                                        <button
                                           className={styles.actionItem}
                                           onClick={() => handlePrintInvoice(order)}
                                         >
                                           📄 Invoice
                                         </button>
-                                        <button 
+                                        <button
                                           className={`${styles.actionItem} ${styles.actionItemDanger}`}
                                           onClick={() => handleDeleteOrder(order.id)}
                                         >
@@ -3732,7 +3730,7 @@ export default function AdminDashboardPage() {
                         <div className={styles.profileLeftCol}>
                           {/* Profile Details Card */}
                           <div className={styles.profileCard}>
-                            <div 
+                            <div
                               style={{
                                 width: '80px',
                                 height: '80px',
@@ -3749,7 +3747,7 @@ export default function AdminDashboardPage() {
                             >
                               {viewingCustomer.name.charAt(0).toUpperCase()}
                             </div>
-                            
+
                             <h4 className={styles.profileName}>{viewingCustomer.name}</h4>
                             <div className={styles.profileEmail}>
                               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.7 }}>
@@ -3869,18 +3867,16 @@ export default function AdminDashboardPage() {
                                               ₹{order.subtotal.toLocaleString()}
                                             </td>
                                             <td className={styles.td}>
-                                              <span className={`${styles.statusBadge} ${
-                                                orderStatus === 'Pending' ? styles.statusBadgePending :
-                                                orderStatus === 'Shipped' ? styles.statusBadgeShipped :
-                                                orderStatus === 'Completed' ? styles.statusBadgeCompleted : styles.statusBadgeCancelled
-                                              }`}>
+                                              <span className={`${styles.statusBadge} ${orderStatus === 'Pending' ? styles.statusBadgePending :
+                                                  orderStatus === 'Shipped' ? styles.statusBadgeShipped :
+                                                    orderStatus === 'Completed' ? styles.statusBadgeCompleted : styles.statusBadgeCancelled
+                                                }`}>
                                                 {orderStatus}
                                               </span>
                                             </td>
                                             <td className={styles.td}>
-                                              <span className={`${styles.paymentBadge} ${
-                                                paymentStatus === 'COMPLETED' ? styles.paymentBadgeCompleted : styles.paymentBadgePending
-                                              }`}>
+                                              <span className={`${styles.paymentBadge} ${paymentStatus === 'COMPLETED' ? styles.paymentBadgeCompleted : styles.paymentBadgePending
+                                                }`}>
                                                 {paymentStatus}
                                               </span>
                                             </td>
@@ -3926,7 +3922,7 @@ export default function AdminDashboardPage() {
                               onChange={(e) => setSearchQuery(e.target.value)}
                             />
                           </div>
-                          
+
                           <button className={styles.filterBtn} style={{ outline: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '8px 12px' }}>
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                               <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
@@ -3954,7 +3950,7 @@ export default function AdminDashboardPage() {
                                   <tr key={cust.email || index} className={styles.tr}>
                                     <td className={styles.td}>
                                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                        <div 
+                                        <div
                                           style={{
                                             width: '36px',
                                             height: '36px',
@@ -4014,7 +4010,7 @@ export default function AdminDashboardPage() {
                                       <div className={styles.actionMenuContainer}>
                                         <button className={styles.actionTrigger}>•••</button>
                                         <div className={styles.actionDropdown}>
-                                          <button 
+                                          <button
                                             className={styles.actionItem}
                                             onClick={() => setViewingCustomer(cust)}
                                           >
@@ -4024,7 +4020,7 @@ export default function AdminDashboardPage() {
                                             </svg>
                                             View Profile
                                           </button>
-                                          <button 
+                                          <button
                                             className={styles.actionItem}
                                             onClick={() => {
                                               setOrdersSearchQuery(cust.email);
@@ -4160,7 +4156,7 @@ export default function AdminDashboardPage() {
                                           <line x1="3" y1="10" x2="21" y2="10" />
                                         </svg>
                                         <span>
-                                          {coup.expiryDate 
+                                          {coup.expiryDate
                                             ? new Date(coup.expiryDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
                                             : 'Never Expires'}
                                         </span>
@@ -4178,12 +4174,12 @@ export default function AdminDashboardPage() {
                                         {coup.usageCount || 0} / {coup.usageLimit || 100} redemptions
                                       </span>
                                       <div style={{ height: '6px', backgroundColor: '#e4e4e7', borderRadius: '3px', overflow: 'hidden' }}>
-                                        <div 
-                                          style={{ 
-                                            height: '100%', 
-                                            backgroundColor: '#00a8b5', 
-                                            width: `${Math.min(100, ((coup.usageCount || 0) / (coup.usageLimit || 100)) * 100)}%` 
-                                          }} 
+                                        <div
+                                          style={{
+                                            height: '100%',
+                                            backgroundColor: '#00a8b5',
+                                            width: `${Math.min(100, ((coup.usageCount || 0) / (coup.usageLimit || 100)) * 100)}%`
+                                          }}
                                         />
                                       </div>
                                     </div>
@@ -4560,7 +4556,7 @@ export default function AdminDashboardPage() {
                                   <td className={styles.td}>
                                     <span className={
                                       subStatus === 'Pending' ? styles.queryBadgePending :
-                                      subStatus === 'In Progress' ? styles.queryBadgeInProgress : styles.queryBadgeResolved
+                                        subStatus === 'In Progress' ? styles.queryBadgeInProgress : styles.queryBadgeResolved
                                     }>
                                       {subStatus.toUpperCase()}
                                     </span>
@@ -4570,7 +4566,7 @@ export default function AdminDashboardPage() {
                                       <button className={styles.actionTrigger}>•••</button>
                                       <div className={styles.actionDropdown}>
                                         <div style={{ padding: '6px 14px', fontSize: '11px', fontWeight: 600, color: '#999', textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid #f4f4f5', marginBottom: '4px' }}>Actions</div>
-                                        <button 
+                                        <button
                                           className={styles.actionItem}
                                           onClick={() => {
                                             setSelectedSubmission(sub);
@@ -4584,7 +4580,7 @@ export default function AdminDashboardPage() {
                                           </svg>
                                           View & Respond
                                         </button>
-                                        <button 
+                                        <button
                                           className={styles.actionItem}
                                           onClick={() => handleUpdateSubmissionStatus(sub.id, 'Resolved')}
                                         >
@@ -4594,7 +4590,7 @@ export default function AdminDashboardPage() {
                                           </svg>
                                           Mark Resolved
                                         </button>
-                                        <button 
+                                        <button
                                           className={`${styles.actionItem} ${styles.actionItemDanger}`}
                                           onClick={() => handleDeleteSubmission(sub.id)}
                                         >
@@ -4631,7 +4627,7 @@ export default function AdminDashboardPage() {
                     <div style={{ display: 'flex', gap: '10px' }}>
                       <button className={styles.exportBtn} onClick={fetchAllData}>
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+                          <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
                         </svg>
                         Refresh Data
                       </button>
@@ -4735,18 +4731,18 @@ export default function AdminDashboardPage() {
                           const padBottom = 30;
                           const plotW = width - padLeft - padRight;
                           const plotH = height - padTop - padBottom;
-                          
+
                           const maxSalesVal = Math.max(...monthlyTimeline.map(m => m.sales), 10000);
                           const chartMaxY = Math.ceil(maxSalesVal / 30000) * 30000;
-                          
+
                           const xCoords = monthlyTimeline.map((_, i) => padLeft + i * (plotW / 6));
-                          
+
                           const salesPoints = monthlyTimeline.map((m, i) => {
                             const x = xCoords[i];
                             const y = padTop + plotH - (m.sales / chartMaxY) * plotH;
                             return `${x},${y}`;
                           });
-                          
+
                           const profitPoints = monthlyTimeline.map((m, i) => {
                             const x = xCoords[i];
                             const y = padTop + plotH - (m.profit / chartMaxY) * plotH;
@@ -4755,7 +4751,7 @@ export default function AdminDashboardPage() {
 
                           const salesAreaPath = `M ${padLeft},${padTop + plotH} L ${salesPoints.join(' L ')} L ${xCoords[6]},${padTop + plotH} Z`;
                           const profitAreaPath = `M ${padLeft},${padTop + plotH} L ${profitPoints.join(' L ')} L ${xCoords[6]},${padTop + plotH} Z`;
-                          
+
                           const gridTicks = [0, chartMaxY * 0.25, chartMaxY * 0.5, chartMaxY * 0.75, chartMaxY];
 
                           return (
@@ -4770,7 +4766,7 @@ export default function AdminDashboardPage() {
                                   <stop offset="100%" stopColor="#10b981" stopOpacity="0.0" />
                                 </linearGradient>
                               </defs>
-                              
+
                               {/* Grid Lines */}
                               {gridTicks.map((tick, idx) => {
                                 const y = padTop + plotH - (tick / chartMaxY) * plotH;
@@ -4830,7 +4826,7 @@ export default function AdminDashboardPage() {
                           const center = size / 2;
                           const r = 60;
                           const circ = 2 * Math.PI * r;
-                          
+
                           let cumulativePercent = 0;
 
                           return (
@@ -4841,7 +4837,7 @@ export default function AdminDashboardPage() {
                                   const sliceColor = categoryColors[idx % categoryColors.length];
                                   const strokeDasharray = `${(item.percent / 100) * circ} ${circ}`;
                                   const strokeDashoffset = -((cumulativePercent / 100) * circ);
-                                  
+
                                   cumulativePercent += item.percent;
 
                                   return (
@@ -4910,18 +4906,18 @@ export default function AdminDashboardPage() {
                         const padBottom = 30;
                         const plotW = width - padLeft - padRight;
                         const plotH = height - padTop - padBottom;
-                        
+
                         const maxCustVal = Math.max(...monthlyTimeline.map(m => m.customers), 3);
                         const chartMaxY = Math.ceil(maxCustVal / 3) * 3;
-                        
+
                         const xCoords = monthlyTimeline.map((_, i) => padLeft + i * (plotW / 6));
-                        
+
                         const customerPoints = monthlyTimeline.map((m, i) => {
                           const x = xCoords[i];
                           const y = padTop + plotH - (m.customers / chartMaxY) * plotH;
                           return `${x},${y}`;
                         });
-                        
+
                         const gridTicks = [0, chartMaxY * 0.25, chartMaxY * 0.5, chartMaxY * 0.75, chartMaxY];
 
                         return (
@@ -5127,7 +5123,7 @@ export default function AdminDashboardPage() {
 
                     <button className={styles.logsRefreshBtn} onClick={fetchLogs} title="Refresh Logs">
                       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+                        <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
                       </svg>
                     </button>
                   </div>
@@ -5151,9 +5147,9 @@ export default function AdminDashboardPage() {
                           <tbody>
                             {filteredLogs.map((log, index) => {
                               const parsed = parseLogAction(log.action);
-                              
+
                               // Format date
-                              const logTime = log.timestamp 
+                              const logTime = log.timestamp
                                 ? new Date(log.timestamp).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) + ', ' + new Date(log.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }).toLowerCase()
                                 : 'N/A';
 
@@ -5175,7 +5171,7 @@ export default function AdminDashboardPage() {
                                     </td>
                                     <td className={styles.td}>
                                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                        <div 
+                                        <div
                                           style={{
                                             width: '32px',
                                             height: '32px',
@@ -5199,10 +5195,10 @@ export default function AdminDashboardPage() {
                                       </div>
                                     </td>
                                     <td className={styles.td}>
-                                      <span 
-                                        className={styles.logModuleBadge} 
-                                        style={{ 
-                                          backgroundColor: parsed.bgColor, 
+                                      <span
+                                        className={styles.logModuleBadge}
+                                        style={{
+                                          backgroundColor: parsed.bgColor,
                                           color: parsed.color
                                         }}
                                       >
@@ -5232,19 +5228,19 @@ export default function AdminDashboardPage() {
                                       </span>
                                     </td>
                                     <td className={styles.td}>
-                                      <span 
+                                      <span
                                         className={styles.logActionBadge}
                                         style={{
-                                          color: 
+                                          color:
                                             parsed.action === 'Create' ? '#10b981' :
-                                            parsed.action === 'Edit' ? '#f59e0b' :
-                                            parsed.action === 'Delete' ? '#ef4444' :
-                                            parsed.action === 'Login' ? '#0d9488' : '#3b82f6',
+                                              parsed.action === 'Edit' ? '#f59e0b' :
+                                                parsed.action === 'Delete' ? '#ef4444' :
+                                                  parsed.action === 'Login' ? '#0d9488' : '#3b82f6',
                                           backgroundColor:
                                             parsed.action === 'Create' ? '#ecfdf5' :
-                                            parsed.action === 'Edit' ? '#fffbeb' :
-                                            parsed.action === 'Delete' ? '#fef2f2' :
-                                            parsed.action === 'Login' ? '#f0fdfa' : '#eff6ff',
+                                              parsed.action === 'Edit' ? '#fffbeb' :
+                                                parsed.action === 'Delete' ? '#fef2f2' :
+                                                  parsed.action === 'Login' ? '#f0fdfa' : '#eff6ff',
                                         }}
                                       >
                                         {parsed.action === 'Create' && '+ '}
@@ -5256,14 +5252,14 @@ export default function AdminDashboardPage() {
                                     <td className={styles.td} style={{ color: '#111', fontWeight: 500, fontSize: '13.5px' }}>
                                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
                                         <span>{log.details || log.action}</span>
-                                        <button 
+                                        <button
                                           onClick={() => setExpandedLogId(expandedLogId === log.id ? null : log.id)}
-                                          style={{ 
-                                            background: 'none', 
-                                            border: 'none', 
-                                            cursor: 'pointer', 
-                                            padding: '4px', 
-                                            display: 'flex', 
+                                          style={{
+                                            background: 'none',
+                                            border: 'none',
+                                            cursor: 'pointer',
+                                            padding: '4px',
+                                            display: 'flex',
                                             alignItems: 'center',
                                             color: '#888',
                                             borderRadius: '4px',
@@ -5413,8 +5409,8 @@ export default function AdminDashboardPage() {
                                     <td className={styles.td}>
                                       <span className={
                                         isSuperAdmin ? styles.roleBadgeSuperAdmin :
-                                        (admin.role || '').toUpperCase().includes('EDITOR') ? styles.roleBadgeEditor :
-                                        styles.roleBadgeManager
+                                          (admin.role || '').toUpperCase().includes('EDITOR') ? styles.roleBadgeEditor :
+                                            styles.roleBadgeManager
                                       }>
                                         {admin.role || 'PRODUCT MANAGER'}
                                       </span>
@@ -5491,18 +5487,18 @@ export default function AdminDashboardPage() {
               {/* === SETTINGS TAB === */}
               {activeTab === 'settings' && (() => {
                 const THEME_COLORS = [
-                  { name: 'Blue',    value: 'blue',    hex: '#3b82f6' },
+                  { name: 'Blue', value: 'blue', hex: '#3b82f6' },
                   { name: 'Emerald', value: 'emerald', hex: '#10b981' },
-                  { name: 'Violet',  value: 'violet',  hex: '#8b5cf6' },
-                  { name: 'Rose',    value: 'rose',    hex: '#f43f5e' },
-                  { name: 'Amber',   value: 'amber',   hex: '#f59e0b' },
-                  { name: 'Orange',  value: 'orange',  hex: '#f97316' },
-                  { name: 'Indigo',  value: 'indigo',  hex: '#4f46e5' },
-                  { name: 'Cyan',    value: 'cyan',    hex: '#06b6d4' },
-                  { name: 'Teal',    value: 'teal',    hex: '#0d9488' },
-                  { name: 'Pink',    value: 'pink',    hex: '#ec4899' },
-                  { name: 'Lime',    value: 'lime',    hex: '#84cc16' },
-                  { name: 'Slate',   value: 'slate',   hex: '#64748b' },
+                  { name: 'Violet', value: 'violet', hex: '#8b5cf6' },
+                  { name: 'Rose', value: 'rose', hex: '#f43f5e' },
+                  { name: 'Amber', value: 'amber', hex: '#f59e0b' },
+                  { name: 'Orange', value: 'orange', hex: '#f97316' },
+                  { name: 'Indigo', value: 'indigo', hex: '#4f46e5' },
+                  { name: 'Cyan', value: 'cyan', hex: '#06b6d4' },
+                  { name: 'Teal', value: 'teal', hex: '#0d9488' },
+                  { name: 'Pink', value: 'pink', hex: '#ec4899' },
+                  { name: 'Lime', value: 'lime', hex: '#84cc16' },
+                  { name: 'Slate', value: 'slate', hex: '#64748b' },
                 ];
                 return (
                   <div style={{ maxWidth: '900px' }}>
@@ -5525,9 +5521,9 @@ export default function AdminDashboardPage() {
                         }}
                       >
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
-                          <polyline points="17 21 17 13 7 13 7 21"/>
-                          <polyline points="7 3 7 8 15 8"/>
+                          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                          <polyline points="17 21 17 13 7 13 7 21" />
+                          <polyline points="7 3 7 8 15 8" />
                         </svg>
                         Save Changes
                       </button>
@@ -5539,9 +5535,9 @@ export default function AdminDashboardPage() {
                       <div style={{ display: 'flex', alignItems: 'center', gap: '14px', padding: '1.5rem' }}>
                         <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: '#f0fdfa', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0d9488" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <circle cx="12" cy="12" r="10"/>
-                            <line x1="2" y1="12" x2="22" y2="12"/>
-                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="2" y1="12" x2="22" y2="12" />
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
                           </svg>
                         </div>
                         <div>
@@ -5615,8 +5611,8 @@ export default function AdminDashboardPage() {
                       <div style={{ display: 'flex', alignItems: 'center', gap: '14px', padding: '1.5rem', borderBottom: '1px solid #f3f4f6' }}>
                         <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: '#eff6ff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <circle cx="12" cy="12" r="3"/>
-                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                            <circle cx="12" cy="12" r="3" />
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
                           </svg>
                         </div>
                         <div>
@@ -5678,7 +5674,7 @@ export default function AdminDashboardPage() {
             </h4>
             <form onSubmit={handleSaveSubmissionDetails}>
               {/* Customer Info Box (light gray bordered box card) */}
-              <div 
+              <div
                 style={{
                   border: '1px solid #e5e7eb',
                   borderRadius: '8px',
@@ -5736,7 +5732,7 @@ export default function AdminDashboardPage() {
                   value={selectedSubmission.message}
                   readOnly
                   disabled
-                  style={{ 
+                  style={{
                     height: '110px',
                     padding: '10px',
                     resize: 'none',
@@ -5776,25 +5772,25 @@ export default function AdminDashboardPage() {
 
               {/* Buttons */}
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '1.5rem' }}>
-                <button 
-                  type="button" 
-                  className={styles.backBtn} 
+                <button
+                  type="button"
+                  className={styles.backBtn}
                   style={{ width: 'auto', padding: '0 1.25rem', height: '40px', fontSize: '14px' }}
                   onClick={() => setSelectedSubmission(null)}
                 >
                   Cancel
                 </button>
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   className={styles.loginBtn}
-                  style={{ 
-                    width: 'auto', 
-                    padding: '0 1.5rem', 
-                    height: '40px', 
-                    fontSize: '14px', 
-                    backgroundColor: '#00a8b5', 
-                    border: 'none', 
-                    fontWeight: 600 
+                  style={{
+                    width: 'auto',
+                    padding: '0 1.5rem',
+                    height: '40px',
+                    fontSize: '14px',
+                    backgroundColor: '#00a8b5',
+                    border: 'none',
+                    fontWeight: 600
                   }}
                 >
                   Save Changes
@@ -5849,7 +5845,7 @@ export default function AdminDashboardPage() {
                 </div>
               </>
             )}
-            
+
             <div style={{ marginTop: '1.25rem' }}>
               <span className={styles.modalLabel} style={{ display: 'block', marginBottom: '8px' }}>Purchase details:</span>
               <div style={{ border: '1px solid #eee', borderRadius: '8px', overflow: 'hidden' }}>
@@ -6826,13 +6822,13 @@ export default function AdminDashboardPage() {
                 <label htmlFor="couponActive" style={{ fontSize: '14px', cursor: 'pointer' }}>Make this coupon active immediately</label>
               </div>
 
-              <button 
-                type="submit" 
-                className={styles.loginBtn} 
-                style={{ 
-                  marginTop: '1.25rem', 
-                  width: '100%', 
-                  backgroundColor: '#00a8b5', 
+              <button
+                type="submit"
+                className={styles.loginBtn}
+                style={{
+                  marginTop: '1.25rem',
+                  width: '100%',
+                  backgroundColor: '#00a8b5',
                   border: 'none',
                   display: 'flex',
                   alignItems: 'center',
@@ -6888,13 +6884,13 @@ export default function AdminDashboardPage() {
                 </select>
               </div>
 
-              <button 
-                type="submit" 
-                className={styles.loginBtn} 
-                style={{ 
-                  marginTop: '1.5rem', 
-                  width: '100%', 
-                  backgroundColor: '#00a8b5', 
+              <button
+                type="submit"
+                className={styles.loginBtn}
+                style={{
+                  marginTop: '1.5rem',
+                  width: '100%',
+                  backgroundColor: '#00a8b5',
                   border: 'none',
                   display: 'flex',
                   alignItems: 'center',
@@ -6921,7 +6917,7 @@ export default function AdminDashboardPage() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.25rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#00a8b5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" /></svg>
                 </div>
                 <h4 style={{ fontSize: '18px', fontWeight: 700, color: '#111', margin: 0 }}>Add Admin</h4>
               </div>
@@ -7017,9 +7013,9 @@ export default function AdminDashboardPage() {
               <div style={{ marginBottom: '1.5rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="12" r="10"/>
-                    <line x1="12" y1="8" x2="12" y2="12"/>
-                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
                   </svg>
                   <span style={{ fontSize: '13px', fontWeight: 700, color: '#00a8b5', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Module Permissions</span>
                   <span style={{ fontSize: '12.5px', color: '#888' }}>Enabling Create/Edit/Delete auto-enables View</span>
@@ -7151,7 +7147,7 @@ export default function AdminDashboardPage() {
                 <button type="submit"
                   style={{ padding: '0 1.5rem', height: '42px', fontSize: '14px', fontWeight: 600, background: '#00a8b5', border: 'none', borderRadius: '8px', cursor: 'pointer', color: 'white', display: 'flex', alignItems: 'center', gap: '7px' }}>
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" />
                   </svg>
                   Create Admin
                 </button>

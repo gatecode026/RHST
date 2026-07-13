@@ -7,11 +7,11 @@ interface SafeImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   hideOnError?: boolean;
 }
 
-export default function SafeImage({ 
-  src, 
-  fallbackSrc = '/images/bestselling_ipad.png', 
+export default function SafeImage({
+  src,
+  fallbackSrc = 'https://ik.imagekit.io/zp0tch54w/RHST/wmremove-transformed.png',
   hideOnError = false,
-  ...props 
+  ...props
 }: SafeImageProps) {
   const [imgSrc, setImgSrc] = useState(src);
   const [hasError, setHasError] = useState(false);
@@ -27,10 +27,10 @@ export default function SafeImage({
   if (hasError) return null;
 
   return (
-    <img 
-      src={imgSrc || fallbackSrc} 
-      onError={handleError} 
-      {...props} 
+    <img
+      src={imgSrc || fallbackSrc}
+      onError={handleError}
+      {...props}
     />
   );
 }

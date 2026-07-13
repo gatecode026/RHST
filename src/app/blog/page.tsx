@@ -38,11 +38,11 @@ export default function BlogPage() {
 
   // Filter blogs
   const filteredBlogs = blogs.filter(post => {
-    const matchesSearch = 
+    const matchesSearch =
       post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       post.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    const matchesCategory = selectedCategory 
+
+    const matchesCategory = selectedCategory
       ? post.category?.toUpperCase() === selectedCategory.toUpperCase()
       : true;
 
@@ -113,14 +113,14 @@ export default function BlogPage() {
         <section className={styles.blogSection}>
           <div className="container">
             <div className={styles.blogLayout}>
-              
+
               {/* Sidebar Section */}
               <aside className={styles.sidebar}>
                 {/* Search Widget */}
                 <div className={styles.searchWrapper}>
-                  <input 
-                    type="text" 
-                    placeholder="Search" 
+                  <input
+                    type="text"
+                    placeholder="Search"
                     className={styles.searchInput}
                     value={searchQuery}
                     onChange={(e) => {
@@ -157,8 +157,8 @@ export default function BlogPage() {
                       { key: 'Television', label: 'Television' }
                     ].map(cat => (
                       <li key={cat.key}>
-                        <button 
-                          onClick={() => handleCategorySelect(cat.key)} 
+                        <button
+                          onClick={() => handleCategorySelect(cat.key)}
                           className={styles.widgetLink}
                           style={{
                             background: 'none',
@@ -200,8 +200,8 @@ export default function BlogPage() {
                   <span className={styles.resultsText}>
                     {loading ? 'Loading...' : `Showing ${sortedBlogs.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1}-${Math.min(currentPage * itemsPerPage, sortedBlogs.length)} of ${sortedBlogs.length} results`}
                   </span>
-                  <select 
-                    className={styles.sortSelect} 
+                  <select
+                    className={styles.sortSelect}
                     value={sortOption}
                     onChange={(e) => setSortOption(e.target.value)}
                   >
@@ -229,14 +229,14 @@ export default function BlogPage() {
                         <article key={post.id || post._id} className={styles.card}>
                           <Link href={blogUrl} style={{ display: 'block', width: '100%' }}>
                             <div className={styles.imageWrapper}>
-                              <img 
-                                src={post.image} 
-                                alt={post.title} 
+                              <img
+                                src={post.image}
+                                alt={post.title}
                                 className={styles.image}
-                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                                 onError={(e) => {
                                   e.currentTarget.onerror = null;
-                                  e.currentTarget.src = '/images/bestselling_ipad.png';
+                                  e.currentTarget.src = 'https://ik.imagekit.io/zp0tch54w/RHST/wmremove-transformed.png';
                                 }}
                               />
                               <span className={styles.badge}>{post.tag}</span>
@@ -280,7 +280,7 @@ export default function BlogPage() {
                     {Array.from({ length: totalPages }).map((_, i) => {
                       const pNum = i + 1;
                       return (
-                        <span 
+                        <span
                           key={pNum}
                           onClick={() => handlePageChange(pNum)}
                           className={`${styles.pageNum} ${currentPage === pNum ? styles.activePage : ''}`}
@@ -290,7 +290,7 @@ export default function BlogPage() {
                         </span>
                       );
                     })}
-                    <span 
+                    <span
                       onClick={() => handlePageChange(currentPage + 1)}
                       className={styles.nextBtn}
                       style={{ cursor: currentPage === totalPages ? 'not-allowed' : 'pointer', opacity: currentPage === totalPages ? 0.5 : 1 }}

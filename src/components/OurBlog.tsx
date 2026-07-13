@@ -10,7 +10,7 @@ const FALLBACK_BLOG_DATA = [
     tag: 'Laptops & Computers',
     title: '5 MUST-HAVE GADGETS FOR THE MODERN HOME',
     excerpt: 'Dive into the world of cutting-edge technology with our latest blog post, where we highlight fi...',
-    image: '/images/bestselling_ipad.png',
+    image: 'https://ik.imagekit.io/zp0tch54w/RHST/wmremove-transformed.png',
     link: '/blog/1'
   },
   {
@@ -18,7 +18,7 @@ const FALLBACK_BLOG_DATA = [
     tag: 'Laptops & Computers',
     title: '5 MUST-HAVE GADGETS FOR THE MODERN HOME',
     excerpt: 'Dive into the world of cutting-edge technology with our latest blog post, where we highlight fi...',
-    image: '/images/bestselling_ipad.png',
+    image: 'https://ik.imagekit.io/zp0tch54w/RHST/wmremove-transformed.png',
     link: '/blog/2'
   },
   {
@@ -26,7 +26,7 @@ const FALLBACK_BLOG_DATA = [
     tag: 'Laptops & Computers',
     title: '5 MUST-HAVE GADGETS FOR THE MODERN HOME',
     excerpt: 'Dive into the world of cutting-edge technology with our latest blog post, where we highlight fi...',
-    image: '/images/bestselling_ipad.png',
+    image: 'https://ik.imagekit.io/zp0tch54w/RHST/wmremove-transformed.png',
     link: '/blog/3'
   }
 ];
@@ -74,18 +74,18 @@ export default function OurBlog({ className = '' }: { className?: string }) {
         <div className={styles.titleWrapper}>
           <h2 className={styles.title}>Our Blog</h2>
           <div className={styles.sliderControls}>
-            <button 
-              className={styles.sliderBtn} 
-              onClick={() => handleScroll('left')} 
+            <button
+              className={styles.sliderBtn}
+              onClick={() => handleScroll('left')}
               aria-label="Slide Left"
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M15 18l-6-6 6-6" />
               </svg>
             </button>
-            <button 
-              className={styles.sliderBtn} 
-              onClick={() => handleScroll('right')} 
+            <button
+              className={styles.sliderBtn}
+              onClick={() => handleScroll('right')}
               aria-label="Slide Right"
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -94,7 +94,7 @@ export default function OurBlog({ className = '' }: { className?: string }) {
             </button>
           </div>
         </div>
- 
+
         {/* Blog Grid/Slider Row */}
         <div className={styles.sliderContainer}>
           <div ref={scrollContainerRef} className={styles.grid}>
@@ -104,13 +104,13 @@ export default function OurBlog({ className = '' }: { className?: string }) {
                 <div key={post.id || post._id} className={styles.card}>
                   <Link href={blogUrl} style={{ display: 'block', width: '100%' }}>
                     <div className={styles.imageWrapper}>
-                      <img 
-                        src={post.image} 
-                        alt={post.title} 
-                        className={styles.image} 
+                      <img
+                        src={post.image}
+                        alt={post.title}
+                        className={styles.image}
                         onError={(e) => {
                           e.currentTarget.onerror = null;
-                          e.currentTarget.src = '/images/bestselling_ipad.png';
+                          e.currentTarget.src = 'https://ik.imagekit.io/zp0tch54w/RHST/wmremove-transformed.png';
                         }}
                       />
                       <span className={styles.badge}>{post.tag || post.category}</span>

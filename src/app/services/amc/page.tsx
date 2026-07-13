@@ -303,7 +303,7 @@ export default function AMCPage() {
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20301%20(3).png"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/BSP"
                     alt="Better System Performance"
                     className={styles.benefitImg}
                   />
@@ -339,7 +339,7 @@ export default function AMCPage() {
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20304%20(3).png"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/PAIT"
                     alt="Proactive Issue Detection"
                     className={styles.benefitImg}
                   />
@@ -351,7 +351,7 @@ export default function AMCPage() {
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20305%20(3).png"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/pss"
                     alt="Priority Service Support"
                     className={styles.benefitImg}
                   />

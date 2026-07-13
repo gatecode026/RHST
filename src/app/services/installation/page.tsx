@@ -394,7 +394,7 @@ export default function InstallationServicesPage() {
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20301.png"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/BUS.png"
                     alt="Transparent Service Process"
                     className={styles.benefitImg}
                   />
@@ -430,7 +430,7 @@ export default function InstallationServicesPage() {
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20304.png"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/LTTS"
                     alt="Long-Term Technology Support"
                     className={styles.benefitImg}
                   />

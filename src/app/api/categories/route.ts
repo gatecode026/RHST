@@ -3,14 +3,6 @@ import { getDb } from '@/lib/mongodb';
 
 export const dynamic = 'force-dynamic';
 
-const DEFAULT_CATEGORIES = [
-  { name: 'Networking', image: '/images/networking.png', link: '#networking' },
-  { name: 'Hardware', image: '/images/hardware.png', link: '#hardware' },
-  { name: 'Office Equipment', image: '/images/office.png', link: '#office-equipment' },
-  { name: 'Gaming Products', image: '/images/gaming.png', link: '#gaming-products' },
-  { name: 'Computer Access', image: '/images/default_category.png', link: '#computer-access' }
-];
-
 export async function GET() {
   try {
     const db = await getDb();
@@ -18,13 +10,6 @@ export async function GET() {
 
     // Clean up existing seeded 'Software' category
     await collection.deleteOne({ name: 'Software' });
-
-    // Count categories
-    const count = await collection.countDocuments();
-    if (count === 0) {
-      // Seed categories
-      await collection.insertMany(DEFAULT_CATEGORIES);
-    }
 
     const categories = await collection.find().toArray();
     const formatted = categories.map(doc => ({
@@ -43,3 +28,4 @@ export async function GET() {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
+

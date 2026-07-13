@@ -8,6 +8,8 @@ import styles from './Header.module.css';
 
 // No static products in Header. Search queries are fetched from the live MongoDB database.
 
+// No static fallbacks are used. All categories and parent groupings are fetched dynamically from the database.
+
 export default function Header() {
   const router = useRouter();
   const {
@@ -33,6 +35,21 @@ export default function Header() {
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [dbProducts, setDbProducts] = useState<any[]>([]);
   const [dbCategories, setDbCategories] = useState<any[]>([]);
+
+  const getSubcategories = (parentName: string) => {
+    const matched = dbCategories.filter(cat => 
+      cat.parentGroup && cat.parentGroup.toLowerCase() === parentName.toLowerCase()
+    );
+    return matched.map(cat => ({
+      name: cat.name,
+      link: `/products?category=${encodeURIComponent(cat.name)}`
+    }));
+  };
+
+  const getMainCategories = () => {
+    const dbMain = dbCategories.filter(cat => !cat.parentGroup || cat.parentGroup === 'None');
+    return Array.from(new Set(dbMain.map(cat => cat.name)));
+  };
 
   // Fetch categories when Header mounts
   useEffect(() => {
@@ -405,23 +422,28 @@ export default function Header() {
                   PRODUCTS<span className={styles.chevron}>▾</span>
                 </Link>
                 <div className={styles.dropdownContent}>
-                  {dbCategories.length > 0 ? (
-                    dbCategories.map((cat) => (
-                      <Link key={cat.id} href={`/products?category=${encodeURIComponent(cat.name)}`}>
-                        {cat.name}
-                      </Link>
-                    ))
-                  ) : (
-                    <>
-                      <Link href="/products?category=Laptops %26 Computers">Laptops & Computers</Link>
-                      <Link href="/products?category=Desktop PC%27s">Desktop PCs</Link>
-                      <Link href="/products?category=Computer Accessories">Computer Accessories</Link>
-                      <Link href="/products?category=Networking Devices">Networking Devices</Link>
-                      <Link href="/products?category=Storage Devices">Storage Devices</Link>
-                      <Link href="/products?category=Printers %26 Scanners">Printers & Scanners</Link>
-                      <Link href="/products?category=Security Products">Security Products</Link>
-                    </>
-                  )}
+                  {getMainCategories().map((mainCat) => {
+                    const subs = getSubcategories(mainCat);
+                    return (
+                      <div key={mainCat} className={styles.nestedDropdown}>
+                        <Link 
+                          href={`/products?category=${encodeURIComponent(mainCat)}`} 
+                          className={styles.nestedDropdownBtn}
+                        >
+                          {mainCat} <span className={styles.rightChevron}>▸</span>
+                        </Link>
+                        {subs.length > 0 && (
+                          <div className={styles.nestedDropdownContent}>
+                            {subs.map((sub) => (
+                              <Link key={sub.name} href={sub.link}>
+                                {sub.name}
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -558,28 +580,34 @@ export default function Header() {
 
           <div className={styles.mobileNavGroup}>
             <span className={styles.mobileNavHeader}>PRODUCTS</span>
-            <div className={styles.mobileSubLinks}>
-              {dbCategories.length > 0 ? (
-                dbCategories.map((cat) => (
-                  <Link
-                    key={cat.id}
-                    href={`/products?category=${encodeURIComponent(cat.name)}`}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {cat.name}
-                  </Link>
-                ))
-              ) : (
-                <>
-                  <Link href="/products?category=Laptops %26 Computers" onClick={() => setIsMobileMenuOpen(false)}>Laptops & Computers</Link>
-                  <Link href="/products?category=Desktop PC%27s" onClick={() => setIsMobileMenuOpen(false)}>Desktop PCs</Link>
-                  <Link href="/products?category=Computer Accessories" onClick={() => setIsMobileMenuOpen(false)}>Computer Accessories</Link>
-                  <Link href="/products?category=Networking Devices" onClick={() => setIsMobileMenuOpen(false)}>Networking Devices</Link>
-                  <Link href="/products?category=Storage Devices" onClick={() => setIsMobileMenuOpen(false)}>Storage Devices</Link>
-                  <Link href="/products?category=Printers %26 Scanners" onClick={() => setIsMobileMenuOpen(false)}>Printers & Scanners</Link>
-                  <Link href="/products?category=Security Products" onClick={() => setIsMobileMenuOpen(false)}>Security Products</Link>
-                </>
-              )}
+            <div className={styles.mobileSubLinksContainer}>
+              {getMainCategories().map((mainCat) => {
+                const subs = getSubcategories(mainCat);
+                return (
+                  <div key={mainCat} className={styles.mobileSubCategoryGroup}>
+                    <Link
+                      href={`/products?category=${encodeURIComponent(mainCat)}`}
+                      className={styles.mobileMainCatLink}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {mainCat}
+                    </Link>
+                    {subs.length > 0 && (
+                      <div className={styles.mobileNestedSubLinks}>
+                        {subs.map((sub) => (
+                          <Link
+                            key={sub.name}
+                            href={sub.link}
+                            onClick={() => setIsMobileMenuOpen(false)}
+                          >
+                            {sub.name}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
 

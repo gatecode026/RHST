@@ -313,7 +313,7 @@ export default function ITSupportPage() {
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20301%20(1).png"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20301.png"
                     alt="Educational Institutions"
                     className={styles.benefitImg}
                   />
@@ -349,7 +349,7 @@ export default function ITSupportPage() {
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20304%20(1).png"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20304.png"
                     alt="Startups"
                     className={styles.benefitImg}
                   />

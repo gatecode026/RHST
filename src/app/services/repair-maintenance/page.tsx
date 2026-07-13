@@ -323,7 +323,7 @@ export default function RepairMaintenancePage() {
               <div className={styles.benefitCard}>
                 <div className={styles.benefitImgWrapper}>
                   <img
-                    src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20301.png?updatedAt=1783327127090"
+                    src="https://ik.imagekit.io/zp0tch54w/RHST/BUS.png"
                     alt="Fast & Reliable Service"
                     className={styles.benefitImg}
                   />
