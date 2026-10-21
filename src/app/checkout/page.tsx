@@ -6,8 +6,8 @@ import CheckoutClient from './CheckoutClient';
 import styles from './Checkout.module.css';
 
 export const metadata: Metadata = {
-  title: 'Checkout | RHST IT Products & Solutions',
-  description: 'Provide your billing and shipment details to complete your order securely with RHST.',
+  title: 'Checkout | VALNQIX IT Products & Solutions',
+  description: 'Provide your billing and shipment details to complete your order securely with VALNQIX.',
 };
 
 export default function CheckoutPage() {

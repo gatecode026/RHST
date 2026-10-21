@@ -7,8 +7,8 @@ import Footer from '@/components/Footer';
 import styles from './Shipping.module.css';
 
 export const metadata: Metadata = {
-  title: 'Shipping Policy | RHST E-commerce & IT Solutions',
-  description: 'Read the shipping policy of RHST to understand order processing, delivery timelines, shipping charges, tracking details, and contact info.',
+  title: 'Shipping Policy | VALNQIX E-commerce & IT Solutions',
+  description: 'Read the shipping policy of VALNQIX to understand order processing, delivery timelines, shipping charges, tracking details, and contact info.',
 };
 
 export default function ShippingPolicyPage() {
@@ -40,7 +40,7 @@ export default function ShippingPolicyPage() {
                 <h2 className={styles.policyTitle}>SHIPPING POLICY</h2>
                 <p className={styles.lastUpdated}>Last Updated: 2026</p>
                 <p className={styles.introParagraph}>
-                  At RHST, we are committed to providing a smooth, reliable, and timely delivery experience for all our customers. This Shipping Policy explains our shipping process, delivery timelines, and related terms for products purchased through our website.
+                  At VALNQIX, we are committed to providing a smooth, reliable, and timely delivery experience for all our customers. This Shipping Policy explains our shipping process, delivery timelines, and related terms for products purchased through our website.
                 </p>
               </div>
 
@@ -102,7 +102,7 @@ export default function ShippingPolicyPage() {
                 <ul className={styles.list}>
                   <li className={styles.listItem}>Order tracking link</li>
                   <li className={styles.listItem}>Tracking number provided through email/SMS</li>
-                  <li className={styles.listItem}>Your RHST account dashboard</li>
+                  <li className={styles.listItem}>Your VALNQIX account dashboard</li>
                 </ul>
               </div>
 
@@ -132,7 +132,7 @@ export default function ShippingPolicyPage() {
                   If you receive a damaged, defective, or incorrect product:
                 </p>
                 <ul className={styles.list}>
-                  <li className={styles.listItem}>Contact RHST customer support within 48 hours of delivery</li>
+                  <li className={styles.listItem}>Contact VALNQIX customer support within 48 hours of delivery</li>
                   <li className={styles.listItem}>Share product images and order details</li>
                   <li className={styles.listItem}>Our team will review the request and provide a suitable solution</li>
                 </ul>
@@ -151,7 +151,7 @@ export default function ShippingPolicyPage() {
                   <li className={styles.listItem}>Unexpected circumstances</li>
                 </ul>
                 <p className={styles.text}>
-                  RHST will keep customers informed about any major delays.
+                  VALNQIX will keep customers informed about any major delays.
                 </p>
               </div>
 
@@ -159,7 +159,7 @@ export default function ShippingPolicyPage() {
               <div className={styles.policyBlock}>
                 <h3 className={styles.sectionHeading}>8. INTERNATIONAL SHIPPING</h3>
                 <p className={styles.text}>
-                  Currently, RHST provides delivery services according to available shipping locations. International shipping availability may vary depending on product and destination.
+                  Currently, VALNQIX provides delivery services according to available shipping locations. International shipping availability may vary depending on product and destination.
                 </p>
               </div>
 
@@ -170,9 +170,8 @@ export default function ShippingPolicyPage() {
                   If you have any questions regarding this Privacy Policy, please contact us:
                 </p>
                 <div className={styles.contactDetails}>
-                  <p className={styles.text}><strong>RHST IT-Ecommerce Private Limited</strong></p>
-                  <p className={styles.text}>Email: rhst@gmail.com</p>
-                  <p className={styles.text}>Phone: +91-XXXXXXXXXX</p>
+                  <p className={styles.text}><strong>VALNQIX IT-Ecommerce Private Limited</strong></p>
+                  <p className={styles.text}>Email: info@valnqix.in</p>
                 </div>
                 <p className={styles.trustText} style={{ fontWeight: 500, color: 'var(--dark)' }}>
                   We are committed to delivering your technology products safely and efficiently.

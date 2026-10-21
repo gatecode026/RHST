@@ -83,13 +83,13 @@ const faqData: FAQCategory[] = [
     items: [
       {
         number: 1,
-        question: 'What is RHST?',
-        answerText: 'RHST is an IT-Ecommerce platform that provides a wide range of technology products and solutions including computers, laptops, accessories, networking devices, software solutions, and IT services for individuals and businesses.'
+        question: 'What is VALNQIX?',
+        answerText: 'VALNQIX is an IT-Ecommerce platform that provides a wide range of technology products and solutions including computers, laptops, accessories, networking devices, software solutions, and IT services for individuals and businesses.'
       },
       {
         number: 2,
-        question: 'What products does RHST sell?',
-        answerText: 'RHST offers various IT products such as:',
+        question: 'What products does VALNQIX sell?',
+        answerText: 'VALNQIX offers various IT products such as:',
         answerList: [
           'Laptops & Desktop Computers',
           'Computer Accessories',
@@ -102,16 +102,15 @@ const faqData: FAQCategory[] = [
       },
       {
         number: 3,
-        question: 'Are RHST products genuine?',
-        answerText: 'Yes, RHST provides authentic products sourced from trusted brands and suppliers. All products are checked to maintain quality and reliability.'
+        question: 'Are VALNQIX products genuine?',
+        answerText: 'Yes, VALNQIX provides authentic products sourced from trusted brands and suppliers. All products are checked to maintain quality and reliability.'
       },
       {
         number: 4,
-        question: 'How can I contact RHST customer support?',
+        question: 'How can I contact VALNQIX customer support?',
         answerText: 'You can contact our support team through:',
         answerList: [
-          'Email: rhst@gmail.com',
-          'Phone: +91-8387634520',
+          'Email: info@valnqix.in',
           'Contact Us page on our website'
         ],
         answerTextAfter: 'Our team will assist you with product, order, and service-related queries.'
@@ -135,7 +134,7 @@ const faqData: FAQCategory[] = [
       },
       {
         number: 6,
-        question: 'How can I create an RHST account?',
+        question: 'How can I create an VALNQIX account?',
         answerText: 'You can register by clicking on the Sign Up/Register option and providing your basic details like name, email, and phone number.'
       },
       {
@@ -169,7 +168,7 @@ const faqData: FAQCategory[] = [
       {
         number: 10,
         question: 'Can I compare different products?',
-        answerText: 'Yes, RHST provides a product comparison feature where you can compare specifications, features, and prices of different products.'
+        answerText: 'Yes, VALNQIX provides a product comparison feature where you can compare specifications, features, and prices of different products.'
       },
       {
         number: 11,
@@ -229,7 +228,7 @@ const faqData: FAQCategory[] = [
       {
         number: 16,
         question: 'What payment methods are available?',
-        answerText: 'RHST supports secure payment options including:',
+        answerText: 'VALNQIX supports secure payment options including:',
         answerList: [
           'UPI',
           'Debit Card',
@@ -241,7 +240,7 @@ const faqData: FAQCategory[] = [
       {
         number: 17,
         question: 'Is my payment information secure?',
-        answerText: 'Yes, payments are processed through secure payment gateways. RHST does not store complete card details.'
+        answerText: 'Yes, payments are processed through secure payment gateways. VALNQIX does not store complete card details.'
       },
       {
         number: 18,
@@ -262,12 +261,12 @@ const faqData: FAQCategory[] = [
       {
         number: 20,
         question: 'How can I track my order?',
-        answerText: 'After shipment, you will receive tracking details through email/SMS. You can also track orders from your RHST account.'
+        answerText: 'After shipment, you will receive tracking details through email/SMS. You can also track orders from your VALNQIX account.'
       },
       {
         number: 21,
         question: 'Do you provide delivery across India?',
-        answerText: 'Yes, RHST provides delivery services across available locations in India.'
+        answerText: 'Yes, VALNQIX provides delivery services across available locations in India.'
       }
     ]
   },
@@ -285,7 +284,7 @@ const faqData: FAQCategory[] = [
         question: 'What if I receive a damaged product?',
         answerText: 'If you receive a damaged or defective product:',
         answerList: [
-          'Contact RHST support within 48 hours',
+          'Contact VALNQIX support within 48 hours',
           'Share order details',
           'Provide product images if required'
         ],
@@ -303,13 +302,13 @@ const faqData: FAQCategory[] = [
     items: [
       {
         number: 25,
-        question: 'Does RHST provide installation support?',
-        answerText: 'Yes, RHST may provide installation and technical support services for selected products.'
+        question: 'Does VALNQIX provide installation support?',
+        answerText: 'Yes, VALNQIX may provide installation and technical support services for selected products.'
       },
       {
         number: 26,
         question: 'Do you provide IT solutions for businesses?',
-        answerText: 'Yes, RHST provides business IT solutions including hardware setup, networking, software solutions, and technical support.'
+        answerText: 'Yes, VALNQIX provides business IT solutions including hardware setup, networking, software solutions, and technical support.'
       },
       {
         number: 27,
@@ -324,12 +323,12 @@ const faqData: FAQCategory[] = [
       {
         number: 28,
         question: 'Is my personal information safe?',
-        answerText: 'Yes, RHST follows security practices to protect customer information. Please refer to our Privacy Policy for more details.'
+        answerText: 'Yes, VALNQIX follows security practices to protect customer information. Please refer to our Privacy Policy for more details.'
       },
       {
         number: 29,
-        question: 'Does RHST share customer information?',
-        answerText: 'No, RHST does not sell or misuse customer information. Information is only used for order processing, support, and service improvement.'
+        question: 'Does VALNQIX share customer information?',
+        answerText: 'No, VALNQIX does not sell or misuse customer information. Information is only used for order processing, support, and service improvement.'
       }
     ]
   },
@@ -338,7 +337,7 @@ const faqData: FAQCategory[] = [
     items: [
       {
         number: 30,
-        question: 'How can I provide feedback about RHST?',
+        question: 'How can I provide feedback about VALNQIX?',
         answerText: 'You can share your feedback through:',
         answerList: [
           'Contact Us page',
@@ -364,7 +363,7 @@ export default function FaqClient() {
         
         {/* Intro */}
         <div className={styles.introBlock}>
-          <h2 className={styles.introTitle}>Welcome to RHST Help Center!</h2>
+          <h2 className={styles.introTitle}>Welcome to VALNQIX Help Center!</h2>
           <p className={styles.introParagraph}>
             Find answers to common questions about our products, orders, payments, shipping, returns, and services. If you need further assistance, our support team is always ready to help you.
           </p>

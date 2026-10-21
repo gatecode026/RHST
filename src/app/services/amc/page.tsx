@@ -7,8 +7,8 @@ import ContactForm from '@/components/ContactForm';
 import styles from './AMC.module.css';
 
 export const metadata: Metadata = {
-  title: 'AMC (Annual Maintenance Contract) | RHST E-commerce & IT Solutions',
-  description: 'RHST provides an IT Annual Maintenance Contract (AMC) service to deliver proactive IT support to keep your systems, devices, and technology infrastructure secure, high-performing, and operational.',
+  title: 'AMC (Annual Maintenance Contract) | VALNQIX E-commerce & IT Solutions',
+  description: 'VALNQIX provides an IT Annual Maintenance Contract (AMC) service to deliver proactive IT support to keep your systems, devices, and technology infrastructure secure, high-performing, and operational.',
 };
 
 export default function AMCPage() {
@@ -32,10 +32,10 @@ export default function AMCPage() {
                 Hassle-Free IT Maintenance for Continuous Business Performance
               </h1>
               <p className={styles.introText}>
-                RHST provides an IT Annual Maintenance Contract (AMC) service to deliver proactive IT support to keep your systems, devices, and technology infrastructure secure, high-performing, and operational throughout the year.
+                VALNQIX provides an IT Annual Maintenance Contract (AMC) service to deliver proactive IT support to keep your systems, devices, and technology infrastructure secure, high-performing, and operational throughout the year.
               </p>
               <p className={styles.introText}>
-                With RHST's AMC, you get a dedicated team of technical experts who visit your premises regularly to maintain your devices along with regular monitoring, maintenance, and support for your systems.
+                With VALNQIX's AMC, you get a dedicated team of technical experts who visit your premises regularly to maintain your devices along with regular monitoring, maintenance, and support for your systems.
               </p>
             </div>
           </div>
@@ -49,7 +49,7 @@ export default function AMCPage() {
                 What is an Annual Maintenance Contract (AMC)?
               </h2>
               <p className={styles.introText} style={{ marginBottom: '1rem' }}>
-                An Annual Maintenance Contract (AMC) is an agreement between RHST and customers where we provide scheduled IT maintenance, technical support, and troubleshooting for a period.
+                An Annual Maintenance Contract (AMC) is an agreement between VALNQIX and customers where we provide scheduled IT maintenance, technical support, and troubleshooting for a period.
               </p>
               <p className={styles.introText}>
                 Our AMC service is signed for a year. The contract can be customized to suit your business requirements.
@@ -268,10 +268,10 @@ export default function AMCPage() {
           </div>
         </section>
 
-        {/* Benefits of Choosing RHST AMC Services (Grid of 8 image cards) */}
+        {/* Benefits of Choosing VALNQIX AMC Services (Grid of 8 image cards) */}
         <section className={styles.benefitsSection}>
           <div className="container">
-            <h2 className={styles.sectionHeading}>Benefits of RHST AMC Services</h2>
+            <h2 className={styles.sectionHeading}>Benefits of VALNQIX AMC Services</h2>
 
             <div className={styles.benefitsGrid}>
 
@@ -375,12 +375,12 @@ export default function AMCPage() {
           </div>
         </section>
 
-        {/* Why RHST IT-Ecommerce Pvt. Ltd. (Dark Banner) */}
+        {/* Why VALNQIX IT-Ecommerce Pvt. Ltd. (Dark Banner) */}
         <section className={styles.darkBanner}>
           <div className="container">
-            <h2 className={styles.darkBannerTitle}>Why RHST IT-Ecommerce Pvt. Ltd.?</h2>
+            <h2 className={styles.darkBannerTitle}>Why VALNQIX IT-Ecommerce Pvt. Ltd.?</h2>
             <p className={styles.darkBannerText}>
-              RHST provides dependable IT maintenance solutions with experienced technicians, customized service plans, and proactive support. We help businesses focus on growth while we take care of their technology infrastructure.
+              VALNQIX provides dependable IT maintenance solutions with experienced technicians, customized service plans, and proactive support. We help businesses focus on growth while we take care of their technology infrastructure.
             </p>
           </div>
         </section>

@@ -3,7 +3,7 @@ import { CartProvider } from "@/context/CartContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "RHST | Premium Tech & IT Hardware Solutions",
+  title: "VALNQIX | Premium Tech & IT Hardware Solutions",
   description: "Powering your digital world with reliable IT solutions, printers, laptops, gaming PCs, router peripherals, and professional CCTV and hardware networking services.",
   icons: {
     icon: "/images/logo.png",

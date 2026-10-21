@@ -6,8 +6,8 @@ import ProfileClient from './ProfileClient';
 import styles from './Profile.module.css';
 
 export const metadata: Metadata = {
-  title: 'Account Dashboard | RHST Store',
-  description: 'Manage your profile, active orders, and settings at RHST Store.',
+  title: 'Account Dashboard | VALNQIX Store',
+  description: 'Manage your profile, active orders, and settings at VALNQIX Store.',
 };
 
 export default function ProfilePage() {

@@ -319,7 +319,7 @@ export default function Header() {
         localStorage.setItem('currentUser', JSON.stringify(data.user));
 
         // Show success view
-        setProfileSuccessMessage('Account created successfully! Welcome to RHST Store.');
+        setProfileSuccessMessage('Account created successfully! Welcome to VALNQIX Store.');
 
         // Clear inputs
         setSignUpName('');
@@ -388,9 +388,6 @@ export default function Header() {
         <div className="container">
           <div className={styles.topBarContent}>
             <div className={styles.topBarItem}>
-              Need help? Call us +91-8387634520
-            </div>
-            <div className={styles.topBarItem}>
               <span>Summer sale discount off 60% off! <Link href="/products" className={styles.topBarLink}>Shop Now</Link></span>
             </div>
             <div className={styles.topBarItem}>
@@ -408,7 +405,7 @@ export default function Header() {
             <Link href="/" className={styles.logoWrapper}>
               <img
                 src="/images/logo.png"
-                alt="RHST ECOMMERCE PVT. LTD."
+                alt="VALNQIX ECOMMERCE PVT. LTD."
                 className={styles.logoImage}
               />
             </Link>
@@ -1055,7 +1052,7 @@ export default function Header() {
                 <>
                   <h2 className={styles.profileModalTitle}>My Account</h2>
                   <p className={styles.profileModalSubtitle}>
-                    Welcome back to RHST Store!
+                    Welcome back to VALNQIX Store!
                   </p>
 
                   <div className={styles.profileDetailsBox}>
@@ -1095,7 +1092,7 @@ export default function Header() {
                 <>
                   <h2 className={styles.profileModalTitle}>Create Account</h2>
                   <p className={styles.profileModalSubtitle}>
-                    Join RHST Store to get the best deals on PC components.
+                    Join VALNQIX Store to get the best deals on PC components.
                   </p>
 
                   <form onSubmit={handleSignUpSubmit} className={styles.profileForm}>
@@ -1197,7 +1194,7 @@ export default function Header() {
                 <>
                   <h2 className={styles.profileModalTitle}>Sign In</h2>
                   <p className={styles.profileModalSubtitle}>
-                    Welcome back! Sign in to your RHST account to check your orders.
+                    Welcome back! Sign in to your VALNQIX account to check your orders.
                   </p>
 
                   <form onSubmit={handleSignInSubmit} className={styles.profileForm}>

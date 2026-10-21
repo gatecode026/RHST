@@ -7,8 +7,8 @@ import Footer from '@/components/Footer';
 import styles from './Privacy.module.css';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | RHST E-commerce & IT Solutions',
-  description: 'Read the privacy policy of RHST to understand how we collect, use, store, and protect your personal and technical information.',
+  title: 'Privacy Policy | VALNQIX E-commerce & IT Solutions',
+  description: 'Read the privacy policy of VALNQIX to understand how we collect, use, store, and protect your personal and technical information.',
 };
 
 export default function PrivacyPolicyPage() {
@@ -40,10 +40,10 @@ export default function PrivacyPolicyPage() {
                 <h2 className={styles.policyTitle}>PRIVACY POLICY</h2>
                 <p className={styles.lastUpdated}>Last Updated: 2026</p>
                 <p className={styles.introParagraph}>
-                  At RHST, we respect your privacy and are committed to protecting your personal information. This Privacy Policy explains how we collect, use, store, and protect your information when you visit our website, purchase products, or use our services.
+                  At VALNQIX, we respect your privacy and are committed to protecting your personal information. This Privacy Policy explains how we collect, use, store, and protect your information when you visit our website, purchase products, or use our services.
                 </p>
                 <p className={styles.agreeText}>
-                  By using the RHST website, you agree to the practices described in this Privacy Policy.
+                  By using the VALNQIX website, you agree to the practices described in this Privacy Policy.
                 </p>
               </div>
 
@@ -95,7 +95,7 @@ export default function PrivacyPolicyPage() {
               <div className={styles.policyBlock}>
                 <h3 className={styles.sectionHeading}>3. PRODUCT ORDERS &amp; PAYMENTS</h3>
                 <p className={styles.text}>
-                  RHST provides secure online shopping services. Payment information is handled through trusted and secure payment gateways. We do not store complete payment card details on our servers.
+                  VALNQIX provides secure online shopping services. Payment information is handled through trusted and secure payment gateways. We do not store complete payment card details on our servers.
                 </p>
               </div>
 
@@ -120,7 +120,7 @@ export default function PrivacyPolicyPage() {
               <div className={styles.policyBlock}>
                 <h3 className={styles.sectionHeading}>5. INFORMATION SHARING</h3>
                 <p className={styles.text}>
-                  RHST does not sell, rent, or trade your personal information.
+                  VALNQIX does not sell, rent, or trade your personal information.
                 </p>
                 <p className={styles.text}>
                   We may share limited information with:
@@ -173,7 +173,7 @@ export default function PrivacyPolicyPage() {
               <div className={styles.policyBlock}>
                 <h3 className={styles.sectionHeading}>8. THIRD-PARTY LINKS</h3>
                 <p className={styles.text}>
-                  Our website may contain links to external sites. RHST is not responsible for the privacy practices or content of third-party websites.
+                  Our website may contain links to external sites. VALNQIX is not responsible for the privacy practices or content of third-party websites.
                 </p>
               </div>
 
@@ -181,7 +181,7 @@ export default function PrivacyPolicyPage() {
               <div className={styles.policyBlock}>
                 <h3 className={styles.sectionHeading}>9. CHILDREN'S PRIVACY</h3>
                 <p className={styles.text}>
-                  RHST does not knowingly collect personal information from children. Users must be of an appropriate age to create an account and make purchases.                </p>
+                  VALNQIX does not knowingly collect personal information from children. Users must be of an appropriate age to create an account and make purchases.                </p>
               </div>
 
               {/* 10. Changes To This Privacy Policy */}
@@ -199,9 +199,8 @@ export default function PrivacyPolicyPage() {
                   If you have any questions regarding this Privacy Policy, please contact us:
                 </p>
                 <div className={styles.contactDetails}>
-                  <p className={styles.text}><strong>RHST - Ecommerce Private Limited</strong></p>
-                  <p className={styles.text}>Email: rhst@gmail.com</p>
-                  <p className={styles.text}>Phone: +91-8387634520</p>
+                  <p className={styles.text}><strong>VALNQIX - Ecommerce Private Limited</strong></p>
+                  <p className={styles.text}>Email: info@valnqix.in</p>
                 </div>
                 <p className={styles.trustText}>
                   Your trust and privacy are important to us.

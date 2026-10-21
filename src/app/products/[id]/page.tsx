@@ -70,7 +70,7 @@ const DEFAULT_REVIEWS = [
     author: 'Reena Choudhary',
     rating: 5,
     date: '06/22/2026',
-    text: 'Excellent product quality and fast delivery. The performance is amazing and the buying experience with RHST was smooth and reliable.'
+    text: 'Excellent product quality and fast delivery. The performance is amazing and the buying experience with VALNQIX was smooth and reliable.'
   },
   {
     author: 'S.K. Jain',
@@ -134,7 +134,7 @@ async function getProduct(id: string) {
           brand: dbProduct.brand || 'ASUS',
           sku: dbProduct.sku || `SKU-DB-${dbProduct._id.toString().substring(18).toUpperCase()}`,
           stock: dbProduct.stock !== undefined ? dbProduct.stock : 8,
-          description: dbProduct.description || 'Premium IT product delivered with full brand warranty and professional configuration guidance from RHST.',
+          description: dbProduct.description || 'Premium IT product delivered with full brand warranty and professional configuration guidance from VALNQIX.',
           mrp: dbProduct.mrp || parsePrice(dbProduct.price) * 1.1,
           discount: dbProduct.discount || 10,
           warranty: dbProduct.warranty || 12,
@@ -219,12 +219,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const product = await getProduct(id);
   if (!product) {
     return {
-      title: 'Product Not Found | RHST',
+      title: 'Product Not Found | VALNQIX',
       description: 'The requested product could not be found.'
     };
   }
   return {
-    title: `${product.name} | RHST IT Products & Solutions`,
+    title: `${product.name} | VALNQIX IT Products & Solutions`,
     description: product.description
   };
 }

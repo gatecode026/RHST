@@ -7,8 +7,8 @@ import Footer from '@/components/Footer';
 import styles from './Return.module.css';
 
 export const metadata: Metadata = {
-  title: 'Return Policy | RHST E-commerce & IT Solutions',
-  description: 'Read the return and replacement policy of RHST to understand return eligibility, time periods, non-returnable products, and refunds.',
+  title: 'Return Policy | VALNQIX E-commerce & IT Solutions',
+  description: 'Read the return and replacement policy of VALNQIX to understand return eligibility, time periods, non-returnable products, and refunds.',
 };
 
 export default function ReturnPolicyPage() {
@@ -40,7 +40,7 @@ export default function ReturnPolicyPage() {
                 <h2 className={styles.policyTitle}>RETURN POLICY</h2>
                 <p className={styles.lastUpdated}>Last Updated: 2026</p>
                 <p className={styles.introParagraph}>
-                  At RHST, we aim to provide high-quality IT products and a reliable shopping experience. If you receive a damaged, defective, or incorrect product, we are here to help you with our return and replacement process.
+                  At VALNQIX, we aim to provide high-quality IT products and a reliable shopping experience. If you receive a damaged, defective, or incorrect product, we are here to help you with our return and replacement process.
                 </p>
               </div>
 
@@ -48,7 +48,7 @@ export default function ReturnPolicyPage() {
               <div className={styles.policyBlock}>
                 <h3 className={styles.sectionHeading}>1. RETURN ELIGIBILITY</h3>
                 <p className={styles.text}>
-                  Products purchased from RHST may be eligible for return if:
+                  Products purchased from VALNQIX may be eligible for return if:
                 </p>
                 <ul className={styles.list}>
                   <li className={styles.listItem}>The product is received damaged or defective</li>
@@ -111,7 +111,7 @@ export default function ReturnPolicyPage() {
                   To request a return:
                 </p>
                 <ol className={styles.orderedList}>
-                  <li className={styles.orderedListItem}>Contact RHST customer support</li>
+                  <li className={styles.orderedListItem}>Contact VALNQIX customer support</li>
                   <li className={styles.orderedListItem}>Share your order details and reason for return</li>
                   <li className={styles.orderedListItem}>Provide images/videos of damaged or incorrect products if required</li>
                   <li className={styles.orderedListItem}>Our team will verify the request</li>
@@ -175,9 +175,8 @@ export default function ReturnPolicyPage() {
                   For return and replacement queries:
                 </p>
                 <div className={styles.contactDetails}>
-                  <p className={styles.text}><strong>RHST IT-Ecommerce Private Limited</strong></p>
-                  <p className={styles.text}>Email: rhst@gmail.com</p>
-                  <p className={styles.text}>Phone: +91-XXXXXXXXXX</p>
+                  <p className={styles.text}><strong>VALNQIX IT-Ecommerce Private Limited</strong></p>
+                  <p className={styles.text}>Email: info@valnqix.in</p>
                 </div>
                 <p className={styles.trustText} style={{ fontWeight: 500, color: 'var(--dark)' }}>
                   We are committed to providing quality products and customer satisfaction.

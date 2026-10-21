@@ -7,8 +7,8 @@ import ContactForm from '@/components/ContactForm';
 import styles from './Consultation.module.css';
 
 export const metadata: Metadata = {
-  title: 'IT Consultation Services | RHST E-commerce & IT Solutions',
-  description: 'RHST provides professional IT Consultation Services to help businesses make informed technology decisions. Our experienced consultants analyze your existing systems and recommend the right solutions.',
+  title: 'IT Consultation Services | VALNQIX E-commerce & IT Solutions',
+  description: 'VALNQIX provides professional IT Consultation Services to help businesses make informed technology decisions. Our experienced consultants analyze your existing systems and recommend the right solutions.',
 };
 
 export default function ConsultationServicesPage() {
@@ -32,10 +32,10 @@ export default function ConsultationServicesPage() {
                 Expert Technology Guidance to Drive Business Growth
               </h1>
               <p className={styles.introText}>
-                At RHST, we provide professional IT Consultation Services to help businesses make smarter technology decisions. Our experts analyze your current IT environment, understand your business goals, and recommend the right solutions to improve efficiency, security, and performance.
+                At VALNQIX, we provide professional IT Consultation Services to help businesses make smarter technology decisions. Our experts analyze your current IT environment, understand your business goals, and recommend the right solutions to improve efficiency, security, and performance.
               </p>
               <p className={styles.introText}>
-                Whether you are planning a new IT setup, upgrading existing infrastructure, adopting cloud solutions, or improving cybersecurity, RHST provides strategic technology guidance tailored to your needs.
+                Whether you are planning a new IT setup, upgrading existing infrastructure, adopting cloud solutions, or improving cybersecurity, VALNQIX provides strategic technology guidance tailored to your needs.
               </p>
             </div>
           </div>
@@ -52,7 +52,7 @@ export default function ConsultationServicesPage() {
                 IT Consultation is a professional service where technology experts help businesses identify challenges, plan solutions, and implement the right IT strategies.
               </p>
               <p className={styles.introText}>
-                RHST helps organizations choose the right hardware, software, infrastructure, and digital solutions to achieve better productivity and long-term success.
+                VALNQIX helps organizations choose the right hardware, software, infrastructure, and digital solutions to achieve better productivity and long-term success.
               </p>
             </div>
           </div>
@@ -275,10 +275,10 @@ export default function ConsultationServicesPage() {
           </div>
         </section>
 
-        {/* Benefits of RHST IT Consultation Services (5 steps) */}
+        {/* Benefits of VALNQIX IT Consultation Services (5 steps) */}
         <section className={styles.servicesSection}>
           <div className="container">
-            <h2 className={styles.sectionHeading}>Benefits of RHST IT Consultation Services</h2>
+            <h2 className={styles.sectionHeading}>Benefits of VALNQIX IT Consultation Services</h2>
 
             <div className={styles.benefitsGrid}>
 
@@ -438,12 +438,12 @@ export default function ConsultationServicesPage() {
           </div>
         </section>
 
-        {/* Why RHST IT-Ecommerce Pvt. Ltd. (Dark Banner) */}
+        {/* Why VALNQIX IT-Ecommerce Pvt. Ltd. (Dark Banner) */}
         <section className={styles.darkBanner}>
           <div className="container">
-            <h2 className={styles.darkBannerTitle}>Why RHST IT-Ecommerce Pvt. Ltd.?</h2>
+            <h2 className={styles.darkBannerTitle}>Why VALNQIX IT-Ecommerce Pvt. Ltd.?</h2>
             <p className={styles.darkBannerText}>
-              RHST combines technical expertise, industry knowledge, and business understanding to deliver practical IT solutions. We help businesses select, implement, and manage technology that supports growth and success.
+              VALNQIX combines technical expertise, industry knowledge, and business understanding to deliver practical IT solutions. We help businesses select, implement, and manage technology that supports growth and success.
             </p>
           </div>
         </section>

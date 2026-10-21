@@ -1267,8 +1267,8 @@ export default function AdminDashboardPage() {
           </div>
           <div class="invoice-header">
             <div class="logo-section">
-              <h1>RHST E-COMMERCE</h1>
-              <span>RHST IT ECOMMERCE PVT. LTD.</span>
+              <h1>VALNQIX E-COMMERCE</h1>
+              <span>VALNQIX IT ECOMMERCE PVT. LTD.</span>
             </div>
             <div class="invoice-details">
               <h2>INVOICE</h2>
@@ -1280,10 +1280,10 @@ export default function AdminDashboardPage() {
           <div class="billing-section">
             <div>
               <h3>Sender / Supplier</h3>
-              <p><strong>RHST IT E-Commerce Pvt. Ltd.</strong></p>
-              <p>Delhi E-Commerce Hub, Connaught Place</p>
-              <p>New Delhi, 110001</p>
-              <p>Email: support@rhst.com | Phone: +91-8387634520</p>
+              <p><strong>VALNQIX IT E-Commerce Pvt. Ltd.</strong></p>
+              <p>G 52, UP, NOIDA</p>
+              <p>Uttar Pradesh, India 201301</p>
+              <p>Email: info@valnqix.in</p>
             </div>
             <div>
               <h3>Bill To / Ship To</h3>
@@ -1321,7 +1321,7 @@ export default function AdminDashboardPage() {
           </div>
           <div class="footer">
             <p>Thank you for shopping with us! This is a system-generated invoice.</p>
-            <p>&copy; ${new Date().getFullYear()} RHST IT E-Commerce Pvt. Ltd. All rights reserved.</p>
+            <p>&copy; ${new Date().getFullYear()} VALNQIX IT E-Commerce Pvt. Ltd. All rights reserved.</p>
           </div>
         </body>
       </html>
@@ -2174,7 +2174,7 @@ export default function AdminDashboardPage() {
     return (
       <div className={styles.loginContainer}>
         <div className={styles.loginCard}>
-          <img src="/images/logo.png" alt="RHST Logo" className={styles.loginLogo} />
+          <img src="/images/logo.png" alt="VALNQIX Logo" className={styles.loginLogo} />
           <h2 className={styles.loginTitle}>Admin Control Center</h2>
           <form className={styles.loginForm} onSubmit={handleLogin}>
             <input
@@ -2245,7 +2245,7 @@ export default function AdminDashboardPage() {
         <div className={styles.sidebarHeader}>
           {!sidebarCollapsed && (
             <>
-              <img src="/images/logo.png" alt="RHST" className={styles.sidebarLogo} />
+              <img src="/images/logo.png" alt="VALNQIX" className={styles.sidebarLogo} />
               <span className={styles.sidebarTitle}>Admin Panel</span>
             </>
           )}
@@ -2539,7 +2539,7 @@ export default function AdminDashboardPage() {
                     {/* User info */}
                     <div style={{ padding: '14px 16px', borderBottom: '1px solid #f3f4f6' }}>
                       <div style={{ fontWeight: 700, fontSize: '14px', color: '#111' }}>Admin User</div>
-                      <div style={{ fontSize: '12px', color: '#888', marginTop: '2px' }}>{currentAdminUsername}@rhst.com</div>
+                      <div style={{ fontSize: '12px', color: '#888', marginTop: '2px' }}>{currentAdminUsername}@valnqix.in</div>
                     </div>
                     {/* Menu items */}
                     <div style={{ padding: '6px 0' }}>
@@ -5627,8 +5627,8 @@ export default function AdminDashboardPage() {
                         </div>
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                           <div className={styles.formGroup}>
-                            <label className={styles.formLabel}>Contact Phone *</label>
-                            <input type="text" className={styles.loginInput} value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} required />
+                            <label className={styles.formLabel}>Contact Phone</label>
+                            <input type="text" className={styles.loginInput} value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} />
                           </div>
                           <div className={styles.formGroup}>
                             <label className={styles.formLabel}>Contact Email *</label>

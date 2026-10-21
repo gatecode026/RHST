@@ -7,8 +7,8 @@ import ContactForm from '@/components/ContactForm';
 import styles from './RepairMaintenance.module.css';
 
 export const metadata: Metadata = {
-  title: 'IT Repair & Maintenance Services | RHST E-commerce & IT Solutions',
-  description: 'Explore the IT repair and maintenance services offered by RHST IT-Ecommerce. We provide desktop and laptop repair, hardware setups, software configurations, network setups, database support, and security audits.',
+  title: 'IT Repair & Maintenance Services | VALNQIX E-commerce & IT Solutions',
+  description: 'Explore the IT repair and maintenance services offered by VALNQIX IT-Ecommerce. We provide desktop and laptop repair, hardware setups, software configurations, network setups, database support, and security audits.',
 };
 
 export default function RepairMaintenancePage() {
@@ -32,10 +32,10 @@ export default function RepairMaintenancePage() {
                 Reliable IT Repair & Maintenance Solutions for Long-Term Performance
               </h1>
               <p className={styles.introText}>
-                At RHST, we provide professional IT Repair & Maintenance Services to keep your technology systems running smoothly and efficiently. Our expert technicians diagnose, repair, and maintain your IT equipment to reduce downtime, improve performance, and extend the life of your devices.
+                At VALNQIX, we provide professional IT Repair & Maintenance Services to keep your technology systems running smoothly and efficiently. Our expert technicians diagnose, repair, and maintain your IT equipment to reduce downtime, improve performance, and extend the life of your devices.
               </p>
               <p className={styles.introText}>
-                Whether it is a hardware issue, software problem, network failure, or regular system maintenance, RHST delivers fast and reliable solutions for individuals and businesses.
+                Whether it is a hardware issue, software problem, network failure, or regular system maintenance, VALNQIX delivers fast and reliable solutions for individuals and businesses.
               </p>
             </div>
           </div>
@@ -300,10 +300,10 @@ export default function RepairMaintenancePage() {
           </div>
         </section>
 
-        {/* Benefits of Choosing RHST Repair & Maintenance (Grid of 8 image cards) */}
+        {/* Benefits of Choosing VALNQIX Repair & Maintenance (Grid of 8 image cards) */}
         <section className={styles.benefitsSection}>
           <div className="container">
-            <h2 className={styles.sectionHeading}>Benefits of Choosing RHST Repair & Maintenance</h2>
+            <h2 className={styles.sectionHeading}>Benefits of Choosing VALNQIX Repair & Maintenance</h2>
 
             <div className={styles.benefitsGrid}>
 
@@ -407,12 +407,12 @@ export default function RepairMaintenancePage() {
           </div>
         </section>
 
-        {/* Why RHST IT-Ecommerce Pvt. Ltd. (Dark Banner) */}
+        {/* Why VALNQIX IT-Ecommerce Pvt. Ltd. (Dark Banner) */}
         <section className={styles.darkBanner}>
           <div className="container">
-            <h2 className={styles.darkBannerTitle}>Why RHST IT-Ecommerce Pvt. Ltd.?</h2>
+            <h2 className={styles.darkBannerTitle}>Why VALNQIX IT-Ecommerce Pvt. Ltd.?</h2>
             <p className={styles.darkBannerText}>
-              Technology problems can affect productivity and business operations. RHST provides dependable repair and maintenance solutions to ensure your IT systems remain secure, stable, and high-performing.
+              Technology problems can affect productivity and business operations. VALNQIX provides dependable repair and maintenance solutions to ensure your IT systems remain secure, stable, and high-performing.
             </p>
           </div>
         </section>

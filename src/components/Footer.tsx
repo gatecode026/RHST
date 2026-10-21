@@ -16,12 +16,12 @@ export default function Footer() {
               <div className={styles.logoWrapper}>
                 <img
                   src="/images/logo.png"
-                  alt="RHST Logo"
+                  alt="VALNQIX Logo"
                   className={styles.logoImg}
                 />
               </div>
               <p className={styles.aboutText}>
-                RHST is your trusted technology partner providing quality IT products, solutions, and services.
+                VALNQIX is your trusted technology partner providing quality IT products, solutions, and services.
                 We offer the latest hardware, software, networking solutions, and business technology products to meet your digital needs.
               </p>
             </div>
@@ -61,15 +61,9 @@ export default function Footer() {
                 <p className={styles.contactText}>
                   Do you have any queries or suggestions?
                 </p>
-                <a href="mailto:rhst@gmail.com" className={styles.emailLink}>
-                  rhst@gmail.com
+                <a href="mailto:info@valnqix.in" className={styles.emailLink}>
+                  info@valnqix.in
                 </a>
-                <p className={styles.contactText} style={{ marginTop: '1.5rem' }}>
-                  If you need support? Just give us a call.
-                </p>
-                <span className={styles.phoneVal}>
-                  +91-8387634520
-                </span>
               </div>
             </div>
           </div>
@@ -136,11 +130,6 @@ export default function Footer() {
                 </div>
               </div>
             </div>
-
-            {/* Copyright */}
-            <p className={styles.copyright}>
-              © Copyright 2026 RHST IT-Ecommerce Pvt. Ltd.. Design by Gatecode Pvt. Ltd.
-            </p>
           </div>
         </div>
       </div>

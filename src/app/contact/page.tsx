@@ -10,8 +10,8 @@ import ContactForm from '@/components/ContactForm';
 import styles from './Contact.module.css';
 
 export const metadata: Metadata = {
-  title: 'Contact Us | RHST E-commerce & IT Solutions',
-  description: 'Get in touch with RHST. Contact our office or management teams, locate our store in Brooklyn, NY, or send us your questions and inquiries online.',
+  title: 'Contact Us | VALNQIX E-commerce & IT Solutions',
+  description: 'Get in touch with VALNQIX. Contact our office or management teams, locate our store in Brooklyn, NY, or send us your questions and inquiries online.',
 };
 
 export default function ContactPage() {
@@ -48,15 +48,13 @@ export default function ContactPage() {
                 <div className={styles.infoCols}>
                   <div className={styles.infoCol}>
                     <h3 className={styles.infoTitle}>OFFICE</h3>
-                    <p className={styles.infoText}>Jaipur,Rajasthan,India</p>
-                    <p className={styles.infoText}>+91-8587634520</p>
-                    <p className={styles.infoText}>rhst@gmail.com</p>
+                    <p className={styles.infoText}>G 52, UP, NOIDA, Uttar Pradesh, India 201301</p>
+                    <p className={styles.infoText}>info@valnqix.in</p>
                   </div>
                   <div className={styles.infoCol}>
                     <h3 className={styles.infoTitle}>MANAGEMENT</h3>
-                    <p className={styles.infoText}>Jaipur,Rajasthan,India</p>
-                    <p className={styles.infoText}>+91-8587634520</p>
-                    <p className={styles.infoText}>rhst@gmail.com</p>
+                    <p className={styles.infoText}>G 52, UP, NOIDA, Uttar Pradesh, India 201301</p>
+                    <p className={styles.infoText}>info@valnqix.in</p>
                   </div>
                 </div>
               </div>
@@ -75,22 +73,14 @@ export default function ContactPage() {
 
             {/* Store Grid Section */}
             <div className={styles.storeGrid}>
-              <div className={styles.storeImageWrapper}>
-                <img
-                  src="https://ik.imagekit.io/zp0tch54w/RHST/Contact%20Img.png"
-                  alt="RHST Showroom Store Rajasthan"
-                  className={styles.storeImage}
-                />
-              </div>
               <div className={styles.storeContent}>
                 <h2 className={styles.sectionTitle} style={{ marginBottom: '0.5rem' }}>OUR STORES</h2>
                 <p className={styles.sectionDesc} style={{ marginBottom: '1.5rem' }}>
                   You can also directly buy products from our stores.
                 </p>
                 <h3 className={styles.storeName}>India</h3>
-                <p className={styles.infoText}>Jaipur,Rajasthan,India</p>
-                <p className={styles.infoText}>+91-8587634520</p>
-                <p className={styles.infoText}>rhst@gmail.com</p>
+                <p className={styles.infoText}>G 52, UP, NOIDA, Uttar Pradesh, India 201301</p>
+                <p className={styles.infoText}>info@valnqix.in</p>
               </div>
             </div>
 

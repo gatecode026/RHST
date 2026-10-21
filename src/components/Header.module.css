@@ -13,7 +13,7 @@
 
 .topBarContent {
   display: grid;
-  grid-template-columns: 310px 1fr auto;
+  grid-template-columns: 1fr auto;
   align-items: stretch;
 }
 
@@ -25,11 +25,6 @@
 }
 
 .topBarItem:first-child {
-  justify-content: flex-start;
-  padding-left: 0;
-}
-
-.topBarItem:nth-child(2) {
   justify-content: center;
 }
 
