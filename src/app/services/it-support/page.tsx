@@ -7,8 +7,8 @@ import ContactForm from '@/components/ContactForm';
 import styles from './ITSupport.module.css';
 
 export const metadata: Metadata = {
-  title: 'IT Support & Repair Services | RHST E-commerce & IT Solutions',
-  description: 'At RHST, we provide professional IT Support and Repair Services to keep your technology systems running smoothly and efficiently. Explore our remote and on-site support options.',
+  title: 'IT Support & Repair Services | VALNQIX E-commerce & IT Solutions',
+  description: 'At VALNQIX, we provide professional IT Support and Repair Services to keep your technology systems running smoothly and efficiently. Explore our remote and on-site support options.',
 };
 
 export default function ITSupportPage() {
@@ -32,7 +32,7 @@ export default function ITSupportPage() {
                 Reliable IT Support for Your Business & Technology Needs
               </h1>
               <p className={styles.introText}>
-                At RHST, we understand that technology plays a critical role in the success of every business. Our IT Support Services are designed to ensure that your systems, devices, networks, and software operate smoothly, securely, and efficiently.
+                At VALNQIX, we understand that technology plays a critical role in the success of every business. Our IT Support Services are designed to ensure that your systems, devices, networks, and software operate smoothly, securely, and efficiently.
               </p>
               <p className={styles.introText}>
                 Whether you are a small business, growing organization, or enterprise, our experienced support team is ready to provide timely technical assistance and reliable solutions to minimize downtime and maximize productivity.
@@ -385,12 +385,12 @@ export default function ITSupportPage() {
           </div>
         </section>
 
-        {/* Why RHST IT-Ecommerce Pvt. Ltd. (Dark Banner) */}
+        {/* Why VALNQIX IT-Ecommerce Pvt. Ltd. (Dark Banner) */}
         <section className={styles.darkBanner}>
           <div className="container">
-            <h2 className={styles.darkBannerTitle}>Why RHST IT-Ecommerce Pvt. Ltd.?</h2>
+            <h2 className={styles.darkBannerTitle}>Why VALNQIX IT-Ecommerce Pvt. Ltd.?</h2>
             <p className={styles.darkBannerText}>
-              At RHST, our goal is to deliver reliable technology solutions that help run and grow your business. We understand each client is unique, which is why we tailor our IT support to fit your specific needs.
+              At VALNQIX, our goal is to deliver reliable technology solutions that help run and grow your business. We understand each client is unique, which is why we tailor our IT support to fit your specific needs.
             </p>
           </div>
         </section>

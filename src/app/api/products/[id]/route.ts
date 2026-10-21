@@ -68,7 +68,7 @@ const DEFAULT_REVIEWS = [
     author: 'Reena Choudhary',
     rating: 5,
     date: '06/22/2026',
-    text: 'Excellent product quality and fast delivery. The performance is amazing and the buying experience with RHST was smooth and reliable.'
+    text: 'Excellent product quality and fast delivery. The performance is amazing and the buying experience with VALNQIX was smooth and reliable.'
   },
   {
     author: 'S.K. Jain',
@@ -136,7 +136,7 @@ export async function GET(
           brand: dbProduct.brand || 'ASUS',
           sku: dbProduct.sku || `SKU-DB-${dbProduct._id.toString().substring(18).toUpperCase()}`,
           stock: dbProduct.stock !== undefined ? dbProduct.stock : 8,
-          description: dbProduct.description || 'Premium IT product delivered with full brand warranty and professional configuration guidance from RHST.',
+          description: dbProduct.description || 'Premium IT product delivered with full brand warranty and professional configuration guidance from VALNQIX.',
           mrp: dbProduct.mrp || parsePrice(dbProduct.price) * 1.1,
           discount: dbProduct.discount || 10,
           warranty: dbProduct.warranty || 12,

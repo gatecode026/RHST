@@ -31,7 +31,7 @@ const DEFAULT_BLOGS = Array.from({ length: 9 }).map((_, index) => {
       {
         id: "block-2",
         type: "paragraph",
-        text: "At RHST, we bring you the latest IT products and solutions designed to make your digital journey smoother, faster, and more reliable."
+        text: "At VALNQIX, we bring you the latest IT products and solutions designed to make your digital journey smoother, faster, and more reliable."
       },
       {
         id: "block-3",
@@ -75,7 +75,7 @@ const DEFAULT_BLOGS = Array.from({ length: 9 }).map((_, index) => {
         image: "https://images.unsplash.com/photo-1616348436168-de43ad0db179?w=600&auto=format&fit=crop&q=80",
         title: "THE FUTURE OF SMART TECHNOLOGY",
         subtitle: "SMART TECHNOLOGY. BETTER PERFORMANCE.",
-        description: "Technology continues to evolve every day, bringing smarter and more efficient solutions for homes and businesses. Investing in the right IT gadgets helps users improve productivity while enjoying a seamless digital experience.\n\nAt RHST, we provide trusted IT products and solutions that help customers build modern, connected, and future-ready workspaces."
+        description: "Technology continues to evolve every day, bringing smarter and more efficient solutions for homes and businesses. Investing in the right IT gadgets helps users improve productivity while enjoying a seamless digital experience.\n\nAt VALNQIX, we provide trusted IT products and solutions that help customers build modern, connected, and future-ready workspaces."
       },
       {
         id: "block-10",
@@ -95,17 +95,17 @@ const DEFAULT_BLOGS = Array.from({ length: 9 }).map((_, index) => {
       {
         id: "block-13",
         type: "heading",
-        text: "BUILD YOUR FUTURE-READY WORKSPACE WITH RHST"
+        text: "BUILD YOUR FUTURE-READY WORKSPACE WITH VALNQIX"
       },
       {
         id: "block-14",
         type: "paragraph",
-        text: "At RHST, we focus on delivering quality IT solutions that combine innovation, reliability, and performance. Our goal is to make advanced technology easily accessible for individuals and businesses."
+        text: "At VALNQIX, we focus on delivering quality IT solutions that combine innovation, reliability, and performance. Our goal is to make advanced technology easily accessible for individuals and businesses."
       },
       {
         id: "block-15",
         type: "paragraph",
-        text: "Explore the latest IT products and upgrade your digital experience with RHST."
+        text: "Explore the latest IT products and upgrade your digital experience with VALNQIX."
       }
     ]
   };

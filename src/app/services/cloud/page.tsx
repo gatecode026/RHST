@@ -7,8 +7,8 @@ import ContactForm from '@/components/ContactForm';
 import styles from './Cloud.module.css';
 
 export const metadata: Metadata = {
-  title: 'Cloud Services | RHST E-commerce & IT Solutions',
-  description: 'At RHST, we provide customized Cloud solutions and support that are engineered to align with your business requirements. We help you migrate, manage, develop, and optimize your complete IT environments on the cloud.',
+  title: 'Cloud Services | VALNQIX E-commerce & IT Solutions',
+  description: 'At VALNQIX, we provide customized Cloud solutions and support that are engineered to align with your business requirements. We help you migrate, manage, develop, and optimize your complete IT environments on the cloud.',
 };
 
 export default function CloudServicesPage() {
@@ -32,10 +32,10 @@ export default function CloudServicesPage() {
                 Secure, Scalable & Reliable Cloud Solutions for Modern Businesses
               </h1>
               <p className={styles.introText}>
-                At RHST, we provide advanced Cloud Services that help businesses store, manage, access, and protect their data with flexibility and security. Our cloud solutions are designed to improve efficiency, reduce infrastructure costs, and support business growth with reliable technology.
+                At VALNQIX, we provide advanced Cloud Services that help businesses store, manage, access, and protect their data with flexibility and security. Our cloud solutions are designed to improve efficiency, reduce infrastructure costs, and support business growth with reliable technology.
               </p>
               <p className={styles.introText}>
-                Whether you need cloud storage, data backup, cloud migration, or complete cloud management, RHST delivers customized solutions to meet your business requirements.
+                Whether you need cloud storage, data backup, cloud migration, or complete cloud management, VALNQIX delivers customized solutions to meet your business requirements.
               </p>
             </div>
           </div>
@@ -52,7 +52,7 @@ export default function CloudServicesPage() {
                 Cloud Services allow businesses to use computing resources such as storage, servers, software, and applications over the internet instead of relying only on physical infrastructure.
               </p>
               <p className={styles.introText}>
-                With RHST Cloud Solutions, businesses can access their data anytime, anywhere, while maintaining security, performance, and scalability.
+                With VALNQIX Cloud Solutions, businesses can access their data anytime, anywhere, while maintaining security, performance, and scalability.
               </p>
             </div>
           </div>
@@ -246,13 +246,13 @@ export default function CloudServicesPage() {
           </div>
         </section>
 
-        {/* Benefits of RHST Cloud Services (Split Section) */}
+        {/* Benefits of VALNQIX Cloud Services (Split Section) */}
         <section className={styles.splitSection}>
           <div className="container">
             <div className={styles.twoCol}>
 
               <div className={styles.textCol}>
-                <h2 className={styles.splitTitle}>Benefits of RHST Cloud Services</h2>
+                <h2 className={styles.splitTitle}>Benefits of VALNQIX Cloud Services</h2>
                 <ul className={styles.benefitsList}>
                   <li className={styles.benefitItem}>Cost-Efficiency</li>
                   <li className={styles.benefitItem}>Anytime, Anywhere Access</li>
@@ -440,12 +440,12 @@ export default function CloudServicesPage() {
           </div>
         </section>
 
-        {/* Why RHST IT-Ecommerce Pvt. Ltd. (Dark Banner) */}
+        {/* Why VALNQIX IT-Ecommerce Pvt. Ltd. (Dark Banner) */}
         <section className={styles.darkBanner}>
           <div className="container">
-            <h2 className={styles.darkBannerTitle}>Why RHST IT-Ecommerce Pvt. Ltd.?</h2>
+            <h2 className={styles.darkBannerTitle}>Why VALNQIX IT-Ecommerce Pvt. Ltd.?</h2>
             <p className={styles.darkBannerText}>
-              RHST helps businesses adopt modern cloud technology with secure, reliable, and customized solutions. Our team ensures smooth implementation, continuous support, and optimized cloud performance.
+              VALNQIX helps businesses adopt modern cloud technology with secure, reliable, and customized solutions. Our team ensures smooth implementation, continuous support, and optimized cloud performance.
             </p>
           </div>
         </section>

@@ -19,7 +19,7 @@ import styles from './Products.module.css';
 const MOCKUP_REVIEWS = [
   {
     id: 1,
-    text: '“RHST is a select IT innovative service provider of IT products, solutions, and services. The primary focus is to deliver prompt quality, cost-effective and client satisfaction.”',
+    text: '“VALNQIX is a select IT innovative service provider of IT products, solutions, and services. The primary focus is to deliver prompt quality, cost-effective and client satisfaction.”',
     rating: 5,
     author: 'Rahul Sharma'
   },
@@ -31,7 +31,7 @@ const MOCKUP_REVIEWS = [
   },
   {
     id: 3,
-    text: '“I had a great experience working with RHST. Their vehicles easy to use, product selection is vast, and customer service is outstanding. Highly recommend to everyone.”',
+    text: '“I had a great experience working with VALNQIX. Their vehicles easy to use, product selection is vast, and customer service is outstanding. Highly recommend to everyone.”',
     rating: 5,
     author: 'Pranav Patel'
   }

@@ -33,16 +33,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const blog = await collection.findOne(query);
     if (blog) {
       return {
-        title: `${blog.title} | RHST Blog`,
-        description: blog.excerpt || `Read the latest blog post "${blog.title}" on RHST E-commerce & IT Solutions.`,
+        title: `${blog.title} | VALNQIX Blog`,
+        description: blog.excerpt || `Read the latest blog post "${blog.title}" on VALNQIX E-commerce & IT Solutions.`,
       };
     }
   } catch (error) {
     console.error("Error generating metadata:", error);
   }
   return {
-    title: 'Blog Post | RHST Blog',
-    description: 'Explore the latest tech news, gadgets advice, and software guidelines on the RHST Blog.',
+    title: 'Blog Post | VALNQIX Blog',
+    description: 'Explore the latest tech news, gadgets advice, and software guidelines on the VALNQIX Blog.',
   };
 }
 

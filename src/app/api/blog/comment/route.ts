@@ -7,7 +7,7 @@ const DEFAULT_COMMENTS = [
     author: 'Rahul Sharma',
     date: 'June 15',
     avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80',
-    text: 'Great article! The information about smart IT gadgets and modern technology solutions is very useful. RHST provides amazing insights about the latest products and helps customers make better technology choices.',
+    text: 'Great article! The information about smart IT gadgets and modern technology solutions is very useful. VALNQIX provides amazing insights about the latest products and helps customers make better technology choices.',
     isReply: false
   },
   {
@@ -23,7 +23,7 @@ const DEFAULT_COMMENTS = [
     author: 'Seema Mishra',
     date: 'June 15',
     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80',
-    text: 'Excellent content! The explanation of IT gadgets, accessories, and future technology solutions is informative. Looking forward to more updates and technology guides from RHST.',
+    text: 'Excellent content! The explanation of IT gadgets, accessories, and future technology solutions is informative. Looking forward to more updates and technology guides from VALNQIX.',
     isReply: false
   }
 ];

@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 
 const DEFAULT_COUPONS = [
   { code: 'WELCOME10', discount: 10, type: 'percentage', isActive: true, minPurchase: 0, usageLimit: 100, usageCount: 0, expiryDate: '2026-12-31' },
-  { code: 'RHST15', discount: 15, type: 'percentage', isActive: true, minPurchase: 1000, usageLimit: 100, usageCount: 0, expiryDate: '2026-12-31' },
+  { code: 'VALNQIX15', discount: 15, type: 'percentage', isActive: true, minPurchase: 1000, usageLimit: 100, usageCount: 0, expiryDate: '2026-12-31' },
   { code: 'FLAT500', discount: 500, type: 'fixed', isActive: true, minPurchase: 3000, usageLimit: 50, usageCount: 0, expiryDate: '2026-12-31' }
 ];
 

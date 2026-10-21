@@ -6,19 +6,19 @@ import styles from './CustomerReviews.module.css';
 const REVIEWS_DATA = [
   {
     id: 1,
-    text: '“RHST is a reliable IT store with a wide range of technology products. The pricing is competitive and the product quality is outstanding. Happy with my purchase!”',
+    text: '“VALNQIX is a reliable IT store with a wide range of technology products. The pricing is competitive and the product quality is outstanding. Happy with my purchase!”',
     rating: 5,
     author: 'Rahul Sharma'
   },
   {
     id: 2,
-    text: '“Best place for IT solutions and technology products. Quality products, affordable prices, and excellent after-sales support make RHST a trusted IT partner.”',
+    text: '“Best place for IT solutions and technology products. Quality products, affordable prices, and excellent after-sales support make VALNQIX a trusted IT partner.”',
     rating: 5,
     author: 'Nikita Rani'
   },
   {
     id: 3,
-    text: '“I had a great experience shopping with RHST. The website is easy to use, product details are clear, and my order arrived on time. Looking forward to buying more products.”',
+    text: '“I had a great experience shopping with VALNQIX. The website is easy to use, product details are clear, and my order arrived on time. Looking forward to buying more products.”',
     rating: 5,
     author: 'Pawan Bisht'
   }

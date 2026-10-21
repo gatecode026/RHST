@@ -3,10 +3,10 @@ import { getDb } from '@/lib/mongodb';
 import { logActivity } from '@/lib/activity';
 
 const DEFAULT_SETTINGS = {
-  shopName: 'RHST - IT Solutions & Services',
-  contactEmail: 'info@rhst.com',
-  contactPhone: '+91-8387634520',
-  contactAddress: 'Jaipur, Rajasthan, India',
+  shopName: 'VALNQIX - IT Solutions & Services',
+  contactEmail: 'info@valnqix.in',
+  contactPhone: '',
+  contactAddress: 'G 52, UP, NOIDA, Uttar Pradesh, India 201301',
   taxRate: '18',
   shopHours: '9:00 AM - 7:00 PM, Mon-Sat'
 };
@@ -52,7 +52,7 @@ export async function POST(request: Request) {
     const updateData = {
       shopName: shopName || DEFAULT_SETTINGS.shopName,
       contactEmail: contactEmail || DEFAULT_SETTINGS.contactEmail,
-      contactPhone: contactPhone || DEFAULT_SETTINGS.contactPhone,
+      contactPhone: contactPhone ?? DEFAULT_SETTINGS.contactPhone,
       contactAddress: contactAddress || DEFAULT_SETTINGS.contactAddress,
       taxRate: taxRate || DEFAULT_SETTINGS.taxRate,
       shopHours: shopHours || DEFAULT_SETTINGS.shopHours,

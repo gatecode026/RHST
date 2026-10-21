@@ -7,8 +7,8 @@ import ContactForm from '@/components/ContactForm';
 import styles from './Installation.module.css';
 
 export const metadata: Metadata = {
-  title: 'IT Installation Services & Solutions | RHST E-commerce & IT Solutions',
-  description: 'Explore professional IT installation services by RHST IT-Ecommerce. We provide desktop setups, firmware configuration, network installations, server setups, CCTV security setups, and software installation.',
+  title: 'IT Installation Services & Solutions | VALNQIX E-commerce & IT Solutions',
+  description: 'Explore professional IT installation services by VALNQIX IT-Ecommerce. We provide desktop setups, firmware configuration, network installations, server setups, CCTV security setups, and software installation.',
 };
 
 export default function InstallationServicesPage() {
@@ -32,10 +32,10 @@ export default function InstallationServicesPage() {
                 Professional IT Installation Solutions for a Smooth Technology Setup
               </h1>
               <p className={styles.introText}>
-                At RHST, we provide reliable and professional IT Installation Services to help businesses and individuals set up their technology infrastructure efficiently. Our skilled technicians ensure that your hardware, software, networks, and IT equipment are installed correctly, configured properly, and ready for seamless operation.
+                At VALNQIX, we provide reliable and professional IT Installation Services to help businesses and individuals set up their technology infrastructure efficiently. Our skilled technicians ensure that your hardware, software, networks, and IT equipment are installed correctly, configured properly, and ready for seamless operation.
               </p>
               <p className={styles.introText}>
-                From basic device setup to complete IT infrastructure installation, RHST delivers secure, efficient, and hassle-free installation solutions.
+                From basic device setup to complete IT infrastructure installation, VALNQIX delivers secure, efficient, and hassle-free installation solutions.
               </p>
             </div>
           </div>
@@ -277,7 +277,7 @@ export default function InstallationServicesPage() {
               <div className={styles.textCol}>
                 <h2 className={styles.splitTitle}>Business IT Setup Services</h2>
                 <p className={styles.splitDesc}>
-                  For offices and organizations, RHST provides complete IT infrastructure setup including:
+                  For offices and organizations, VALNQIX provides complete IT infrastructure setup including:
                 </p>
                 <ul className={styles.benefitsList}>
                   <li className={styles.benefitItem}>Office computer setup</li>
@@ -359,10 +359,10 @@ export default function InstallationServicesPage() {
           </div>
         </section>
 
-        {/* Benefits of Choosing RHST Installation Services (Grid 3 - Images with titles underneath) */}
+        {/* Benefits of Choosing VALNQIX Installation Services (Grid 3 - Images with titles underneath) */}
         <section className={styles.benefitsSection}>
           <div className="container">
-            <h2 className={styles.sectionHeading}>Benefits of Choosing RHST Installation Services</h2>
+            <h2 className={styles.sectionHeading}>Benefits of Choosing VALNQIX Installation Services</h2>
 
             <div className={styles.benefitsGrid}>
 
@@ -514,12 +514,12 @@ export default function InstallationServicesPage() {
           </div>
         </section>
 
-        {/* Why RHST IT-Ecommerce Pvt. Ltd. (Dark Banner) */}
+        {/* Why VALNQIX IT-Ecommerce Pvt. Ltd. (Dark Banner) */}
         <section className={styles.darkBanner}>
           <div className="container">
-            <h2 className={styles.darkBannerTitle}>Why RHST IT-Ecommerce Pvt. Ltd.?</h2>
+            <h2 className={styles.darkBannerTitle}>Why VALNQIX IT-Ecommerce Pvt. Ltd.?</h2>
             <p className={styles.darkBannerText}>
-              RHST IT-Ecommerce Pvt. Ltd. provides complete IT installation solutions with a focus on quality, security, and customer satisfaction. Whether you need a single device setup or a complete business technology installation, our team delivers professional results.
+              VALNQIX IT-Ecommerce Pvt. Ltd. provides complete IT installation solutions with a focus on quality, security, and customer satisfaction. Whether you need a single device setup or a complete business technology installation, our team delivers professional results.
             </p>
           </div>
         </section>

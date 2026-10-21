@@ -8,8 +8,8 @@ import FaqClient from './FaqClient';
 import styles from './Faq.module.css';
 
 export const metadata: Metadata = {
-  title: 'Frequently Asked Questions (FAQ) | RHST E-commerce & IT Solutions',
-  description: 'Find answers to frequently asked questions about RHST IT-Ecommerce services, product catalog, orders, payments, shipping, returns, technical support, and account setup.',
+  title: 'Frequently Asked Questions (FAQ) | VALNQIX E-commerce & IT Solutions',
+  description: 'Find answers to frequently asked questions about VALNQIX IT-Ecommerce services, product catalog, orders, payments, shipping, returns, technical support, and account setup.',
 };
 
 export default function FAQPage() {

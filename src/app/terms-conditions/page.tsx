@@ -7,8 +7,8 @@ import Footer from '@/components/Footer';
 import styles from './Terms.module.css';
 
 export const metadata: Metadata = {
-  title: 'Terms & Conditions | RHST E-commerce & IT Solutions',
-  description: 'Read the terms and conditions of RHST governing rules, registration, product details, billing, shipping, returns, and limitation of liability.',
+  title: 'Terms & Conditions | VALNQIX E-commerce & IT Solutions',
+  description: 'Read the terms and conditions of VALNQIX governing rules, registration, product details, billing, shipping, returns, and limitation of liability.',
 };
 
 export default function TermsConditionsPage() {
@@ -40,7 +40,7 @@ export default function TermsConditionsPage() {
                 <h2 className={styles.policyTitle}>TERMS & CONDITIONS</h2>
                 <p className={styles.lastUpdated}>Last Updated: 2026</p>
                 <p className={styles.introParagraph}>
-                  Welcome to RHST. These Terms & Conditions explain the rules and guidelines for using our website, purchasing products, and accessing our services. By visiting or using the RHST website, you agree to follow these terms.
+                  Welcome to VALNQIX. These Terms & Conditions explain the rules and guidelines for using our website, purchasing products, and accessing our services. By visiting or using the VALNQIX website, you agree to follow these terms.
                 </p>
                 <p className={styles.introParagraph}>
                   Please read these terms carefully before using our services.
@@ -51,7 +51,7 @@ export default function TermsConditionsPage() {
               <div className={styles.policyBlock}>
                 <h3 className={styles.sectionHeading}>1. WEBSITE USAGE</h3>
                 <p className={styles.text}>
-                  By accessing the RHST website, you agree that:
+                  By accessing the VALNQIX website, you agree that:
                 </p>
                 <ul className={styles.list}>
                   <li className={styles.listItem}>You will use the website only for lawful purposes</li>
@@ -76,7 +76,7 @@ export default function TermsConditionsPage() {
                   <li className={styles.listItem}>All activities performed through your account</li>
                 </ul>
                 <p className={styles.text}>
-                  RHST reserves the right to suspend or terminate accounts involved in suspicious or unauthorized activities.
+                  VALNQIX reserves the right to suspend or terminate accounts involved in suspicious or unauthorized activities.
                 </p>
               </div>
 
@@ -84,7 +84,7 @@ export default function TermsConditionsPage() {
               <div className={styles.policyBlock}>
                 <h3 className={styles.sectionHeading}>3. PRODUCT INFORMATION</h3>
                 <p className={styles.text}>
-                  RHST makes every effort to provide accurate product information, including:
+                  VALNQIX makes every effort to provide accurate product information, including:
                 </p>
                 <ul className={styles.list}>
                   <li className={styles.listItem}>Product descriptions</li>
@@ -113,7 +113,7 @@ export default function TermsConditionsPage() {
                   <li className={styles.listItem}>Accept applicable taxes and shipping charges</li>
                 </ul>
                 <p className={styles.text}>
-                  RHST uses secure payment methods to process transactions.
+                  VALNQIX uses secure payment methods to process transactions.
                 </p>
               </div>
 
@@ -125,7 +125,7 @@ export default function TermsConditionsPage() {
                 </p>
                 <ul className={styles.list}>
                   <li className={styles.listItem}>Customers will receive order confirmation</li>
-                  <li className={styles.listItem}>RHST reserves the right to cancel orders due to stock issues, incorrect pricing, or verification problems</li>
+                  <li className={styles.listItem}>VALNQIX reserves the right to cancel orders due to stock issues, incorrect pricing, or verification problems</li>
                   <li className={styles.listItem}>Customers may request cancellation before shipment processing</li>
                 </ul>
               </div>
@@ -134,7 +134,7 @@ export default function TermsConditionsPage() {
               <div className={styles.policyBlock}>
                 <h3 className={styles.sectionHeading}>6. SHIPPING & DELIVERY</h3>
                 <p className={styles.text}>
-                  RHST aims to deliver products within the estimated delivery timeframe.
+                  VALNQIX aims to deliver products within the estimated delivery timeframe.
                 </p>
                 <p className={styles.text}>
                   Delivery may be affected by:
@@ -181,7 +181,7 @@ export default function TermsConditionsPage() {
                   <li className={styles.listItem}>Software</li>
                 </ul>
                 <p className={styles.text}>
-                  is the property of RHST and cannot be copied, modified, or used without permission.
+                  is the property of VALNQIX and cannot be copied, modified, or used without permission.
                 </p>
               </div>
 
@@ -189,7 +189,7 @@ export default function TermsConditionsPage() {
               <div className={styles.policyBlock}>
                 <h3 className={styles.sectionHeading}>9. LIMITATION OF LIABILITY</h3>
                 <p className={styles.text}>
-                  RHST is not responsible for:
+                  VALNQIX is not responsible for:
                 </p>
                 <ul className={styles.list}>
                   <li className={styles.listItem}>Temporary website interruptions</li>
@@ -203,7 +203,7 @@ export default function TermsConditionsPage() {
               <div className={styles.policyBlock}>
                 <h3 className={styles.sectionHeading}>10. THIRD-PARTY SERVICES</h3>
                 <p className={styles.text}>
-                  Our website may include links or services provided by third parties. RHST is not responsible for the content, policies, or actions of external websites.
+                  Our website may include links or services provided by third parties. VALNQIX is not responsible for the content, policies, or actions of external websites.
                 </p>
               </div>
 
@@ -219,7 +219,7 @@ export default function TermsConditionsPage() {
               <div className={styles.policyBlock}>
                 <h3 className={styles.sectionHeading}>12. CHANGES TO TERMS</h3>
                 <p className={styles.text}>
-                  RHST reserves the right to update or modify these Terms & Conditions at any time. Updated terms will be published on this page.
+                  VALNQIX reserves the right to update or modify these Terms & Conditions at any time. Updated terms will be published on this page.
                 </p>
               </div>
 
@@ -231,14 +231,11 @@ export default function TermsConditionsPage() {
                 </p>
                 <div className={styles.contactDetails}>
                   <p className={styles.text}>
-                    <strong>Email:</strong> info@rhst.com
-                  </p>
-                  <p className={styles.text}>
-                    <strong>Phone:</strong> +91 9876543210
+                    <strong>Email:</strong> info@valnqix.in
                   </p>
                 </div>
                 <p className={styles.trustText}>
-                  Thank you for choosing RHST - Your Trusted Technology Partner
+                  Thank you for choosing VALNQIX - Your Trusted Technology Partner
                 </p>
               </div>
 
