@@ -21,7 +21,7 @@ export default function Footer() {
                 />
               </div>
               <p className={styles.aboutText}>
-                VALNQIX is your trusted technology partner providing quality IT products, solutions, and services.
+                VALNQIX is a brand under RHST E-Commerce Pvt. Ltd., serving as your trusted technology partner providing quality IT products, solutions, and services.
                 We offer the latest hardware, software, networking solutions, and business technology products to meet your digital needs.
               </p>
             </div>
@@ -74,6 +74,11 @@ export default function Footer() {
       <div className={styles.footerBottom}>
         <div className="container">
           <div className={styles.bottomContent}>
+            {/* Copyright & Brand Attribution */}
+            <p className={styles.copyright}>
+              © {new Date().getFullYear()} <strong>VALNQIX</strong> — A Brand under <strong>RHST E-Commerce Pvt. Ltd.</strong> All rights reserved.
+            </p>
+
             {/* Payment & Shipping Logos */}
             <div className={styles.logosRow}>
               <div className={styles.logoItem}>

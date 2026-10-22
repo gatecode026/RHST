@@ -266,13 +266,35 @@ function ProductsCatalogContent() {
     return result;
   }, [allProducts, searchQuery, activeCategory, activeBrand, activePriceRange, sortOption]);
 
-  // Pagination logic (12 items per page)
-  const itemsPerPage = 12;
+  // Pagination logic (24 items per page to fill page cleanly without white space)
+  const itemsPerPage = 24;
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage) || 1;
   const paginatedProducts = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
     return filteredProducts.slice(start, start + itemsPerPage);
   }, [filteredProducts, currentPage]);
+
+  // Generate sliding window of around 5 pages with Prev and Next
+  const getPageNumbers = () => {
+    const maxButtons = 5;
+    if (totalPages <= maxButtons) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+
+    let start = Math.max(1, currentPage - 2);
+    let end = start + maxButtons - 1;
+
+    if (end > totalPages) {
+      end = totalPages;
+      start = Math.max(1, end - maxButtons + 1);
+    }
+
+    const pages: number[] = [];
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+    return pages;
+  };
 
   // Dynamic counts for sidebar widgets
   const getCategoryCount = (catName: string) => {
@@ -419,31 +441,46 @@ function ProductsCatalogContent() {
                 {/* Pagination */}
                 {totalPages > 1 && (
                   <div className={styles.pagination}>
-                    {currentPage > 1 && (
+                    <button
+                      className={`${styles.pageBtn} ${styles.prevNextBtn}`}
+                      disabled={currentPage === 1}
+                      onClick={() => {
+                        if (currentPage > 1) {
+                          setCurrentPage(prev => prev - 1);
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }
+                      }}
+                      aria-label="Previous Page"
+                    >
+                      Prev
+                    </button>
+
+                    {getPageNumbers().map((pageNum) => (
                       <button
-                        className={styles.pageBtn}
-                        onClick={() => setCurrentPage(prev => prev - 1)}
+                        key={pageNum}
+                        className={`${styles.pageBtn} ${currentPage === pageNum ? styles.activePageBtn : ''}`}
+                        onClick={() => {
+                          setCurrentPage(pageNum);
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}
                       >
-                        Prev
-                      </button>
-                    )}
-                    {Array.from({ length: totalPages }).map((_, idx) => (
-                      <button
-                        key={idx}
-                        className={`${styles.pageBtn} ${currentPage === idx + 1 ? styles.activePageBtn : ''}`}
-                        onClick={() => setCurrentPage(idx + 1)}
-                      >
-                        {idx + 1}
+                        {pageNum}
                       </button>
                     ))}
-                    {currentPage < totalPages && (
-                      <button
-                        className={styles.pageBtn}
-                        onClick={() => setCurrentPage(prev => prev + 1)}
-                      >
-                        Next
-                      </button>
-                    )}
+
+                    <button
+                      className={`${styles.pageBtn} ${styles.prevNextBtn}`}
+                      disabled={currentPage === totalPages}
+                      onClick={() => {
+                        if (currentPage < totalPages) {
+                          setCurrentPage(prev => prev + 1);
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }
+                      }}
+                      aria-label="Next Page"
+                    >
+                      Next
+                    </button>
                   </div>
                 )}
 
