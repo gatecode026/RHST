@@ -125,18 +125,19 @@ export default function BestSelling() {
                         });
                       }}
                       style={{
-                        marginTop: '1.25rem',
+                        marginTop: '0.75rem',
                         backgroundColor: 'var(--primary)',
                         color: 'white',
-                        padding: '10px 24px',
+                        padding: '8px 16px',
                         borderRadius: '50px',
-                        fontSize: '15px',
-                        fontWeight: 400,
+                        fontSize: '12px',
+                        fontWeight: 500,
                         cursor: 'pointer',
                         width: '100%',
                         textTransform: 'uppercase',
                         letterSpacing: '0.02em',
-                        transition: 'background-color 0.2s',
+                        transition: 'all 0.2s',
+                        border: 'none',
                       }}
                     >
                       Add to Cart

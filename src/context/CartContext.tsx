@@ -29,6 +29,8 @@ interface CartContextType {
   logoutCleanup: () => void;
   isCartOpen: boolean;
   setIsCartOpen: (isOpen: boolean) => void;
+  isWishlistOpen: boolean;
+  setIsWishlistOpen: (isOpen: boolean) => void;
   isSearchOpen: boolean;
   setIsSearchOpen: (isOpen: boolean) => void;
   subtotal: number;
@@ -47,6 +49,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isWishlistOpen, setIsWishlistOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   // Helper to determine active localStorage keys based on currentUser session
@@ -110,17 +113,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   };
 
   const addToCart = (newItem: Omit<CartItem, 'qty'>) => {
-    // Restrict checkout/cart to logged in users only
-    const isLoggedIn = typeof window !== 'undefined' ? localStorage.getItem('currentUser') : null;
-    if (!isLoggedIn) {
-      // Open the login overlay modal directly without alerts
-      const accountBtn = document.querySelector('[aria-label="Account"]') as HTMLElement;
-      if (accountBtn) {
-        accountBtn.click();
-      }
-      return;
-    }
-
     const existingIndex = cartItems.findIndex((item) => item.id === newItem.id);
     const maxStock = newItem.stock !== undefined ? newItem.stock : 999;
 
@@ -212,6 +204,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         logoutCleanup,
         isCartOpen,
         setIsCartOpen,
+        isWishlistOpen,
+        setIsWishlistOpen,
         isSearchOpen,
         setIsSearchOpen,
         subtotal,

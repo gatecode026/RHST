@@ -51,7 +51,7 @@ export default function AboutPage() {
               <div className={styles.introText}>
                 <h2 className={styles.introTitle}>ABOUT VALNQIX</h2>
                 <p className={styles.introParagraph}>
-                  At VALNQIX, we are committed to providing high-quality IT products and services, tailoring solutions to meet the needs of businesses and individuals. We focus on key functional areas: Hardware, Software, Networking, and Digital Solutions to help clients navigate the demands of an evolving technology environment.
+                  VALNQIX is a brand under RHST E-Commerce Pvt. Ltd., committed to providing high-quality IT products and services, tailoring solutions to meet the needs of businesses and individuals. We focus on key functional areas: Hardware, Software, Networking, and Digital Solutions to help clients navigate the demands of an evolving technology environment.
                 </p>
                 <p className={styles.introParagraph}>
                   With a focus on quality, reliability, and customer satisfaction, VALNQIX offers a diverse range of IT products, including computers, laptops, accessories, networking devices, software licenses, and enterprise technology products. Our goal is to make technology more accessible, reliable, and simple to use.

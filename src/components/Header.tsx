@@ -21,10 +21,13 @@ export default function Header() {
     logoutCleanup,
     isCartOpen,
     setIsCartOpen,
+    isWishlistOpen,
+    setIsWishlistOpen,
     isSearchOpen,
     setIsSearchOpen,
     subtotal,
-    wishlistItems
+    wishlistItems,
+    removeFromWishlist
   } = useCart();
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -169,16 +172,28 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Load current user session on mount
+  // Load and continuously sync current user session
   useEffect(() => {
-    const savedUser = localStorage.getItem('currentUser');
-    if (savedUser) {
-      try {
-        setCurrentUser(JSON.parse(savedUser));
-      } catch (e) {
-        console.error('Failed to parse currentUser from localStorage:', e);
+    const syncUser = () => {
+      const savedUser = localStorage.getItem('currentUser');
+      if (savedUser) {
+        try {
+          setCurrentUser(JSON.parse(savedUser));
+        } catch (e) {
+          console.error('Failed to parse currentUser from localStorage:', e);
+          setCurrentUser(null);
+        }
+      } else {
+        setCurrentUser(null);
       }
-    }
+    };
+    syncUser();
+    window.addEventListener('storage', syncUser);
+    window.addEventListener('focus', syncUser);
+    return () => {
+      window.removeEventListener('storage', syncUser);
+      window.removeEventListener('focus', syncUser);
+    };
   }, []);
 
   // Sync drawer checkout fields if logged in
@@ -192,7 +207,7 @@ export default function Header() {
 
   // Lock body scroll when any overlay/drawer is open to prevent background scrolling/bleeding
   useEffect(() => {
-    if (isCartOpen || isMobileMenuOpen || isSearchOpen || isProfileOpen) {
+    if (isCartOpen || isWishlistOpen || isMobileMenuOpen || isSearchOpen || isProfileOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -200,7 +215,7 @@ export default function Header() {
     return () => {
       document.body.style.overflow = '';
     };
-  }, [isCartOpen, isMobileMenuOpen, isSearchOpen, isProfileOpen]);
+  }, [isCartOpen, isWishlistOpen, isMobileMenuOpen, isSearchOpen, isProfileOpen]);
 
   // Focus search input when modal opens
   useEffect(() => {
@@ -312,14 +327,20 @@ export default function Header() {
           password: signUpPassword,
         })
       });
-      const data = await res.json();
-      if (data.success) {
+      let data: any = null;
+      try {
+        data = await res.json();
+      } catch (parseErr) {
+        setOtpStatus(`Server error (${res.status}). Please check your server or database configuration.`);
+        return;
+      }
+      if (data && data.success) {
         // Set current user session
         setCurrentUser(data.user);
         localStorage.setItem('currentUser', JSON.stringify(data.user));
 
-        // Show success view
-        setProfileSuccessMessage('Account created successfully! Welcome to VALNQIX Store.');
+        // Show success view and redirect to profile page
+        setProfileSuccessMessage('Account created successfully! Redirecting to your profile...');
 
         // Clear inputs
         setSignUpName('');
@@ -327,11 +348,17 @@ export default function Header() {
         setSignUpEmail('');
         setSignUpPassword('');
         setOtpStatus('');
+
+        setTimeout(() => {
+          setIsProfileOpen(false);
+          setProfileSuccessMessage('');
+          router.push('/profile');
+        }, 600);
       } else {
-        setOtpStatus(data.error || 'Registration failed.');
+        setOtpStatus(data?.error || 'Registration failed.');
       }
-    } catch (err) {
-      setOtpStatus('Network error during registration.');
+    } catch (err: any) {
+      setOtpStatus(err?.message || 'Network error during registration.');
     }
   };
 
@@ -347,22 +374,34 @@ export default function Header() {
           password: signInPassword,
         })
       });
-      const data = await res.json();
-      if (data.success) {
+      let data: any = null;
+      try {
+        data = await res.json();
+      } catch (parseErr) {
+        setOtpStatus(`Server error (${res.status}). Please check your server or database configuration.`);
+        return;
+      }
+      if (data && data.success) {
         // Set current user session
         setCurrentUser(data.user);
         localStorage.setItem('currentUser', JSON.stringify(data.user));
 
-        // Show success view
-        setProfileSuccessMessage('Signed in successfully! Welcome back.');
+        // Show success view and redirect to profile page
+        setProfileSuccessMessage('Signed in successfully! Redirecting to your profile...');
         setSignInEmail('');
         setSignInPassword('');
         setOtpStatus('');
+
+        setTimeout(() => {
+          setIsProfileOpen(false);
+          setProfileSuccessMessage('');
+          router.push('/profile');
+        }, 600);
       } else {
-        setOtpStatus(data.error || 'Invalid email or password.');
+        setOtpStatus(data?.error || 'Invalid email or password.');
       }
-    } catch (err) {
-      setOtpStatus('Network error during sign in.');
+    } catch (err: any) {
+      setOtpStatus(err?.message || 'Network error during sign in.');
     }
   };
 
@@ -405,7 +444,7 @@ export default function Header() {
             <Link href="/" className={styles.logoWrapper}>
               <img
                 src="/images/logo.png"
-                alt="VALNQIX ECOMMERCE PVT. LTD."
+                alt="VALNQIX - A Brand under RHST E-Commerce Pvt. Ltd."
                 className={styles.logoImage}
               />
             </Link>
@@ -475,29 +514,80 @@ export default function Header() {
                 </svg>
               </button>
 
-              <button
-                onClick={() => {
-                  if (currentUser) {
-                    router.push('/profile');
-                  } else {
+              {currentUser ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setProfileMode('profile');
+                    setIsProfileOpen(true);
+                  }}
+                  className={styles.actionBtn}
+                  aria-label="My Profile"
+                  title={`Logged in as ${currentUser.name || currentUser.email} — Click to view profile`}
+                  style={{
+                    position: 'relative',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    cursor: 'pointer',
+                    background: 'none',
+                    border: 'none',
+                    padding: 0
+                  }}
+                >
+                  <div style={{
+                    width: '26px',
+                    height: '26px',
+                    borderRadius: '50%',
+                    backgroundColor: 'var(--primary, #ff4e2a)',
+                    color: '#ffffff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    boxShadow: '0 2px 6px rgba(255, 78, 42, 0.35)'
+                  }}>
+                    {(currentUser.name || currentUser.email || 'U').trim()[0]}
+                  </div>
+                  <span style={{
+                    fontSize: '13px',
+                    fontWeight: 500,
+                    color: '#333333',
+                    maxWidth: '85px',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  }}>
+                    {currentUser.name ? currentUser.name.split(' ')[0] : 'Profile'}
+                  </span>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
                     setProfileMode('signup');
                     setIsProfileOpen(true);
-                  }
-                }}
-                className={styles.actionBtn}
-                aria-label="Account"
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="12" cy="7" r="4"></circle>
-                </svg>
-              </button>
+                  }}
+                  className={styles.actionBtn}
+                  aria-label="Account"
+                  title="Sign In / Register"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </button>
+              )}
 
-              <Link
-                href="/wishlist"
+              <button
+                type="button"
+                onClick={() => setIsWishlistOpen(true)}
                 className={styles.actionBtn}
                 style={{ position: 'relative' }}
                 aria-label="Wishlist"
+                title={`Wishlist (${wishlistItems?.length || 0} items)`}
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
@@ -521,7 +611,7 @@ export default function Header() {
                     {wishlistItems.length}
                   </span>
                 )}
-              </Link>
+              </button>
 
               <button
                 onClick={() => setIsCartOpen(true)}
@@ -626,6 +716,44 @@ export default function Header() {
           <Link href="/about" onClick={() => setIsMobileMenuOpen(false)}>ABOUT</Link>
           <Link href="/blog" onClick={() => setIsMobileMenuOpen(false)}>BLOGS</Link>
           <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)}>CONTACT</Link>
+
+          {currentUser ? (
+            <Link
+              href="/profile"
+              onClick={() => setIsMobileMenuOpen(false)}
+              style={{
+                color: 'var(--primary, #ff4e2a)',
+                fontWeight: 600,
+                borderTop: '1px solid #f0f0f0',
+                paddingTop: '0.75rem',
+                marginTop: '0.5rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px'
+              }}
+            >
+              MY ACCOUNT ({currentUser.name ? currentUser.name.split(' ')[0] : 'Profile'}) →
+            </Link>
+          ) : (
+            <span
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                setProfileMode('signup');
+                setIsProfileOpen(true);
+              }}
+              style={{
+                cursor: 'pointer',
+                color: '#333333',
+                fontWeight: 500,
+                borderTop: '1px solid #f0f0f0',
+                paddingTop: '0.75rem',
+                marginTop: '0.5rem',
+                display: 'block'
+              }}
+            >
+              SIGN IN / REGISTER
+            </span>
+          )}
         </nav>
       </div>
 
@@ -905,6 +1033,141 @@ export default function Header() {
         )}
       </div>
 
+      {/* Slide-out Wishlist/Liked Items Drawer Overlay */}
+      <div 
+        className={`${styles.drawerOverlay} ${isWishlistOpen ? styles.overlayOpen : ''}`} 
+        onClick={() => setIsWishlistOpen(false)} 
+      />
+      <div className={`${styles.cartDrawer} ${isWishlistOpen ? styles.drawerOpen : ''}`}>
+        <div className={styles.drawerHeader}>
+          <h3>Wishlist ({wishlistItems?.length || 0})</h3>
+          <button 
+            onClick={() => setIsWishlistOpen(false)} 
+            className={styles.closeBtn} 
+            aria-label="Close Wishlist"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div className={styles.drawerItems}>
+          {(!wishlistItems || wishlistItems.length === 0) ? (
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: '100%',
+              textAlign: 'center',
+              padding: '2rem 1rem',
+              color: 'var(--gray)'
+            }}>
+              <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: '1rem' }}>
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+              <h4 style={{ fontSize: '18px', fontWeight: 600, color: '#333', marginBottom: '6px' }}>Your Wishlist is Empty</h4>
+              <p style={{ fontSize: '14px', color: '#777', marginBottom: '1.5rem', lineHeight: 1.5 }}>
+                Explore products and tap the heart icon to save products you love.
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsWishlistOpen(false);
+                  router.push('/products');
+                }}
+                className={styles.checkoutBtn}
+                style={{ width: 'auto', padding: '10px 24px', fontSize: '14px' }}
+              >
+                Explore Products
+              </button>
+            </div>
+          ) : (
+            wishlistItems.map((item) => (
+              <div key={item.id} className={styles.cartItem}>
+                <img src={item.image} alt={item.name} className={styles.itemImage} />
+                <div className={styles.itemDetails}>
+                  <h4 style={{ fontSize: '15px', fontWeight: 500, marginBottom: '4px' }}>
+                    <Link 
+                      href={`/products/${item.slug || item.id}`}
+                      onClick={() => setIsWishlistOpen(false)}
+                      style={{ color: 'inherit', textDecoration: 'none' }}
+                    >
+                      {item.name}
+                    </Link>
+                  </h4>
+                  <p style={{ fontSize: '14px', color: 'var(--primary)', fontWeight: 600, margin: '0 0 8px 0' }}>
+                    ₹{item.price.toLocaleString()}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      addToCart({
+                        id: item.id,
+                        name: item.name,
+                        price: item.price,
+                        image: item.image,
+                        stock: item.stock !== undefined ? item.stock : 10
+                      });
+                      removeFromWishlist(item.id);
+                      setIsWishlistOpen(false);
+                    }}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      padding: '5px 12px',
+                      fontSize: '12px',
+                      backgroundColor: 'var(--primary, #ff4e2a)',
+                      color: '#ffffff',
+                      border: 'none',
+                      borderRadius: '4px',
+                      cursor: 'pointer',
+                      fontWeight: 500
+                    }}
+                  >
+                    Move to Cart →
+                  </button>
+                </div>
+                <button
+                  type="button"
+                  className={styles.removeItem}
+                  onClick={() => removeFromWishlist(item.id)}
+                  aria-label="Remove from Wishlist"
+                  title="Remove item"
+                >
+                  ×
+                </button>
+              </div>
+            ))
+          )}
+        </div>
+
+        {wishlistItems && wishlistItems.length > 0 && (
+          <div className={styles.drawerFooter}>
+            <button
+              type="button"
+              className={styles.checkoutBtn}
+              onClick={() => {
+                setIsWishlistOpen(false);
+                router.push('/wishlist');
+              }}
+            >
+              View Full Wishlist Page
+            </button>
+            <button 
+              type="button" 
+              onClick={() => setIsWishlistOpen(false)} 
+              className={styles.viewCartBtn}
+            >
+              Continue Shopping
+            </button>
+          </div>
+        )}
+      </div>
+
       {/* Search Modal Overlay */}
       <div className={`${styles.searchOverlay} ${isSearchOpen ? styles.searchOpen : ''}`}>
         <button onClick={() => setIsSearchOpen(false)} className={styles.closeSearchBtn} aria-label="Close Search">
@@ -1052,7 +1315,7 @@ export default function Header() {
                 <>
                   <h2 className={styles.profileModalTitle}>My Account</h2>
                   <p className={styles.profileModalSubtitle}>
-                    Welcome back to VALNQIX Store!
+                    Welcome back to VALNQIX (A Brand under RHST E-Commerce Pvt. Ltd.)!
                   </p>
 
                   <div className={styles.profileDetailsBox}>
@@ -1070,29 +1333,97 @@ export default function Header() {
                     </div>
                   </div>
 
+                  {/* Primary Action Button */}
                   <button
                     type="button"
                     className={styles.profileSubmitBtn}
-                    style={{ backgroundColor: '#ff4e2a', marginTop: '1.5rem' }}
+                    style={{ marginTop: '1.5rem', width: '100%' }}
                     onClick={() => {
-                      setCurrentUser(null);
-                      localStorage.removeItem('currentUser');
-                      logoutCleanup();
-                      setProfileMode('signup');
-                      router.push('/');
-                      setTimeout(() => {
-                        window.location.reload();
-                      }, 100);
+                      handleCloseProfile();
+                      router.push('/profile');
                     }}
                   >
-                    Sign Out
+                    Account Dashboard <span className={styles.arrowIcon}>→</span>
                   </button>
+
+                  {/* Secondary Action Buttons */}
+                  <div style={{ display: 'flex', gap: '10px', width: '100%', marginTop: '0.75rem' }}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleCloseProfile();
+                        router.push('/profile?tab=orders');
+                      }}
+                      style={{
+                        flex: 1,
+                        padding: '12px 14px',
+                        borderRadius: '12px',
+                        border: '1px solid #e2e4e8',
+                        backgroundColor: '#f8f9fa',
+                        color: '#222222',
+                        fontSize: '14px',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '6px',
+                        whiteSpace: 'nowrap',
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <path d="M16 10a4 4 0 0 1-8 0"></path>
+                      </svg>
+                      My Orders
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCurrentUser(null);
+                        localStorage.removeItem('currentUser');
+                        logoutCleanup();
+                        setProfileMode('signup');
+                        router.push('/');
+                        setTimeout(() => {
+                          window.location.reload();
+                        }, 100);
+                      }}
+                      style={{
+                        flex: 1,
+                        padding: '12px 14px',
+                        borderRadius: '12px',
+                        border: '1px solid #ffdcd6',
+                        backgroundColor: '#fff5f3',
+                        color: '#ff4e2a',
+                        fontSize: '14px',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '6px',
+                        whiteSpace: 'nowrap',
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                      </svg>
+                      Sign Out
+                    </button>
+                  </div>
                 </>
               ) : profileMode === 'signup' ? (
                 <>
                   <h2 className={styles.profileModalTitle}>Create Account</h2>
                   <p className={styles.profileModalSubtitle}>
-                    Join VALNQIX Store to get the best deals on PC components.
+                    Join VALNQIX (A Brand under RHST E-Commerce Pvt. Ltd.) to get the best deals on PC components.
                   </p>
 
                   <form onSubmit={handleSignUpSubmit} className={styles.profileForm}>
@@ -1194,7 +1525,7 @@ export default function Header() {
                 <>
                   <h2 className={styles.profileModalTitle}>Sign In</h2>
                   <p className={styles.profileModalSubtitle}>
-                    Welcome back! Sign in to your VALNQIX account to check your orders.
+                    Welcome back! Sign in to your VALNQIX account (A Brand under RHST E-Commerce Pvt. Ltd.) to check your orders.
                   </p>
 
                   <form onSubmit={handleSignInSubmit} className={styles.profileForm}>
