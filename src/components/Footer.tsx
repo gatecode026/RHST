@@ -92,45 +92,25 @@ export default function Footer() {
                   />
                   DHL
                 </span>
-                <span className={styles.logoFedex}>
-                  <img 
-                    src="https://www.google.com/s2/favicons?domain=fedex.com&sz=32" 
-                    alt="FedEx" 
-                    className={styles.favicon}
-                    onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                  />
-                  FedEx
-                </span>
               </div>
               <div className={styles.logoItem}>
                 <span className={styles.logoLabel}>Payment options:</span>
                 <div className={styles.cardLogos}>
                   <span className={styles.cardLogo}>
-                    <img 
-                      src="https://www.google.com/s2/favicons?domain=visa.com&sz=32" 
-                      alt="Visa" 
-                      className={styles.favicon}
-                      onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                    />
-                    Visa
+                    <svg width="22" height="15" viewBox="0 0 32 22" fill="none" style={{ borderRadius: '3px', flexShrink: 0 }}>
+                      <rect width="32" height="22" rx="3" fill="#003366"/>
+                      <path d="M6 5h6.5c2.2 0 3.5 1.1 3.5 3s-1.3 3-3.5 3h-3.5v6H6V5zm3 4.5h3.5c.6 0 1-.3 1-.8s-.4-.8-1-.8H9v1.6z" fill="#FFFFFF"/>
+                      <path d="M16 11l4.5 6h3.5l-4.5-6h-3.5z" fill="#00A859"/>
+                      <path d="M21 11l4.5 6h3.5l-4.5-6h-3.5z" fill="#F58220"/>
+                    </svg>
+                    RuPay
                   </span>
                   <span className={styles.cardLogo}>
-                    <img 
-                      src="https://www.google.com/s2/favicons?domain=mastercard.com&sz=32" 
-                      alt="Mastercard" 
-                      className={styles.favicon}
-                      onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                    />
-                    Mastercard
-                  </span>
-                  <span className={styles.cardLogo}>
-                    <img 
-                      src="https://www.google.com/s2/favicons?domain=paypal.com&sz=32" 
-                      alt="PayPal" 
-                      className={styles.favicon}
-                      onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                    />
-                    PayPal
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style={{ flexShrink: 0 }}>
+                      <path d="M6 4l7 8-7 8" stroke="#009933" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M12 4l7 8-7 8" stroke="#F58220" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    UPI
                   </span>
                 </div>
               </div>

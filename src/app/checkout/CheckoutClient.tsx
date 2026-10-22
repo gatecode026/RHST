@@ -26,7 +26,7 @@ export default function CheckoutClient() {
 
   // Multi-step checkout states
   const [step, setStep] = useState<'billing' | 'payment'>('billing');
-  const [paymentMethod, setPaymentMethod] = useState<'Direct bank transfer' | 'Cash on delivery' | 'PayPal'>('Direct bank transfer');
+  const [paymentMethod, setPaymentMethod] = useState<'Direct bank transfer' | 'Cash on delivery' | 'UPI'>('Direct bank transfer');
 
   // Custom bank/card & upi states matching user request
   const [cardNumber, setCardNumber] = useState('');
@@ -207,7 +207,7 @@ export default function CheckoutClient() {
       }
     }
 
-    if (paymentMethod === 'PayPal') {
+    if (paymentMethod === 'UPI') {
       if (!upiId.trim()) {
         setErrorMessage('Please enter your UPI ID.');
         setCheckoutStatus('error');
@@ -564,7 +564,7 @@ export default function CheckoutClient() {
               {[
                 { id: 'bank', label: 'Direct bank transfer' },
                 { id: 'cod', label: 'Cash on delivery' },
-                { id: 'paypal', label: 'PayPal' }
+                { id: 'upi', label: 'UPI' }
               ].map(method => (
                 <div key={method.id} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1.25rem' }}>
                   <label className={styles.radioLabel} style={{ marginBottom: 0 }}>
@@ -627,8 +627,8 @@ export default function CheckoutClient() {
                     </div>
                   )}
 
-                  {/* If PayPal is selected, show UPI ID field */}
-                  {method.id === 'paypal' && paymentMethod === 'PayPal' && (
+                  {/* If UPI is selected, show UPI ID field */}
+                  {method.id === 'upi' && paymentMethod === 'UPI' && (
                     <div className={styles.paymentSubForm}>
                       <label className={styles.subFormLabel}>UPI ID</label>
                       <input 

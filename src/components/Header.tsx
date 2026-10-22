@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 import styles from './Header.module.css';
 
@@ -12,6 +12,7 @@ import styles from './Header.module.css';
 
 export default function Header() {
   const router = useRouter();
+  const pathname = usePathname();
   const {
     cartItems,
     addToCart,
@@ -451,10 +452,18 @@ export default function Header() {
 
             {/* Navigation Links */}
             <nav className={styles.navLinks}>
-              <Link href="/" className={styles.activeLink}>HOME</Link>
+              <Link 
+                href="/" 
+                className={pathname === '/' ? styles.activeLink : ''}
+              >
+                HOME
+              </Link>
 
               <div className={styles.dropdown}>
-                <Link href="/products" className={styles.dropdownBtn}>
+                <Link 
+                  href="/products" 
+                  className={`${styles.dropdownBtn} ${pathname.startsWith('/products') ? styles.activeLink : ''}`}
+                >
                   PRODUCTS<span className={styles.chevron}>▾</span>
                 </Link>
                 <div className={styles.dropdownContent}>
@@ -484,7 +493,10 @@ export default function Header() {
               </div>
 
               <div className={styles.dropdown}>
-                <Link href="/#services" className={styles.dropdownBtn}>
+                <Link 
+                  href="/#services" 
+                  className={`${styles.dropdownBtn} ${pathname.startsWith('/services') ? styles.activeLink : ''}`}
+                >
                   SERVICES<span className={styles.chevron}>▾</span>
                 </Link>
                 <div className={styles.dropdownContent}>
@@ -496,9 +508,24 @@ export default function Header() {
                   <Link href="/services/consultation">Consultation Services</Link>
                 </div>
               </div>
-              <Link href="/about">ABOUT</Link>
-              <Link href="/blog">BLOGS</Link>
-              <Link href="/contact">CONTACT</Link>
+              <Link 
+                href="/about" 
+                className={pathname === '/about' ? styles.activeLink : ''}
+              >
+                ABOUT
+              </Link>
+              <Link 
+                href="/blog" 
+                className={pathname.startsWith('/blog') ? styles.activeLink : ''}
+              >
+                BLOGS
+              </Link>
+              <Link 
+                href="/contact" 
+                className={pathname === '/contact' ? styles.activeLink : ''}
+              >
+                CONTACT
+              </Link>
             </nav>
 
             {/* Actions (Search, Account, Wishlist, Cart) */}
@@ -663,7 +690,13 @@ export default function Header() {
       {/* Slide-out Mobile Navigation */}
       <div className={`${styles.mobileMenu} ${isMobileMenuOpen ? styles.mobileMenuOpen : ''}`}>
         <nav className={styles.mobileNavLinks}>
-          <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>HOME</Link>
+          <Link 
+            href="/" 
+            className={pathname === '/' ? styles.activeLink : ''}
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            HOME
+          </Link>
 
           <div className={styles.mobileNavGroup}>
             <span className={styles.mobileNavHeader}>PRODUCTS</span>
@@ -713,9 +746,27 @@ export default function Header() {
             </div>
           </div>
 
-          <Link href="/about" onClick={() => setIsMobileMenuOpen(false)}>ABOUT</Link>
-          <Link href="/blog" onClick={() => setIsMobileMenuOpen(false)}>BLOGS</Link>
-          <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)}>CONTACT</Link>
+          <Link 
+            href="/about" 
+            className={pathname === '/about' ? styles.activeLink : ''}
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            ABOUT
+          </Link>
+          <Link 
+            href="/blog" 
+            className={pathname.startsWith('/blog') ? styles.activeLink : ''}
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            BLOGS
+          </Link>
+          <Link 
+            href="/contact" 
+            className={pathname === '/contact' ? styles.activeLink : ''}
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            CONTACT
+          </Link>
 
           {currentUser ? (
             <Link
