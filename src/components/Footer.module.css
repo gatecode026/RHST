@@ -159,16 +159,18 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem 2rem;
+  flex-wrap: nowrap;
+  gap: 1.5rem;
+  width: 100%;
 }
 
 .logosRow {
   display: flex;
   align-items: center;
-  gap: 1.75rem;
+  gap: 1.25rem;
   flex-wrap: nowrap;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .logoItem {
@@ -258,16 +260,20 @@
   }
   
   .bottomContent {
-    flex-direction: column;
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    text-align: center;
-    gap: 1.25rem;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
   }
   
   .logosRow {
-    flex-direction: column;
+    display: flex;
+    flex-direction: row;
     align-items: center;
     gap: 1rem;
+    flex-wrap: nowrap;
+    white-space: nowrap;
   }
 }
 
