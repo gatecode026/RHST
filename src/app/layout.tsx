@@ -3,8 +3,8 @@ import { CartProvider } from "@/context/CartContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "VALNQIX | Premium Tech & IT Hardware Solutions",
-  description: "Powering your digital world with reliable IT solutions, printers, laptops, gaming PCs, router peripherals, and professional CCTV and hardware networking services.",
+  title: "VALNQIX | B2B IT Hardware, Suppliers & Marketplace Directory",
+  description: "Connect directly with verified IT hardware manufacturers, wholesalers, and distributors across India. Post buy requirements, request lowest quotations, and source IT equipment directly from suppliers.",
   icons: {
     icon: "/images/logo.png",
   }

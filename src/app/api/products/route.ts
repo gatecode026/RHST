@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/mongodb';
+import { ensureSellersSeeded, assignSellersToProducts } from '@/lib/sellers';
 
 export const dynamic = 'force-dynamic';
 
@@ -336,27 +337,63 @@ export async function GET() {
       console.warn("Products slug migration failed:", migErr);
     }
 
+    // Seed sellers and assign to products
+    try {
+      await ensureSellersSeeded();
+      await assignSellersToProducts();
+    } catch (sellerErr) {
+      console.warn("Seller seeding/assignment warning:", sellerErr);
+    }
+
     const products = await collection.find().toArray();
-    const formatted = products.map(doc => ({
-      id: doc._id.toString(),
-      slug: doc.slug || doc.name.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-'),
-      name: doc.name,
-      price: doc.price,
-      image: doc.image,
-      link: doc.link,
-      category: doc.category,
-      brand: doc.brand || 'Dell',
-      sku: doc.sku || ('SKU-' + doc._id.toString().substring(18).toUpperCase()),
-      stock: doc.stock !== undefined ? doc.stock : 10,
-      status: doc.status || 'PUBLISHED',
-      description: doc.description || '',
-      mrp: doc.mrp !== undefined ? doc.mrp : parseInt((doc.price || '').replace(/[^\d]/g, ''), 10),
-      discount: doc.discount !== undefined ? doc.discount : 0,
-      featured: doc.featured !== undefined ? doc.featured : false,
-      onOffer: doc.onOffer !== undefined ? doc.onOffer : false,
-      warranty: doc.warranty !== undefined ? doc.warranty : 0,
-      lowStockThreshold: doc.lowStockThreshold !== undefined ? doc.lowStockThreshold : 10
-    }));
+    const formatted = products.map(doc => {
+      // Fallback seller based on category if not yet updated
+      const cat = doc.category || 'Hardware';
+      const defaultSellerName = cat === 'Gaming Products'
+        ? 'HyperDrive Gaming & Peripherals'
+        : cat === 'Office Equipment'
+        ? 'Zenith Office Tech & Display Solutions'
+        : cat === 'Computer Access'
+        ? 'Paramount Digital Accessories Co.'
+        : 'Apex Tech Systems Pvt Ltd';
+
+      const defaultSellerLocation = cat === 'Gaming Products'
+        ? 'Bengaluru, Karnataka'
+        : cat === 'Office Equipment'
+        ? 'New Delhi, Delhi'
+        : cat === 'Computer Access'
+        ? 'Mumbai, Maharashtra'
+        : 'Jaipur, Rajasthan';
+
+      return {
+        id: doc._id.toString(),
+        slug: doc.slug || doc.name.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-'),
+        name: doc.name,
+        price: doc.price,
+        image: doc.image,
+        link: doc.link,
+        category: doc.category,
+        brand: doc.brand || 'Dell',
+        sku: doc.sku || ('SKU-' + doc._id.toString().substring(18).toUpperCase()),
+        stock: doc.stock !== undefined ? doc.stock : 10,
+        status: doc.status || 'PUBLISHED',
+        description: doc.description || '',
+        mrp: doc.mrp !== undefined ? doc.mrp : parseInt((doc.price || '').replace(/[^\d]/g, ''), 10),
+        discount: doc.discount !== undefined ? doc.discount : 0,
+        featured: doc.featured !== undefined ? doc.featured : false,
+        onOffer: doc.onOffer !== undefined ? doc.onOffer : false,
+        warranty: doc.warranty !== undefined ? doc.warranty : 0,
+        lowStockThreshold: doc.lowStockThreshold !== undefined ? doc.lowStockThreshold : 10,
+        // IndiaMART Seller attributes
+        sellerId: doc.sellerId || 'seller-default',
+        sellerName: doc.sellerName || defaultSellerName,
+        sellerLocation: doc.sellerLocation || defaultSellerLocation,
+        sellerRating: doc.sellerRating || 4.8,
+        sellerVerified: doc.sellerVerified !== undefined ? doc.sellerVerified : true,
+        sellerMainCategory: doc.sellerMainCategory || cat,
+        sellerTrustScore: doc.sellerTrustScore || 'Verified TrustSEAL'
+      };
+    });
 
     return NextResponse.json({ success: true, products: formatted });
   } catch (error: any) {

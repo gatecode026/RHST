@@ -26,7 +26,12 @@ export async function GET() {
       featured: doc.featured !== undefined ? doc.featured : false,
       onOffer: doc.onOffer !== undefined ? doc.onOffer : false,
       warranty: doc.warranty !== undefined ? doc.warranty : 0,
-      lowStockThreshold: doc.lowStockThreshold !== undefined ? doc.lowStockThreshold : 10
+      lowStockThreshold: doc.lowStockThreshold !== undefined ? doc.lowStockThreshold : 10,
+      sellerId: doc.sellerId || '',
+      sellerName: doc.sellerName || '',
+      sellerLocation: doc.sellerLocation || '',
+      sellerGst: doc.sellerGst || '',
+      sellerTrustScore: doc.sellerTrustScore || ''
     }));
 
     return NextResponse.json({ success: true, products: formatted });
@@ -53,7 +58,11 @@ export async function POST(request: Request) {
       featured,
       onOffer,
       warranty,
-      lowStockThreshold
+      lowStockThreshold,
+      sellerId,
+      sellerName,
+      sellerLocation,
+      sellerGst
     } = body;
 
     if (!name || mrp === undefined || !category) {
@@ -76,6 +85,28 @@ export async function POST(request: Request) {
 
     const generatedSku = sku ? sku.toUpperCase().trim() : ('SKU-' + Math.random().toString(36).substring(3, 8).toUpperCase() + '-' + Math.floor(100 + Math.random() * 900));
 
+    const db = await getDb();
+
+    let assignedSellerId = sellerId || '';
+    let assignedSellerName = sellerName || '';
+    let assignedSellerLocation = sellerLocation || '';
+    let assignedSellerGst = sellerGst || '';
+
+    if (!assignedSellerName) {
+      const matchedSeller = await db.collection('sellers').findOne({
+        $or: [
+          { mainCategory: { $regex: new RegExp('^' + category + '$', 'i') } },
+          { mainCategory: { $regex: new RegExp(category, 'i') } }
+        ]
+      });
+      if (matchedSeller) {
+        assignedSellerId = matchedSeller._id.toString();
+        assignedSellerName = matchedSeller.name;
+        assignedSellerLocation = matchedSeller.location || 'India';
+        assignedSellerGst = matchedSeller.gstNumber || '';
+      }
+    }
+
     const calculatedSlug = slug ? slug.trim().toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-') : name.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-');
     const newProduct = {
       name,
@@ -94,10 +125,13 @@ export async function POST(request: Request) {
       featured: featured === true,
       onOffer: onOffer === true,
       warranty: warranty !== undefined ? parseInt(warranty, 10) : 0,
-      lowStockThreshold: lowStockThreshold !== undefined ? parseInt(lowStockThreshold, 10) : 10
+      lowStockThreshold: lowStockThreshold !== undefined ? parseInt(lowStockThreshold, 10) : 10,
+      sellerId: assignedSellerId,
+      sellerName: assignedSellerName,
+      sellerLocation: assignedSellerLocation,
+      sellerGst: assignedSellerGst
     };
 
-    const db = await getDb();
     const result = await db.collection('products').insertOne(newProduct);
 
     await logActivity('Created Product', `Name: "${name}" (SKU: ${newProduct.sku})`);
@@ -133,7 +167,11 @@ export async function PUT(request: Request) {
       featured,
       onOffer,
       warranty,
-      lowStockThreshold
+      lowStockThreshold,
+      sellerId,
+      sellerName,
+      sellerLocation,
+      sellerGst
     } = body;
 
     if (!id || !name || mrp === undefined || !category) {
@@ -159,7 +197,7 @@ export async function PUT(request: Request) {
     const formattedPrice = '₹' + Math.round(sellPriceVal).toLocaleString();
 
     const calculatedSlug = slug ? slug.trim().toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-') : name.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-');
-    const updateData = {
+    const updateData: any = {
       name,
       mrp: calculatedMrp,
       discount: calculatedDiscount,
@@ -178,6 +216,11 @@ export async function PUT(request: Request) {
       warranty: warranty !== undefined ? parseInt(warranty, 10) : 0,
       lowStockThreshold: lowStockThreshold !== undefined ? parseInt(lowStockThreshold, 10) : 10
     };
+
+    if (sellerId !== undefined) updateData.sellerId = sellerId;
+    if (sellerName !== undefined) updateData.sellerName = sellerName;
+    if (sellerLocation !== undefined) updateData.sellerLocation = sellerLocation;
+    if (sellerGst !== undefined) updateData.sellerGst = sellerGst;
 
     const db = await getDb();
     const result = await db.collection('products').updateOne(

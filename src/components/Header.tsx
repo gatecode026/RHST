@@ -640,37 +640,32 @@ export default function Header() {
                 )}
               </button>
 
-              <button
-                onClick={() => setIsCartOpen(true)}
-                className={styles.actionBtn}
-                style={{ position: 'relative' }}
-                aria-label="Cart"
+              {/* IndiaMART Post Buy Requirement CTA */}
+              <Link
+                href="/products"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  backgroundColor: '#16a34a',
+                  color: '#ffffff',
+                  padding: '7px 14px',
+                  borderRadius: '6px',
+                  fontSize: '12px',
+                  fontWeight: 700,
+                  textDecoration: 'none',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.02em',
+                  boxShadow: '0 2px 4px rgba(22, 163, 74, 0.25)'
+                }}
+                className={styles.headerRequirementBtn}
               >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="9" cy="21" r="1"></circle>
-                  <circle cx="20" cy="21" r="1"></circle>
-                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <line x1="22" y1="2" x2="11" y2="13"></line>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
                 </svg>
-                {totalCartCount > 0 && (
-                  <span style={{
-                    position: 'absolute',
-                    top: '-6px',
-                    right: '-6px',
-                    backgroundColor: 'var(--primary)',
-                    color: 'white',
-                    borderRadius: '50%',
-                    fontSize: '11px',
-                    width: '16px',
-                    height: '16px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontWeight: 600
-                  }}>
-                    {totalCartCount}
-                  </span>
-                )}
-              </button>
+                <span>Post Requirement</span>
+              </Link>
 
               {/* Hamburger Button (Mobile) */}
               <button
@@ -808,282 +803,6 @@ export default function Header() {
         </nav>
       </div>
 
-      {/* Slide-out Cart Drawer Overlay */}
-      <div className={`${styles.drawerOverlay} ${isCartOpen ? styles.overlayOpen : ''}`} onClick={() => setIsCartOpen(false)} />
-      <div className={`${styles.cartDrawer} ${isCartOpen ? styles.drawerOpen : ''}`}>
-        <div className={styles.drawerHeader}>
-          <h3>Shopping Cart ({totalCartCount})</h3>
-          <button onClick={() => setIsCartOpen(false)} className={styles.closeBtn} aria-label="Close Cart">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
-        </div>
-
-        {checkoutStatus === 'success' ? (
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '80%',
-            padding: '2rem',
-            textAlign: 'center'
-          }}>
-            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#28a745" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: '1.5rem' }}>
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-              <polyline points="22 4 12 14.01 9 11.01" />
-            </svg>
-            <h3 style={{ fontSize: '24px', marginBottom: '0.75rem', fontWeight: 600 }}>Order Placed!</h3>
-            <p style={{ fontSize: '16px', color: '#666', marginBottom: '0.5rem' }}>
-              Thank you for your order.
-            </p>
-            <span style={{ fontSize: '14px', fontWeight: 600, background: '#e2f0d9', padding: '6px 12px', borderRadius: '4px' }}>
-              ID: {orderId}
-            </span>
-          </div>
-        ) : (
-          <>
-            {step === 'cart' ? (
-              <>
-                <div className={styles.drawerItems}>
-                  {cartItems.length === 0 ? (
-                    <div style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      height: '100%',
-                      color: 'var(--gray)',
-                      fontSize: '18px'
-                    }}>
-                      Your cart is empty
-                    </div>
-                  ) : (
-                    cartItems.map((item) => (
-                      <div key={item.id} className={styles.cartItem}>
-                        <img src={item.image} alt={item.name} className={styles.itemImage} />
-                        <div className={styles.itemDetails}>
-                          <h4 style={{ fontSize: '16px', fontWeight: 400, marginBottom: '2px' }}>{item.name}</h4>
-                          <p style={{ fontSize: '15px', color: 'var(--gray)', margin: 0 }}>
-                            <span className={styles.itemPrice}>₹{item.price.toLocaleString()}</span>
-                          </p>
-                          {/* Qty adjustments */}
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '6px' }}>
-                            <button
-                              onClick={() => updateQty(item.id, item.qty - 1)}
-                              style={{
-                                border: '1px solid #ccc',
-                                borderRadius: '4px',
-                                width: '24px',
-                                height: '24px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                fontSize: '14px',
-                                color: '#333',
-                                cursor: 'pointer'
-                              }}
-                            >
-                              -
-                            </button>
-                            <span style={{ fontSize: '14px', fontWeight: 600 }}>{item.qty}</span>
-                            <button
-                              onClick={() => updateQty(item.id, item.qty + 1)}
-                              style={{
-                                border: '1px solid #ccc',
-                                borderRadius: '4px',
-                                width: '24px',
-                                height: '24px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                fontSize: '14px',
-                                color: '#333',
-                                cursor: 'pointer'
-                              }}
-                            >
-                              +
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setIsCartOpen(false);
-                                router.push(`/checkout?buyNow=${item.id}`);
-                              }}
-                              className={styles.buyNowCartBtn}
-                            >
-                              Buy Now
-                            </button>
-                          </div>
-                        </div>
-                        <button
-                          className={styles.removeItem}
-                          onClick={() => removeFromCart(item.id)}
-                          aria-label="Remove Item"
-                        >
-                          ×
-                        </button>
-                      </div>
-                    ))
-                  )}
-                </div>
-
-                {cartItems.length > 0 && (
-                  <div className={styles.drawerFooter}>
-                    <div className={styles.subtotalRow}>
-                      <span>Subtotal:</span>
-                      <span>₹{subtotal.toLocaleString()}</span>
-                    </div>
-                    <button
-                      className={styles.checkoutBtn}
-                      onClick={() => {
-                        setIsCartOpen(false);
-                        router.push('/checkout');
-                      }}
-                    >
-                      Proceed To Checkout
-                    </button>
-                    <button onClick={() => setIsCartOpen(false)} className={styles.viewCartBtn}>Continue Shopping</button>
-                  </div>
-                )}
-              </>
-            ) : (
-              <form onSubmit={handleCheckout} style={{ display: 'flex', flexDirection: 'column', height: 'calc(100% - 73px)' }}>
-                <div className={styles.drawerItems} style={{ gap: '1rem' }}>
-                  <h4 style={{ fontSize: '16px', fontWeight: 600, borderBottom: '1px solid #eee', paddingBottom: '6px', marginBottom: '8px' }}>Delivery details</h4>
-
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <label style={{ fontSize: '13px', color: '#666', fontWeight: 500 }}>Full Name *</label>
-                    <input
-                      type="text"
-                      className={styles.searchInput}
-                      style={{ fontSize: '15px', border: '1px solid #ddd', borderRadius: '6px', padding: '8px 12px', width: '100%', backgroundColor: '#fff' }}
-                      placeholder="e.g. John Doe"
-                      value={customerName}
-                      onChange={(e) => setCustomerName(e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <label style={{ fontSize: '13px', color: '#666', fontWeight: 500 }}>Email Address *</label>
-                    <input
-                      type="email"
-                      className={styles.searchInput}
-                      style={{ fontSize: '15px', border: '1px solid #ddd', borderRadius: '6px', padding: '8px 12px', width: '100%', backgroundColor: '#fff' }}
-                      placeholder="e.g. john@example.com"
-                      value={customerEmail}
-                      onChange={(e) => setCustomerEmail(e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <label style={{ fontSize: '13px', color: '#666', fontWeight: 500 }}>Phone Number *</label>
-                    <input
-                      type="tel"
-                      maxLength={10}
-                      pattern="[6-9][0-9]{9}"
-                      className={styles.searchInput}
-                      style={{ fontSize: '15px', border: '1px solid #ddd', borderRadius: '6px', padding: '8px 12px', width: '100%', backgroundColor: '#fff' }}
-                      placeholder="e.g. 9876543210"
-                      value={customerPhone}
-                      onChange={(e) => {
-                        const val = e.target.value.replace(/[^\d]/g, '');
-                        if (val.length === 0 || /^[6-9]/.test(val)) {
-                          setCustomerPhone(val.slice(0, 10));
-                        }
-                      }}
-                      required
-                    />
-                  </div>
-
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <label style={{ fontSize: '13px', color: '#666', fontWeight: 500 }}>Shipping Address *</label>
-                    <textarea
-                      className={styles.searchInput}
-                      style={{ fontSize: '15px', border: '1px solid #ddd', borderRadius: '6px', padding: '8px 12px', width: '100%', minHeight: '60px', fontFamily: 'inherit', resize: 'vertical', backgroundColor: '#fff' }}
-                      placeholder="e.g. House No., Street, City, State, ZIP"
-                      value={customerAddress}
-                      onChange={(e) => setCustomerAddress(e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  <h4 style={{ fontSize: '16px', fontWeight: 600, borderBottom: '1px solid #eee', paddingBottom: '6px', marginTop: '1rem', marginBottom: '8px' }}>Promo Coupon</h4>
-                  <div style={{ display: 'flex', gap: '8px' }}>
-                    <input
-                      type="text"
-                      className={styles.searchInput}
-                      style={{ fontSize: '14px', border: '1px solid #ddd', borderRadius: '6px', padding: '8px 12px', flex: 1, textTransform: 'uppercase', backgroundColor: '#fff' }}
-                      placeholder="e.g. WELCOME10"
-                      value={couponInput}
-                      onChange={(e) => setCouponInput(e.target.value)}
-                    />
-                    <button
-                      type="button"
-                      onClick={handleApplyCoupon}
-                      style={{ backgroundColor: 'var(--dark)', color: '#fff', padding: '8px 16px', borderRadius: '6px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}
-                    >
-                      Apply
-                    </button>
-                  </div>
-                  {couponError && <div style={{ color: '#ff4e2a', fontSize: '13px' }}>{couponError}</div>}
-                  {appliedCoupon && (
-                    <div style={{ color: '#28a745', fontSize: '13px', fontWeight: 500 }}>
-                      Coupon code "{appliedCoupon.code}" applied! (-{appliedCoupon.discount}{appliedCoupon.type === 'percentage' ? '%' : ' INR'})
-                    </div>
-                  )}
-                </div>
-
-                <div className={styles.drawerFooter}>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '1rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', color: '#666' }}>
-                      <span>Subtotal:</span>
-                      <span>₹{subtotal.toLocaleString()}</span>
-                    </div>
-                    {appliedCoupon && (
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', color: '#28a745', fontWeight: 500 }}>
-                        <span>Discount ({appliedCoupon.code}):</span>
-                        <span>-₹{getDiscountAmount().toLocaleString()}</span>
-                      </div>
-                    )}
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '16px', fontWeight: 700, borderTop: '1px solid #ddd', paddingTop: '8px', marginTop: '4px' }}>
-                      <span>Grand Total:</span>
-                      <span style={{ color: 'var(--primary)' }}>₹{getDiscountedSubtotal().toLocaleString()}</span>
-                    </div>
-                  </div>
-
-                  {checkoutStatus === 'error' && (
-                    <div style={{ color: '#ff4e2a', fontSize: '14px', marginBottom: '8px', textAlign: 'center' }}>
-                      Checkout failed. Please try again.
-                    </div>
-                  )}
-
-                  <button
-                    type="submit"
-                    className={styles.checkoutBtn}
-                    disabled={checkoutStatus === 'loading'}
-                    style={{ opacity: checkoutStatus === 'loading' ? 0.7 : 1, marginBottom: '0.5rem' }}
-                  >
-                    {checkoutStatus === 'loading' ? 'PLACING ORDER...' : 'Confirm & Place Order'}
-                  </button>
-                  <button
-                    type="button"
-                    className={styles.viewCartBtn}
-                    onClick={() => setStep('cart')}
-                  >
-                    Back to Cart
-                  </button>
-                </div>
-              </form>
-            )}
-          </>
-        )}
-      </div>
-
       {/* Slide-out Wishlist/Liked Items Drawer Overlay */}
       <div 
         className={`${styles.drawerOverlay} ${isWishlistOpen ? styles.overlayOpen : ''}`} 
@@ -1152,35 +871,24 @@ export default function Header() {
                   <p style={{ fontSize: '14px', color: 'var(--primary)', fontWeight: 600, margin: '0 0 8px 0' }}>
                     ₹{item.price.toLocaleString()}
                   </p>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      addToCart({
-                        id: item.id,
-                        name: item.name,
-                        price: item.price,
-                        image: item.image,
-                        stock: item.stock !== undefined ? item.stock : 10
-                      });
-                      removeFromWishlist(item.id);
-                      setIsWishlistOpen(false);
-                    }}
+                  <Link
+                    href={`/products/${item.slug || item.id}`}
+                    onClick={() => setIsWishlistOpen(false)}
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
                       gap: '4px',
                       padding: '5px 12px',
                       fontSize: '12px',
-                      backgroundColor: 'var(--primary, #ff4e2a)',
+                      backgroundColor: '#16a34a',
                       color: '#ffffff',
-                      border: 'none',
                       borderRadius: '4px',
-                      cursor: 'pointer',
-                      fontWeight: 500
+                      textDecoration: 'none',
+                      fontWeight: 600
                     }}
                   >
-                    Move to Cart →
-                  </button>
+                    Send Enquiry →
+                  </Link>
                 </div>
                 <button
                   type="button"

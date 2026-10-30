@@ -154,15 +154,26 @@ export default function WishlistPage() {
                         </span>
                       </td>
 
-                      {/* Add to Cart Action Column */}
+                      {/* Enquiry Action Column */}
                       <td>
-                        <button
-                          type="button"
-                          className={styles.addToCartBtn}
-                          onClick={() => handleAddToCart(item)}
+                        <Link
+                          href={`/products/${item.slug || item.id}`}
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                            backgroundColor: '#16a34a',
+                            color: '#ffffff',
+                            padding: '8px 16px',
+                            borderRadius: '6px',
+                            fontSize: '12px',
+                            fontWeight: 700,
+                            textDecoration: 'none',
+                            textTransform: 'uppercase'
+                          }}
                         >
-                          Add to cart
-                        </button>
+                          Send Enquiry →
+                        </Link>
                       </td>
 
                       {/* Remove Action Column */}

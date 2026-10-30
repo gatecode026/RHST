@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 import Categories from '@/components/Categories';
 import Brands from '@/components/Brands';
+import EnquiryModal from '@/components/EnquiryModal';
 import styles from './ProductDetails.module.css';
 
 interface Review {
@@ -31,19 +32,30 @@ interface ProductDetails {
   os: string;
   designType: string;
   reviews: Review[];
+  // IndiaMART Seller attributes
+  sellerId?: string;
+  sellerName?: string;
+  sellerLocation?: string;
+  sellerRating?: number;
+  sellerVerified?: boolean;
+  sellerMainCategory?: string;
+  sellerGst?: string;
+  sellerPhone?: string;
+  sellerEmail?: string;
+  sellerTrustScore?: string;
 }
 
 export default function ProductDetailsClient({ initialProduct }: { initialProduct: ProductDetails }) {
   const router = useRouter();
-  const { addToCart, updateQty, setIsCartOpen, toggleWishlist, isInWishlist } = useCart();
+  const { toggleWishlist, isInWishlist } = useCart();
 
   // Local state for product data
   const [product, setProduct] = useState<ProductDetails>(initialProduct);
+  const isWishlisted = isInWishlist(product.id);
   const [activeImage, setActiveImage] = useState(initialProduct.image);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<'description' | 'info' | 'reviews'>('description');
-  
-  const isWishlisted = isInWishlist(product.id);
+  const [isEnquiryModalOpen, setIsEnquiryModalOpen] = useState(false);
 
   // Review Form States
   const [reviewRating, setReviewRating] = useState(5);
@@ -62,24 +74,8 @@ export default function ProductDetailsClient({ initialProduct }: { initialProduc
     initialProduct.image
   ];
 
-  const handleAddToCart = () => {
-    addToCart({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image: product.image,
-      stock: product.stock
-    });
-
-    if (quantity > 1) {
-      updateQty(product.id, quantity);
-    }
-  };
-
-  const handleOrderNow = () => {
-    handleAddToCart();
-    setIsCartOpen(false);
-    router.push(`/checkout?buyNow=${product.id}`);
+  const handleOpenEnquiry = () => {
+    setIsEnquiryModalOpen(true);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -207,45 +203,103 @@ export default function ProductDetailsClient({ initialProduct }: { initialProduc
             )}
           </div>
 
-          {/* Purchase Actions */}
-          <div className={styles.purchaseRow}>
-            <div className={styles.qtyWrapper}>
-              <button
-                type="button"
-                className={styles.qtyBtn}
-                onClick={() => setQuantity(q => Math.max(1, q - 1))}
-              >
-                -
-              </button>
-              <input
-                type="text"
-                readOnly
-                value={quantity}
-                className={styles.qtyInput}
-              />
-              <button
-                type="button"
-                className={styles.qtyBtn}
-                onClick={() => setQuantity(q => Math.min(product.stock, q + 1))}
-              >
-                +
-              </button>
+          {/* IndiaMART Verified Supplier Details Card */}
+          <div style={{
+            backgroundColor: '#f8fafc',
+            border: '1px solid #cbd5e1',
+            borderRadius: '8px',
+            padding: '1.25rem',
+            margin: '1.25rem 0',
+            boxShadow: '0 2px 6px rgba(0,0,0,0.04)'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', marginBottom: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ fontSize: '18px' }}>🏢</span>
+                <strong style={{ fontSize: '16px', color: '#0f172a' }}>
+                  {product.sellerName || 'Apex Tech Systems Pvt Ltd'}
+                </strong>
+              </div>
+              <span style={{
+                backgroundColor: '#dcfce7',
+                color: '#15803d',
+                fontSize: '11px',
+                fontWeight: 700,
+                padding: '3px 10px',
+                borderRadius: '50px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                border: '1px solid #86efac'
+              }}>
+                ✓ {product.sellerTrustScore || 'Verified TrustSEAL'}
+              </span>
             </div>
 
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '8px', fontSize: '13px', color: '#475569', marginTop: '10px' }}>
+              <div><strong>Main Category:</strong> {product.sellerMainCategory || product.category}</div>
+              <div><strong>Location:</strong> 📍 {product.sellerLocation || 'Jaipur, Rajasthan'}</div>
+              <div><strong>GST No:</strong> {product.sellerGst || '08AAPCA9281G1Z3'}</div>
+              <div><strong>Response Time:</strong> ⚡ &lt; 2 Hours</div>
+            </div>
+          </div>
+
+          {/* IndiaMART Enquiry Actions */}
+          <div style={{ display: 'flex', gap: '12px', margin: '1.5rem 0', flexWrap: 'wrap' }}>
             <button
               type="button"
-              className={styles.orderNowBtn}
-              onClick={handleOrderNow}
+              onClick={handleOpenEnquiry}
+              style={{
+                flex: '1',
+                minWidth: '220px',
+                backgroundColor: '#16a34a',
+                color: '#ffffff',
+                border: 'none',
+                padding: '14px 24px',
+                borderRadius: '6px',
+                fontSize: '15px',
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                boxShadow: '0 4px 12px rgba(22, 163, 74, 0.3)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.03em',
+                transition: 'background 0.2s'
+              }}
+              onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#15803d')}
+              onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#16a34a')}
             >
-              Order Now
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+              Send Enquiry / Get Best Price
             </button>
 
             <button
               type="button"
-              className={styles.addToCartBtn}
-              onClick={handleAddToCart}
+              onClick={handleOpenEnquiry}
+              style={{
+                backgroundColor: '#0284c7',
+                color: '#ffffff',
+                border: 'none',
+                padding: '14px 20px',
+                borderRadius: '6px',
+                fontSize: '14px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                transition: 'background 0.2s'
+              }}
+              onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#0369a1')}
+              onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#0284c7')}
             >
-              Add to Cart
+              📞 Request Callback
             </button>
           </div>
 
@@ -467,6 +521,22 @@ export default function ProductDetailsClient({ initialProduct }: { initialProduc
         <Categories title="HARDWARE PRODUCTS" />
       </div>
       <Brands />
+
+      {/* IndiaMART Enquiry Modal */}
+      <EnquiryModal
+        isOpen={isEnquiryModalOpen}
+        onClose={() => setIsEnquiryModalOpen(false)}
+        product={{
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          image: product.image,
+          sellerId: product.sellerId,
+          sellerName: product.sellerName,
+          sellerLocation: product.sellerLocation,
+          sellerVerified: product.sellerVerified
+        }}
+      />
     </div>
   );
 }

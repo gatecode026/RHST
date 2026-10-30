@@ -6,8 +6,8 @@ import CheckoutClient from './CheckoutClient';
 import styles from './Checkout.module.css';
 
 export const metadata: Metadata = {
-  title: 'Checkout | VALNQIX IT Products & Solutions',
-  description: 'Provide your billing and shipment details to complete your order securely with VALNQIX.',
+  title: 'Post Buy Requirement | VALNQIX Verified Suppliers',
+  description: 'Post your requirement to receive competitive quotations from verified IT suppliers and manufacturers across India.',
 };
 
 export default function CheckoutPage() {
@@ -18,9 +18,9 @@ export default function CheckoutPage() {
         {/* Breadcrumb banner heading */}
         <div className={styles.breadcrumbsHeader}>
           <div className="container">
-            <h1>Checkout</h1>
+            <h1>Post Buy Requirement</h1>
             <p>
-              <a href="/">Home</a> &gt; <span>Shop</span>
+              <a href="/">Home</a> &gt; <span>Get Quotes from Verified Sellers</span>
             </p>
           </div>
         </div>

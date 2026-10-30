@@ -15,28 +15,28 @@ interface Slide {
 
 const STATIC_SLIDES: Slide[] = [
   {
-    title: 'Powering Your Digital World With Reliable IT Solutions',
-    subtitle: 'Limited stocks available. Grab it now!',
-    ctaText: 'Shop Collection',
+    title: 'India’s Leading B2B IT Hardware & Network Solutions Portal',
+    subtitle: 'Connect with verified manufacturers, wholesalers & dealers across India.',
+    ctaText: 'Explore Verified Suppliers',
     image: 'https://ik.imagekit.io/zp0tch54w/RHST/IMG.png?updatedAt=1781696174888',
     theme: 'light',
     link: '/products'
   },
   {
-    title: 'Immersive Gaming with the Play Station 5',
-    subtitle: 'Experience lightning-fast load times, 3D audio, and an all-new generation of incredible games.',
-    ctaText: 'Explore Gaming',
+    title: 'Gaming & Computing Systems from Authorized Distributors',
+    subtitle: 'Get lowest wholesale quotations on bulk orders with verified warranty.',
+    ctaText: 'Get Best Price Quotes',
     image: 'https://ik.imagekit.io/zp0tch54w/RHST/Home%20page%20banner%2004=3%201.png',
     theme: 'light',
-    link: '/products'
+    link: '/products?category=Gaming%20Products'
   },
   {
-    title: 'Dominate Every Frame with Crystal-Clear Precision',
-    subtitle: 'Dominate every game with vibrant colors, fluid motion, and ultra-low latency designed for peak performance.',
-    ctaText: 'Discover Television',
+    title: 'Commercial Displays & Office IT Infrastructure',
+    subtitle: 'Source direct from verified OEM suppliers with fast delivery across India.',
+    ctaText: 'Post Your Requirement',
     image: 'https://ik.imagekit.io/zp0tch54w/RHST/image%20191.png',
     theme: 'light',
-    link: '/products?category=Television'
+    link: '/checkout'
   }
 ];
 

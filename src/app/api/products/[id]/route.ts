@@ -126,6 +126,23 @@ export async function GET(
       }
 
       if (dbProduct) {
+        const cat = dbProduct.category || 'Hardware';
+        const defaultSellerName = cat === 'Gaming Products'
+          ? 'HyperDrive Gaming & Peripherals'
+          : cat === 'Office Equipment'
+          ? 'Zenith Office Tech & Display Solutions'
+          : cat === 'Computer Access'
+          ? 'Paramount Digital Accessories Co.'
+          : 'Apex Tech Systems Pvt Ltd';
+
+        const defaultSellerLocation = cat === 'Gaming Products'
+          ? 'Bengaluru, Karnataka'
+          : cat === 'Office Equipment'
+          ? 'New Delhi, Delhi'
+          : cat === 'Computer Access'
+          ? 'Mumbai, Maharashtra'
+          : 'Jaipur, Rajasthan';
+
         product = {
           id: dbProduct._id.toString(),
           slug: dbProduct.slug || dbProduct.name.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-'),
@@ -136,12 +153,22 @@ export async function GET(
           brand: dbProduct.brand || 'ASUS',
           sku: dbProduct.sku || `SKU-DB-${dbProduct._id.toString().substring(18).toUpperCase()}`,
           stock: dbProduct.stock !== undefined ? dbProduct.stock : 8,
-          description: dbProduct.description || 'Premium IT product delivered with full brand warranty and professional configuration guidance from VALNQIX.',
+          description: dbProduct.description || 'Premium IT product delivered with verified seller guarantee and direct quotation support.',
           mrp: dbProduct.mrp || parsePrice(dbProduct.price) * 1.1,
           discount: dbProduct.discount || 10,
           warranty: dbProduct.warranty || 12,
           os: dbProduct.os || 'Windows 11 Home',
-          designType: dbProduct.designType || 'Standard Desktop PC'
+          designType: dbProduct.designType || 'Standard Desktop PC',
+          sellerId: dbProduct.sellerId || 'seller-default',
+          sellerName: dbProduct.sellerName || defaultSellerName,
+          sellerLocation: dbProduct.sellerLocation || defaultSellerLocation,
+          sellerRating: dbProduct.sellerRating || 4.8,
+          sellerVerified: dbProduct.sellerVerified !== undefined ? dbProduct.sellerVerified : true,
+          sellerMainCategory: dbProduct.sellerMainCategory || cat,
+          sellerTrustScore: dbProduct.sellerTrustScore || 'Verified TrustSEAL',
+          sellerGst: dbProduct.sellerGst || '08AAPCA9281G1Z3',
+          sellerPhone: dbProduct.sellerPhone || '+91 98290 12345',
+          sellerEmail: dbProduct.sellerEmail || 'sales@apextechsystems.in'
         };
       }
     }
@@ -153,6 +180,7 @@ export async function GET(
         p.name.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-') === id.toLowerCase()
       );
       if (mockCatProd) {
+        const cat = mockCatProd.category || 'Hardware';
         product = {
           ...mockCatProd,
           price: parsePrice(mockCatProd.price),
@@ -160,7 +188,14 @@ export async function GET(
           discount: 12,
           warranty: 12,
           os: 'Windows 11 Home',
-          designType: mockCatProd.category === 'Hardware' ? 'Personal Computer' : 'Accessory'
+          designType: mockCatProd.category === 'Hardware' ? 'Personal Computer' : 'Accessory',
+          sellerId: 'seller-default',
+          sellerName: cat === 'Office Equipment' ? 'Zenith Office Tech & Display Solutions' : 'Apex Tech Systems Pvt Ltd',
+          sellerLocation: cat === 'Office Equipment' ? 'New Delhi, Delhi' : 'Jaipur, Rajasthan',
+          sellerRating: 4.8,
+          sellerVerified: true,
+          sellerMainCategory: cat,
+          sellerTrustScore: 'Verified TrustSEAL'
         };
       } else {
         const mockColProd = COLUMN_PRODUCTS.find(p =>
@@ -168,6 +203,7 @@ export async function GET(
           p.name.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-') === id.toLowerCase()
         );
         if (mockColProd) {
+          const cat = mockColProd.category || 'Hardware';
           product = {
             ...mockColProd,
             price: parsePrice(mockColProd.price),
@@ -175,7 +211,14 @@ export async function GET(
             discount: 15,
             warranty: 12,
             os: 'Windows 11 Home',
-            designType: 'Accessory'
+            designType: 'Accessory',
+            sellerId: 'seller-default',
+            sellerName: cat === 'Gaming Products' ? 'HyperDrive Gaming & Peripherals' : 'Apex Tech Systems Pvt Ltd',
+            sellerLocation: cat === 'Gaming Products' ? 'Bengaluru, Karnataka' : 'Jaipur, Rajasthan',
+            sellerRating: 4.8,
+            sellerVerified: true,
+            sellerMainCategory: cat,
+            sellerTrustScore: 'Verified TrustSEAL'
           };
         }
       }

@@ -38,8 +38,9 @@ export default function ProfileClient() {
   const [profileMessage, setProfileMessage] = useState('');
   const [profileError, setProfileError] = useState('');
 
-  // Orders state
+  // Enquiries & Orders state
   const [orders, setOrders] = useState<Order[]>([]);
+  const [enquiries, setEnquiries] = useState<any[]>([]);
   const [ordersLoading, setOrdersLoading] = useState(false);
 
   // Address fields states
@@ -121,29 +122,37 @@ export default function ProfileClient() {
     }
   }, []);
 
-  // Fetch user orders when tabs change or on mount
+  // Fetch user enquiries & orders when tabs change or on mount
   useEffect(() => {
     if (!currentUser?.email) {
       setOrders([]);
+      setEnquiries([]);
       return;
     }
 
-    const fetchOrders = async () => {
+    const fetchProfileData = async () => {
       setOrdersLoading(true);
       try {
-        const res = await fetch(`/api/profile/orders?email=${encodeURIComponent(currentUser.email)}`);
-        const data = await res.json();
+        const [ordersRes, enqRes] = await Promise.all([
+          fetch(`/api/profile/orders?email=${encodeURIComponent(currentUser.email)}`),
+          fetch(`/api/enquiry?email=${encodeURIComponent(currentUser.email)}`)
+        ]);
+        const data = await ordersRes.json();
+        const enqData = await enqRes.json();
         if (data.success && data.orders) {
           setOrders(data.orders);
         }
+        if (enqData.success && enqData.enquiries) {
+          setEnquiries(enqData.enquiries);
+        }
       } catch (e) {
-        console.error('Failed to fetch user orders:', e);
+        console.error('Failed to fetch user enquiries/orders:', e);
       } finally {
         setOrdersLoading(false);
       }
     };
 
-    fetchOrders();
+    fetchProfileData();
   }, [currentUser, activeTab]);
 
   // Handle Logout
@@ -364,7 +373,7 @@ export default function ProfileClient() {
                 <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
                 <line x1="12" y1="22.08" x2="12" y2="12" />
               </svg>
-              My Orders
+              My Enquiries & Quotes
             </button>
 
             <button 
@@ -523,35 +532,72 @@ export default function ProfileClient() {
             </div>
           )}
 
-          {/* TAB 2: MY ORDERS */}
+          {/* TAB 2: MY ENQUIRIES & QUOTES */}
           {activeTab === 'orders' && (
             <div>
               <div className={styles.cardHeader}>
                 <div>
-                  <h2 className={styles.cardTitle}>My Orders</h2>
-                  <p className={styles.cardSubtitle}>Track and manage your order history</p>
+                  <h2 className={styles.cardTitle}>My Enquiries & Quotations</h2>
+                  <p className={styles.cardSubtitle}>Track quotations and status of requirements sent to verified suppliers</p>
                 </div>
               </div>
 
               {ordersLoading ? (
                 <div style={{ padding: '2rem 0', textAlign: 'center', color: '#666' }}>
-                  Loading order history...
+                  Loading enquiries & quotes...
                 </div>
-              ) : orders.length === 0 ? (
+              ) : enquiries.length === 0 && orders.length === 0 ? (
                 <div className={styles.emptyStateBox}>
-                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: '1rem' }}>
-                    <circle cx="9" cy="21" r="1" />
-                    <circle cx="20" cy="21" r="1" />
-                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-                  </svg>
-                  <h4>No orders found</h4>
-                  <p>You haven't placed any orders with this account yet.</p>
+                  <div style={{ fontSize: '40px', marginBottom: '1rem' }}>📋</div>
+                  <h4>No enquiries sent yet</h4>
+                  <p>You haven't requested any quotations or sent enquiries to sellers yet.</p>
                   <button className={styles.browseBtn} onClick={() => router.push('/products')}>
-                    Browse Products
+                    Explore Verified Products & Suppliers
                   </button>
                 </div>
               ) : (
                 <div className={styles.ordersList}>
+                  {enquiries.map((enq) => (
+                    <div key={enq.enquiryId || enq._id} className={styles.orderCard}>
+                      <div className={styles.orderCardHeader}>
+                        <div>
+                          <span className={styles.orderId}>{enq.enquiryId}</span>
+                          <span className={styles.orderDate}>Sent on: {new Date(enq.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+                        </div>
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                          <span className={`${styles.badgeStatus} ${styles.status_pending}`} style={{ backgroundColor: '#dcfce7', color: '#15803d' }}>
+                            ✓ Sent to Supplier
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className={styles.orderItems}>
+                        <div className={styles.orderItemRow}>
+                          <img src={enq.productImage || '/images/default_category.png'} alt={enq.productName} className={styles.orderItemImg} />
+                          <div className={styles.orderItemMeta}>
+                            <h5>{enq.productName}</h5>
+                            <p style={{ color: '#0284c7', fontWeight: 600 }}>Supplier: {enq.sellerName} ({enq.sellerLocation})</p>
+                            <p>Quantity Required: <strong>{enq.quantity}</strong></p>
+                            {enq.requirement && (
+                              <p style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>
+                                <em>"{enq.requirement}"</em>
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className={styles.orderCardFooter}>
+                        <div>
+                          <strong>Target Price / Rate:</strong> {enq.productPrice || 'Best Quotation Requested'}
+                        </div>
+                        <div style={{ fontSize: '13px', color: '#16a34a', fontWeight: 600 }}>
+                          ⚡ Supplier Contacting via Phone / WhatsApp
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+
                   {orders.map((order) => (
                     <div key={order.orderId} className={styles.orderCard}>
                       <div className={styles.orderCardHeader}>
@@ -559,14 +605,9 @@ export default function ProfileClient() {
                           <span className={styles.orderId}>{order.orderId}</span>
                           <span className={styles.orderDate}>Placed on: {new Date(order.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}</span>
                         </div>
-                        <div style={{ display: 'flex', gap: '8px' }}>
-                          <span className={`${styles.badgeStatus} ${styles[`status_${order.status.toLowerCase()}`] || styles.status_pending}`}>
-                            {order.status}
-                          </span>
-                          <span className={`${styles.badgeStatus} ${order.paymentStatus === 'PAID' ? styles.status_paid : styles.status_unpaid}`}>
-                            Payment: {order.paymentStatus}
-                          </span>
-                        </div>
+                        <span className={styles.badgeStatus}>
+                          Order: {order.status}
+                        </span>
                       </div>
 
                       <div className={styles.orderItems}>
@@ -580,15 +621,6 @@ export default function ProfileClient() {
                             <span className={styles.orderItemTotal}>₹{(item.price * item.qty).toLocaleString()}</span>
                           </div>
                         ))}
-                      </div>
-
-                      <div className={styles.orderCardFooter}>
-                        <div>
-                          <strong>Method:</strong> {order.paymentMethod}
-                        </div>
-                        <div className={styles.grandTotalText}>
-                          Grand Total: <span>₹{order.subtotal.toLocaleString()}/-</span>
-                        </div>
                       </div>
                     </div>
                   ))}

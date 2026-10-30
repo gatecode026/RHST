@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useCart } from '@/context/CartContext';
+import EnquiryModal, { EnquiryProduct } from './EnquiryModal';
 import styles from './ProductColumns.module.css';
 
 interface Product {
@@ -17,6 +17,10 @@ interface Product {
   discount?: number;
   mrp?: number;
   stock?: number;
+  sellerName?: string;
+  sellerLocation?: string;
+  sellerRating?: number;
+  sellerVerified?: boolean;
 }
 
 interface Column {
@@ -25,9 +29,9 @@ interface Column {
 }
 
 export default function ProductColumns() {
-  const { addToCart } = useCart();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedProductForEnquiry, setSelectedProductForEnquiry] = useState<EnquiryProduct | null>(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -48,24 +52,26 @@ export default function ProductColumns() {
 
   // Restore scroll position on home page after content is loaded
   useEffect(() => {
-    if (!loading) {
-      const saved = sessionStorage.getItem('scroll_pos_before_product_detail');
-      if (saved) {
+    if (!loading && products.length > 0) {
+      const savedPos = sessionStorage.getItem('scroll_pos_before_product_detail');
+      if (savedPos) {
         try {
-          const { path, scrollY } = JSON.parse(saved);
-          if (path === window.location.pathname) {
-            const timer = setTimeout(() => {
-              window.scrollTo(0, scrollY);
+          const parsed = JSON.parse(savedPos);
+          if (parsed.path === window.location.pathname) {
+            setTimeout(() => {
+              window.scrollTo({
+                top: parsed.scrollY,
+                behavior: 'instant'
+              });
               sessionStorage.removeItem('scroll_pos_before_product_detail');
-            }, 150);
-            return () => clearTimeout(timer);
+            }, 100);
           }
         } catch (e) {
-          console.error('Failed to restore scroll position:', e);
+          sessionStorage.removeItem('scroll_pos_before_product_detail');
         }
       }
     }
-  }, [loading]);
+  }, [loading, products]);
 
   const parsePrice = (priceVal: any): number => {
     if (typeof priceVal === 'number') return priceVal;
@@ -89,28 +95,22 @@ export default function ProductColumns() {
     return '₹0';
   };
 
-  // Define static fallback columns in case DB fails to load or has 0 products
-// Static fallback columns are removed. Homepage feeds rely purely on database items.
-
   const getColumnData = (): Column[] => {
     if (loading || products.length === 0) {
       return [
-        { title: 'Featured', products: [] },
-        { title: 'Latest Items', products: [] },
-        { title: 'Best Reviewed', products: [] },
-        { title: 'On Sale', products: [] }
+        { title: 'Featured Suppliers', products: [] },
+        { title: 'Latest Products', products: [] },
+        { title: 'Verified Quotations', products: [] },
+        { title: 'Bulk Deals', products: [] }
       ];
     }
 
     // Filter dynamic lists
     const featuredList = products.filter(p => p.featured === true).slice(0, 3);
     const saleList = products.filter(p => (p.discount && p.discount > 0) || p.onOffer).slice(0, 3);
-    // Sort latest by ID (newer MongoDB ObjectIds are alphabetically/chronologically greater)
     const latestList = [...products].sort((a, b) => String(b.id).localeCompare(String(a.id))).slice(0, 3);
-    // Sort by price descending as mock for premium "Best Reviewed" items
     const bestReviewedList = [...products].sort((a, b) => parsePrice(b.price) - parsePrice(a.price)).slice(0, 3);
 
-    // Helper to fill columns with generic fallback products if specific lists are less than 3
     const fillList = (list: Product[]) => {
       const needed = 3 - list.length;
       if (needed <= 0) return list;
@@ -120,19 +120,19 @@ export default function ProductColumns() {
 
     return [
       {
-        title: 'Featured',
+        title: 'Featured Suppliers',
         products: fillList(featuredList)
       },
       {
-        title: 'Latest Items',
+        title: 'Latest Products',
         products: fillList(latestList)
       },
       {
-        title: 'Best Reviewed',
+        title: 'Verified Quotations',
         products: fillList(bestReviewedList)
       },
       {
-        title: 'On Sale',
+        title: 'Bulk Deals',
         products: fillList(saleList).map(p => ({
           ...p,
           oldPrice: p.mrp && p.mrp > parsePrice(p.price) ? `₹${p.mrp.toLocaleString()}` : undefined
@@ -167,53 +167,109 @@ export default function ProductColumns() {
               </div>
               <div className={styles.productList}>
                 {col.products.map((prod, pIdx) => (
-                  <Link 
+                  <div 
                     key={`${prod.id}-${pIdx}`} 
-                    href={`/products/${prod.slug || prod.id}`} 
                     className={styles.productRow}
-                    onClick={() => {
-                      sessionStorage.setItem('scroll_pos_before_product_detail', JSON.stringify({
-                        path: window.location.pathname,
-                        scrollY: window.scrollY
-                      }));
-                    }}
+                    style={{ position: 'relative' }}
                   >
-                    <div className={styles.imageWrapper}>
+                    <Link
+                      href={`/products/${prod.slug || prod.id}`}
+                      className={styles.imageWrapper}
+                      onClick={() => {
+                        sessionStorage.setItem('scroll_pos_before_product_detail', JSON.stringify({
+                          path: window.location.pathname,
+                          scrollY: window.scrollY
+                        }));
+                      }}
+                    >
                       <img src={prod.image} alt={prod.name} className={styles.image} />
-                    </div>
+                    </Link>
+
                     <div className={styles.info}>
-                      <h4 className={styles.name}>{prod.name}</h4>
+                      <Link
+                        href={`/products/${prod.slug || prod.id}`}
+                        style={{ textDecoration: 'none', color: 'inherit' }}
+                      >
+                        <h4 className={styles.name}>{prod.name}</h4>
+                      </Link>
+
                       <div className={styles.priceRow}>
                         {prod.oldPrice && (
                           <span className={styles.oldPrice}>{prod.oldPrice}</span>
                         )}
                         <span className={styles.price}>{formatPrice(prod.price)}</span>
                       </div>
+
+                      {/* IndiaMART Seller Info */}
+                      <div style={{
+                        fontSize: '11px',
+                        color: '#15803d',
+                        fontWeight: 600,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '3px',
+                        marginTop: '2px'
+                      }}>
+                        <span>✓</span>
+                        <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '140px' }}>
+                          {prod.sellerName || 'Apex Tech Systems Pvt Ltd'}
+                        </span>
+                      </div>
                     </div>
+
+                    {/* Enquiry Button */}
                     <button
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        addToCart({
+                        setSelectedProductForEnquiry({
                           id: prod.id,
                           name: prod.name,
-                          price: parsePrice(prod.price),
+                          price: prod.price,
                           image: prod.image,
-                          stock: prod.stock
+                          sellerName: prod.sellerName,
+                          sellerLocation: prod.sellerLocation,
+                          sellerVerified: prod.sellerVerified
                         });
                       }}
-                      className={styles.addCartIconBtn}
-                      title="Add to Cart"
+                      style={{
+                        backgroundColor: '#16a34a',
+                        color: '#ffffff',
+                        border: 'none',
+                        borderRadius: '4px',
+                        padding: '6px 10px',
+                        fontSize: '11px',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.02em',
+                        marginLeft: 'auto',
+                        flexShrink: 0,
+                        transition: 'background 0.15s'
+                      }}
+                      onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#15803d')}
+                      onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#16a34a')}
+                      title="Send Enquiry to Seller"
                     >
-                      +
+                      Enquiry
                     </button>
-                  </Link>
+                  </div>
                 ))}
               </div>
             </div>
           ))}
         </div>
       </div>
+
+      {/* Enquiry Modal */}
+      <EnquiryModal
+        isOpen={!!selectedProductForEnquiry}
+        onClose={() => setSelectedProductForEnquiry(null)}
+        product={selectedProductForEnquiry}
+      />
     </section>
   );
 }

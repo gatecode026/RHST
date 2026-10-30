@@ -9,7 +9,7 @@ import OurBlog from '@/components/OurBlog';
 import Brands from '@/components/Brands';
 import Footer from '@/components/Footer';
 import ContactForm from '@/components/ContactForm';
-import { useCart } from '@/context/CartContext';
+import EnquiryModal, { EnquiryProduct } from '@/components/EnquiryModal';
 import { useSearchParams } from 'next/navigation';
 import styles from './Products.module.css';
 
@@ -38,7 +38,6 @@ const MOCKUP_REVIEWS = [
 ];
 
 function ProductsCatalogContent() {
-  const { addToCart } = useCart();
   const searchParams = useSearchParams();
 
   // Filter local states
@@ -46,10 +45,14 @@ function ProductsCatalogContent() {
   const [typedSearch, setTypedSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
   const [activeBrand, setActiveBrand] = useState('All');
+  const [activeSeller, setActiveSeller] = useState('All');
   const [activePriceRange, setActivePriceRange] = useState<string | null>(null);
   const [sortOption, setSortOption] = useState('default');
   const [currentPage, setCurrentPage] = useState(1);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+
+  // Enquiry modal state
+  const [selectedProductForEnquiry, setSelectedProductForEnquiry] = useState<EnquiryProduct | null>(null);
 
   // Sync category with URL query parameter
   useEffect(() => {
@@ -65,19 +68,22 @@ function ProductsCatalogContent() {
   const [dbProducts, setDbProducts] = useState<any[]>([]);
   const [dbCategories, setDbCategories] = useState<any[]>([]);
   const [dbBrands, setDbBrands] = useState<any[]>([]);
+  const [dbSellers, setDbSellers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadDynamicData = async () => {
       try {
-        const [prodRes, catRes, brandRes] = await Promise.all([
+        const [prodRes, catRes, brandRes, sellerRes] = await Promise.all([
           fetch('/api/products?t=' + Date.now(), { cache: 'no-store' }),
           fetch('/api/categories?t=' + Date.now(), { cache: 'no-store' }),
-          fetch('/api/brands?t=' + Date.now(), { cache: 'no-store' })
+          fetch('/api/brands?t=' + Date.now(), { cache: 'no-store' }),
+          fetch('/api/sellers?t=' + Date.now(), { cache: 'no-store' })
         ]);
         const prodData = await prodRes.json();
         const catData = await catRes.json();
         const brandData = await brandRes.json();
+        const sellerData = await sellerRes.json();
         if (prodData.success) {
           setDbProducts(prodData.products);
         }
@@ -87,8 +93,11 @@ function ProductsCatalogContent() {
         if (brandData.success) {
           setDbBrands(brandData.brands);
         }
+        if (sellerData.success) {
+          setDbSellers(sellerData.sellers);
+        }
       } catch (err) {
-        console.error('Failed to load products/categories/brands in catalog:', err);
+        console.error('Failed to load products/categories/brands/sellers in catalog:', err);
       } finally {
         setLoading(false);
       }
@@ -113,7 +122,13 @@ function ProductsCatalogContent() {
       image: p.image,
       category: p.category,
       brand: p.brand || 'Dell',
-      stock: p.stock !== undefined ? p.stock : 99
+      stock: p.stock !== undefined ? p.stock : 99,
+      sellerId: p.sellerId,
+      sellerName: p.sellerName || 'Apex Tech Systems Pvt Ltd',
+      sellerLocation: p.sellerLocation || 'Jaipur, Rajasthan',
+      sellerRating: p.sellerRating || 4.8,
+      sellerVerified: p.sellerVerified !== undefined ? p.sellerVerified : true,
+      sellerTrustScore: p.sellerTrustScore || 'Verified TrustSEAL'
     }));
   }, [dbProducts]);
 
@@ -237,6 +252,11 @@ function ProductsCatalogContent() {
       result = result.filter(p => p.brand.toLowerCase() === activeBrand.toLowerCase());
     }
 
+    // Seller filter
+    if (activeSeller !== 'All') {
+      result = result.filter(p => (p.sellerName || '').toLowerCase() === activeSeller.toLowerCase());
+    }
+
     // Price filter
     if (activePriceRange) {
       if (activePriceRange === 'less15') {
@@ -264,7 +284,38 @@ function ProductsCatalogContent() {
     }
 
     return result;
-  }, [allProducts, searchQuery, activeCategory, activeBrand, activePriceRange, sortOption]);
+  }, [allProducts, searchQuery, activeCategory, activeBrand, activeSeller, activePriceRange, sortOption]);
+
+  const sellersList = useMemo(() => {
+    const list = [{ key: 'All', display: 'All Verified Sellers' }];
+    const seen = new Set(['all']);
+
+    if (dbSellers.length > 0) {
+      dbSellers.forEach(s => {
+        const keyLower = s.name.toLowerCase();
+        if (!seen.has(keyLower)) {
+          seen.add(keyLower);
+          list.push({ key: s.name, display: s.name });
+        }
+      });
+    } else {
+      allProducts.forEach(p => {
+        if (p.sellerName) {
+          const keyLower = p.sellerName.toLowerCase();
+          if (!seen.has(keyLower)) {
+            seen.add(keyLower);
+            list.push({ key: p.sellerName, display: p.sellerName });
+          }
+        }
+      });
+    }
+    return list;
+  }, [dbSellers, allProducts]);
+
+  const getSellerCount = (sellerName: string) => {
+    if (sellerName === 'All') return allProducts.length;
+    return allProducts.filter(p => (p.sellerName || '').toLowerCase() === sellerName.toLowerCase()).length;
+  };
 
   // Pagination logic (24 items per page to fill page cleanly without white space)
   const itemsPerPage = 24;
@@ -420,17 +471,72 @@ function ProductsCatalogContent() {
                             <h3 className={styles.name}>{prod.name}</h3>
                           </Link>
                           <span className={styles.price}>₹{prod.price.toLocaleString()}</span>
+
+                          {/* IndiaMART Seller Info on Product Card */}
+                          <div style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                            fontSize: '11px',
+                            color: '#15803d',
+                            backgroundColor: '#f0fdf4',
+                            border: '1px solid #bbf7d0',
+                            padding: '2px 8px',
+                            borderRadius: '4px',
+                            marginTop: '6px',
+                            fontWeight: 600,
+                            width: 'fit-content'
+                          }}>
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                            </svg>
+                            <span>{prod.sellerName || 'Apex Tech Systems Pvt Ltd'}</span>
+                          </div>
+
+                          <div style={{ fontSize: '11px', color: '#64748b', marginTop: '3px', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                            <span>📍</span>
+                            <span>{prod.sellerLocation || 'Jaipur, Rajasthan'}</span>
+                          </div>
+
+                          {/* Enquiry Button */}
                           <button
-                            onClick={() => addToCart({
+                            onClick={() => setSelectedProductForEnquiry({
                               id: prod.id,
                               name: prod.name,
                               price: prod.price,
                               image: prod.image,
-                              stock: prod.stock
+                              sellerName: prod.sellerName,
+                              sellerLocation: prod.sellerLocation,
+                              sellerVerified: prod.sellerVerified
                             })}
-                            className={styles.cartBtn}
+                            style={{
+                              backgroundColor: '#16a34a',
+                              color: '#ffffff',
+                              border: 'none',
+                              borderRadius: '6px',
+                              padding: '10px 14px',
+                              fontSize: '13px',
+                              fontWeight: 700,
+                              cursor: 'pointer',
+                              textTransform: 'uppercase',
+                              letterSpacing: '0.03em',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              gap: '6px',
+                              width: '100%',
+                              marginTop: '0.85rem',
+                              boxShadow: '0 2px 4px rgba(22, 163, 74, 0.25)',
+                              transition: 'background 0.2s'
+                            }}
+                            onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#15803d')}
+                            onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#16a34a')}
                           >
-                            Add to Cart
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                              <line x1="22" y1="2" x2="11" y2="13"></line>
+                              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                            </svg>
+                            Enquiry
                           </button>
                         </div>
                       </div>
@@ -542,6 +648,28 @@ function ProductsCatalogContent() {
                         <span>{brand.display}</span>
                         {brand.key !== 'All' && (
                           <span className={styles.itemCount}>{getBrandCount(brand.key)}</span>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Verified Sellers Widget */}
+                <div className={styles.widget}>
+                  <h3 className={styles.widgetTitle}>Verified Suppliers</h3>
+                  <ul className={styles.widgetList}>
+                    {sellersList.map((seller) => (
+                      <li
+                        key={seller.key}
+                        className={`${styles.widgetItem} ${activeSeller === seller.key ? styles.activeWidgetItem : ''}`}
+                        onClick={() => {
+                          setActiveSeller(seller.key);
+                          setCurrentPage(1);
+                        }}
+                      >
+                        <span style={{ fontSize: '13px' }}>{seller.display}</span>
+                        {seller.key !== 'All' && (
+                          <span className={styles.itemCount}>{getSellerCount(seller.key)}</span>
                         )}
                       </li>
                     ))}
@@ -766,6 +894,12 @@ function ProductsCatalogContent() {
           </div>
         </div>
       </div>
+      {/* Enquiry Modal */}
+      <EnquiryModal
+        isOpen={!!selectedProductForEnquiry}
+        onClose={() => setSelectedProductForEnquiry(null)}
+        product={selectedProductForEnquiry}
+      />
     </>
   );
 }

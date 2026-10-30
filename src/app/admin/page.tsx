@@ -62,6 +62,26 @@ interface Brand {
   status?: string;
 }
 
+interface Seller {
+  id: string;
+  name: string;
+  mainCategory: string;
+  location: string;
+  rating?: number;
+  reviewCount?: number;
+  verified?: boolean;
+  memberSince?: string;
+  gstNumber?: string;
+  responseTime?: string;
+  responseRate?: string;
+  natureOfBusiness?: string;
+  contactPerson?: string;
+  phone?: string;
+  email?: string;
+  trustScore?: string;
+  status?: string;
+}
+
 interface Product {
   id: string;
   name: string;
@@ -81,6 +101,11 @@ interface Product {
   onOffer?: boolean;
   warranty?: number;
   lowStockThreshold?: number;
+  sellerId?: string;
+  sellerName?: string;
+  sellerLocation?: string;
+  sellerGst?: string;
+  sellerTrustScore?: string;
 }
 
 interface Banner {
@@ -151,9 +176,10 @@ const getAvatarStyle = (name: string) => {
 const ADMIN_MODULES = [
   { key: 'Dashboard', icon: '▦' },
   { key: 'Users', icon: '👤' },
-  { key: 'Products', icon: '📦' },
-  { key: 'Brands', icon: '🎗' },
   { key: 'Categories', icon: '🗂' },
+  { key: 'Products', icon: '📦' },
+  { key: 'Sellers', icon: '🏢' },
+  { key: 'Brands', icon: '🎗' },
   { key: 'Orders', icon: '🛒' },
   { key: 'Coupons', icon: '🏷' },
   { key: 'Homepage Banner', icon: '🖼' },
@@ -181,7 +207,7 @@ export default function AdminDashboardPage() {
 
   // Active navigation tab
   const [activeTab, setActiveTab] = useState<
-    'dashboard' | 'categories' | 'products' | 'orders' | 'customers' | 'coupons' | 'queries' | 'analytics' | 'activity-logs' | 'admin-manager' | 'settings' | 'brands' | 'blogs' | 'promo-banner'
+    'dashboard' | 'categories' | 'products' | 'sellers' | 'orders' | 'customers' | 'coupons' | 'queries' | 'analytics' | 'activity-logs' | 'admin-manager' | 'settings' | 'brands' | 'blogs' | 'promo-banner'
   >('dashboard');
 
   // Database State lists
@@ -190,6 +216,7 @@ export default function AdminDashboardPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [brands, setBrands] = useState<Brand[]>([]);
   const [adminProducts, setAdminProducts] = useState<Product[]>([]);
+  const [sellers, setSellers] = useState<Seller[]>([]);
   const [coupons, setCoupons] = useState<Coupon[]>([]);
   const [logs, setLogs] = useState<ActivityLog[]>([]);
   const [adminUsers, setAdminUsers] = useState<AdminUser[]>([]);
@@ -213,7 +240,48 @@ export default function AdminDashboardPage() {
   const [isAddCategoryOpen, setIsAddCategoryOpen] = useState(false);
   const [isAddBrandOpen, setIsAddBrandOpen] = useState(false);
   const [isAddProductOpen, setIsAddProductOpen] = useState(false);
+  const [isAddSellerOpen, setIsAddSellerOpen] = useState(false);
   const [isAddCouponOpen, setIsAddCouponOpen] = useState(false);
+
+  // Sellers Search & Filter States
+  const [editingSeller, setEditingSeller] = useState<Seller | null>(null);
+  const [sellerSearchQuery, setSellerSearchQuery] = useState('');
+  const [sellerCategoryFilter, setSellerCategoryFilter] = useState('All');
+
+  // Add Seller Form State
+  const [newSellerName, setNewSellerName] = useState('');
+  const [newSellerMainCategory, setNewSellerMainCategory] = useState('');
+  const [newSellerLocation, setNewSellerLocation] = useState('');
+  const [newSellerPhone, setNewSellerPhone] = useState('');
+  const [newSellerEmail, setNewSellerEmail] = useState('');
+  const [newSellerGst, setNewSellerGst] = useState('');
+  const [newSellerContactPerson, setNewSellerContactPerson] = useState('');
+  const [newSellerNature, setNewSellerNature] = useState('Wholesale Supplier & Manufacturer');
+  const [newSellerTrustScore, setNewSellerTrustScore] = useState('Verified TrustSEAL');
+  const [newSellerRating, setNewSellerRating] = useState('4.8');
+  const [newSellerResponseTime, setNewSellerResponseTime] = useState('< 2 Hours');
+
+  // Edit Seller Form State
+  const [editSellerName, setEditSellerName] = useState('');
+  const [editSellerMainCategory, setEditSellerMainCategory] = useState('');
+  const [editSellerLocation, setEditSellerLocation] = useState('');
+  const [editSellerPhone, setEditSellerPhone] = useState('');
+  const [editSellerEmail, setEditSellerEmail] = useState('');
+  const [editSellerGst, setEditSellerGst] = useState('');
+  const [editSellerContactPerson, setEditSellerContactPerson] = useState('');
+  const [editSellerNature, setEditSellerNature] = useState('Verified Supplier');
+  const [editSellerTrustScore, setEditSellerTrustScore] = useState('Verified TrustSEAL');
+  const [editSellerStatus, setEditSellerStatus] = useState('Active');
+
+  // Product Seller assignment states for Add Product
+  const [newProdSellerId, setNewProdSellerId] = useState('');
+  const [newProdSellerName, setNewProdSellerName] = useState('');
+  const [newProdSellerLocation, setNewProdSellerLocation] = useState('');
+
+  // Product Seller assignment states for Edit Product
+  const [editProdSellerId, setEditProdSellerId] = useState('');
+  const [editProdSellerName, setEditProdSellerName] = useState('');
+  const [editProdSellerLocation, setEditProdSellerLocation] = useState('');
 
   // Blogs States
   const [blogs, setBlogs] = useState<any[]>([]);
@@ -413,6 +481,8 @@ export default function AdminDashboardPage() {
       isAddCategoryOpen ||
       isAddBrandOpen ||
       isAddProductOpen ||
+      isAddSellerOpen ||
+      editingSeller !== null ||
       isAddCouponOpen ||
       isBlogModalOpen ||
       isUpdateStatusModalOpen ||
@@ -430,6 +500,8 @@ export default function AdminDashboardPage() {
     isAddCategoryOpen,
     isAddBrandOpen,
     isAddProductOpen,
+    isAddSellerOpen,
+    editingSeller,
     isAddCouponOpen,
     isBlogModalOpen,
     isUpdateStatusModalOpen,
@@ -540,6 +612,7 @@ export default function AdminDashboardPage() {
         fetchAdminCategories(),
         fetchAdminBrands(),
         fetchAdminProducts(),
+        fetchAdminSellers(),
         fetchCoupons(),
         fetchLogs(),
         fetchSettings(),
@@ -588,6 +661,16 @@ export default function AdminDashboardPage() {
     const res = await fetch('/api/admin/products');
     const data = await res.json();
     if (data.success) setAdminProducts(data.products.reverse());
+  };
+
+  const fetchAdminSellers = async () => {
+    try {
+      const res = await fetch('/api/admin/sellers');
+      const data = await res.json();
+      if (data.success) setSellers(data.sellers);
+    } catch (e) {
+      console.error('Error fetching admin sellers:', e);
+    }
   };
 
   const fetchCoupons = async () => {
@@ -827,6 +910,22 @@ export default function AdminDashboardPage() {
       }
     } catch (e) {
       alert('Error deleting product');
+    }
+  };
+
+  const handleDeleteSeller = async (id: string, name?: string) => {
+    if (!confirm(`Are you sure you want to delete supplier "${name || 'this supplier'}"? Any products assigned to this supplier will have their supplier detached.`)) return;
+    try {
+      const res = await fetch(`/api/admin/sellers?id=${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) {
+        setSellers(prev => prev.filter(item => item.id !== id));
+        fetchLogs();
+      } else {
+        alert(data.error || 'Failed to delete seller');
+      }
+    } catch (e) {
+      alert('Error deleting seller');
     }
   };
 
@@ -1435,7 +1534,10 @@ export default function AdminDashboardPage() {
           featured: newProdFeatured,
           onOffer: newProdOnOffer,
           warranty: newProdWarranty,
-          lowStockThreshold: newProdLowStockThreshold
+          lowStockThreshold: newProdLowStockThreshold,
+          sellerId: newProdSellerId,
+          sellerName: newProdSellerName,
+          sellerLocation: newProdSellerLocation
         })
       });
       const data = await res.json();
@@ -1456,6 +1558,9 @@ export default function AdminDashboardPage() {
         setNewProdOnOffer(false);
         setNewProdWarranty('0');
         setNewProdLowStockThreshold('10');
+        setNewProdSellerId('');
+        setNewProdSellerName('');
+        setNewProdSellerLocation('');
         setIsAddProductOpen(false);
         fetchLogs();
       }
@@ -1491,6 +1596,9 @@ export default function AdminDashboardPage() {
     setEditProdOnOffer(prod.onOffer === true);
     setEditProdWarranty(String(prod.warranty !== undefined ? prod.warranty : 0));
     setEditProdLowStockThreshold(String(prod.lowStockThreshold !== undefined ? prod.lowStockThreshold : 10));
+    setEditProdSellerId(prod.sellerId || '');
+    setEditProdSellerName(prod.sellerName || '');
+    setEditProdSellerLocation(prod.sellerLocation || '');
   };
 
   const handleSaveCategory = async (e: React.FormEvent) => {
@@ -1600,7 +1708,10 @@ export default function AdminDashboardPage() {
           featured: editProdFeatured,
           onOffer: editProdOnOffer,
           warranty: editProdWarranty,
-          lowStockThreshold: editProdLowStockThreshold
+          lowStockThreshold: editProdLowStockThreshold,
+          sellerId: editProdSellerId,
+          sellerName: editProdSellerName,
+          sellerLocation: editProdSellerLocation
         })
       });
       const data = await res.json();
@@ -1613,6 +1724,99 @@ export default function AdminDashboardPage() {
       }
     } catch (err) {
       alert('Error updating product.');
+    }
+  };
+
+  const handleAddSeller = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newSellerName.trim() || !newSellerMainCategory.trim()) {
+      alert('Seller Name and Main Category are required.');
+      return;
+    }
+    try {
+      const res = await fetch('/api/admin/sellers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: newSellerName,
+          mainCategory: newSellerMainCategory,
+          location: newSellerLocation,
+          phone: newSellerPhone,
+          email: newSellerEmail,
+          gstNumber: newSellerGst,
+          contactPerson: newSellerContactPerson,
+          natureOfBusiness: newSellerNature,
+          trustScore: newSellerTrustScore,
+          rating: newSellerRating,
+          responseTime: newSellerResponseTime
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setSellers(prev => [data.seller, ...prev]);
+        setNewSellerName('');
+        setNewSellerMainCategory('');
+        setNewSellerLocation('');
+        setNewSellerPhone('');
+        setNewSellerEmail('');
+        setNewSellerGst('');
+        setNewSellerContactPerson('');
+        setIsAddSellerOpen(false);
+        fetchLogs();
+      } else {
+        alert(data.error || 'Failed to add seller.');
+      }
+    } catch (err) {
+      alert('Error creating seller.');
+    }
+  };
+
+  const handleEditSeller = (seller: Seller) => {
+    setEditingSeller(seller);
+    setEditSellerName(seller.name);
+    setEditSellerMainCategory(seller.mainCategory);
+    setEditSellerLocation(seller.location);
+    setEditSellerPhone(seller.phone || '');
+    setEditSellerEmail(seller.email || '');
+    setEditSellerGst(seller.gstNumber || '');
+    setEditSellerContactPerson(seller.contactPerson || '');
+    setEditSellerNature(seller.natureOfBusiness || 'Verified Supplier');
+    setEditSellerTrustScore(seller.trustScore || 'Verified TrustSEAL');
+    setEditSellerStatus(seller.status || 'Active');
+  };
+
+  const handleSaveSeller = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingSeller) return;
+    try {
+      const res = await fetch('/api/admin/sellers', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: editingSeller.id,
+          name: editSellerName,
+          mainCategory: editSellerMainCategory,
+          location: editSellerLocation,
+          phone: editSellerPhone,
+          email: editSellerEmail,
+          gstNumber: editSellerGst,
+          contactPerson: editSellerContactPerson,
+          natureOfBusiness: editSellerNature,
+          trustScore: editSellerTrustScore,
+          status: editSellerStatus
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setSellers(prev => prev.map(s => s.id === editingSeller.id ? { ...s, ...data.seller } : s));
+        fetchAdminProducts();
+        setEditingSeller(null);
+        fetchLogs();
+      } else {
+        alert(data.error || 'Failed to update seller.');
+      }
+    } catch (err) {
+      alert('Error updating seller.');
     }
   };
 
@@ -2149,8 +2353,21 @@ export default function AdminDashboardPage() {
 
   const filteredProducts = adminProducts.filter(prod =>
     (prod.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (prod.category || '').toLowerCase().includes(searchQuery.toLowerCase())
+    (prod.category || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (prod.sellerName || '').toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const filteredSellers = sellers.filter(seller => {
+    const matchesCategory = sellerCategoryFilter === 'All' || seller.mainCategory.toLowerCase() === sellerCategoryFilter.toLowerCase();
+    const query = sellerSearchQuery.toLowerCase().trim();
+    const matchesSearch = !query ||
+      (seller.name || '').toLowerCase().includes(query) ||
+      (seller.location || '').toLowerCase().includes(query) ||
+      (seller.mainCategory || '').toLowerCase().includes(query) ||
+      (seller.contactPerson || '').toLowerCase().includes(query) ||
+      (seller.gstNumber || '').toLowerCase().includes(query);
+    return matchesCategory && matchesSearch;
+  });
 
 
 
@@ -2310,6 +2527,20 @@ export default function AdminDashboardPage() {
               <line x1="12" y1="22.08" x2="12" y2="12" />
             </svg>
             {!sidebarCollapsed && <span>Products</span>}
+          </button>
+
+          {/* Sellers */}
+          <button
+            onClick={() => handleTabChange('sellers')}
+            className={`${styles.sidebarItem} ${activeTab === 'sellers' ? styles.sidebarItemActive : ''}`}
+            title={sidebarCollapsed ? "Sellers" : undefined}
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="8.5" cy="7" r="4" />
+              <polyline points="17 11 19 13 23 9" />
+            </svg>
+            {!sidebarCollapsed && <span>Sellers</span>}
           </button>
 
           {/* Brands */}
@@ -3469,6 +3700,7 @@ export default function AdminDashboardPage() {
                             <th className={styles.th}>Product Name</th>
                             <th className={styles.th}>SKU</th>
                             <th className={styles.th}>Category</th>
+                            <th className={styles.th}>Supplier / Seller</th>
                             <th className={styles.th}>Price</th>
                             <th className={styles.th}>Stock</th>
                             <th className={styles.th}>Status</th>
@@ -3488,6 +3720,16 @@ export default function AdminDashboardPage() {
                                   {prod.category}
                                 </span>
                               </td>
+                              <td className={styles.td}>
+                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                  <span style={{ fontWeight: 600, color: '#0f766e', fontSize: '13px' }}>
+                                    {prod.sellerName || 'Auto-Assigned'}
+                                  </span>
+                                  {prod.sellerLocation && (
+                                    <span style={{ fontSize: '11px', color: '#888' }}>📍 {prod.sellerLocation}</span>
+                                  )}
+                                </div>
+                              </td>
                               <td className={styles.td} style={{ color: '#111', fontWeight: 600 }}>{prod.price}</td>
                               <td className={styles.td} style={{ fontWeight: 500 }}>{prod.stock !== undefined ? prod.stock : 'N/A'}</td>
                               <td className={styles.td}>
@@ -3500,6 +3742,145 @@ export default function AdminDashboardPage() {
                                   Edit
                                 </button>
                                 <button className={styles.deleteBtn} onClick={() => handleDeleteProduct(prod.id)}>
+                                  Delete
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* === SELLERS TAB === */}
+              {activeTab === 'sellers' && (
+                <div className={styles.panelCard}>
+                  <div className={styles.panelHeader} style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '0.75rem', padding: '1.75rem 2rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+                      <div>
+                        <h3 className={styles.panelTitle} style={{ fontSize: '24px', textTransform: 'none', fontWeight: 700, margin: 0 }}>
+                          Sellers & Verified Suppliers
+                        </h3>
+                        <p style={{ color: '#666', fontSize: '14px', margin: '4px 0 0 0' }}>
+                          IndiaMART-style verified suppliers, manufacturers & distributors assigned to main product categories.
+                        </p>
+                      </div>
+                      <button className={styles.addBtn} onClick={() => setIsAddSellerOpen(true)} style={{ backgroundColor: '#00a8b5', border: 'none', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <line x1="12" y1="5" x2="12" y2="19" />
+                          <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg>
+                        + Add Supplier
+                      </button>
+                    </div>
+
+                    <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.5rem', flexWrap: 'wrap', gap: '0.75rem' }}>
+                      <div className={styles.searchWrapper} style={{ maxWidth: '340px', width: '100%', backgroundColor: '#fff', border: '1px solid #e2e2e8' }}>
+                        <span className={styles.searchIcon}>🔍</span>
+                        <input
+                          type="text"
+                          placeholder="Search suppliers by name, city, GST, category..."
+                          className={styles.searchInput}
+                          value={sellerSearchQuery}
+                          onChange={(e) => setSellerSearchQuery(e.target.value)}
+                        />
+                      </div>
+
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <span style={{ fontSize: '13px', fontWeight: 600, color: '#555' }}>Main Category:</span>
+                        <select
+                          className={styles.formSelect}
+                          style={{ width: 'auto', minWidth: '180px', height: '38px', padding: '0 0.75rem', fontSize: '13.5px' }}
+                          value={sellerCategoryFilter}
+                          onChange={(e) => setSellerCategoryFilter(e.target.value)}
+                        >
+                          <option value="All">All Categories ({sellers.length})</option>
+                          {categories.map((c) => {
+                            const count = sellers.filter(s => s.mainCategory.toLowerCase() === c.name.toLowerCase()).length;
+                            return (
+                              <option key={c.id} value={c.name}>
+                                {c.name} {count > 0 ? `(${count})` : ''}
+                              </option>
+                            );
+                          })}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className={styles.tableWrapper}>
+                    {filteredSellers.length === 0 ? (
+                      <div className={styles.emptyState}>No suppliers found matching criteria.</div>
+                    ) : (
+                      <table className={styles.table}>
+                        <thead>
+                          <tr>
+                            <th className={styles.th}>Company / Supplier</th>
+                            <th className={styles.th}>Main Category</th>
+                            <th className={styles.th}>Location</th>
+                            <th className={styles.th}>Contact Info</th>
+                            <th className={styles.th}>GST Number</th>
+                            <th className={styles.th}>TrustSEAL / Rating</th>
+                            <th className={styles.th}>Status</th>
+                            <th className={styles.th} style={{ textAlign: 'right', paddingRight: '2rem' }}>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {filteredSellers.map((s) => (
+                            <tr key={s.id} className={styles.tr}>
+                              <td className={styles.td}>
+                                <div>
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                    <span style={{ fontWeight: 600, color: '#111', fontSize: '14px' }}>{s.name}</span>
+                                    {s.verified && (
+                                      <span title="IndiaMART Verified Supplier" style={{ color: '#059669', fontSize: '13px', fontWeight: 'bold' }}>✓</span>
+                                    )}
+                                  </div>
+                                  <div style={{ fontSize: '12px', color: '#666', marginTop: '2px' }}>
+                                    {s.natureOfBusiness || 'Verified Supplier'} {s.memberSince ? `• Since ${s.memberSince}` : ''}
+                                  </div>
+                                </div>
+                              </td>
+                              <td className={styles.td}>
+                                <span className={styles.badgeParent} style={{ backgroundColor: '#eff6ff', color: '#1d4ed8', border: '1px solid #bfdbfe' }}>
+                                  {s.mainCategory}
+                                </span>
+                              </td>
+                              <td className={styles.td}>
+                                <div style={{ fontSize: '13.5px', color: '#333' }}>📍 {s.location}</div>
+                                {s.responseTime && (
+                                  <div style={{ fontSize: '11.5px', color: '#777', marginTop: '2px' }}>⚡ {s.responseTime}</div>
+                                )}
+                              </td>
+                              <td className={styles.td}>
+                                <div style={{ fontSize: '13px', color: '#222', fontWeight: 500 }}>{s.contactPerson || 'N/A'}</div>
+                                {s.phone && <div style={{ fontSize: '12px', color: '#555' }}>📞 {s.phone}</div>}
+                                {s.email && <div style={{ fontSize: '12px', color: '#00a8b5' }}>✉️ {s.email}</div>}
+                              </td>
+                              <td className={styles.td} style={{ fontFamily: 'monospace', fontSize: '12.5px', color: '#444' }}>
+                                {s.gstNumber || 'N/A'}
+                              </td>
+                              <td className={styles.td}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                  <span style={{ color: '#f59e0b', fontSize: '12px' }}>★</span>
+                                  <span style={{ fontWeight: 600, fontSize: '13px', color: '#333' }}>{s.rating || 4.8}</span>
+                                </div>
+                                <div style={{ fontSize: '11.5px', color: '#059669', fontWeight: 500, marginTop: '2px' }}>
+                                  {s.trustScore || 'Verified TrustSEAL'}
+                                </div>
+                              </td>
+                              <td className={styles.td}>
+                                <span className={styles.badgeVisible}>
+                                  {s.status || 'Active'}
+                                </span>
+                              </td>
+                              <td className={styles.td} style={{ textAlign: 'right', paddingRight: '2rem' }}>
+                                <button className={styles.editBtn} onClick={() => handleEditSeller(s)} style={{ fontWeight: 600 }}>
+                                  Edit
+                                </button>
+                                <button className={styles.deleteBtn} onClick={() => handleDeleteSeller(s.id, s.name)} style={{ fontWeight: 600 }}>
                                   Delete
                                 </button>
                               </td>
@@ -6016,6 +6397,279 @@ export default function AdminDashboardPage() {
         </div>
       )}
 
+      {/* Add Seller Modal */}
+      {isAddSellerOpen && (
+        <div className={styles.modalOverlay} onClick={() => setIsAddSellerOpen(false)}>
+          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()} style={{ maxWidth: '620px' }}>
+            <button className={styles.modalClose} onClick={() => setIsAddSellerOpen(false)}>×</button>
+            <h4 className={styles.modalTitle} style={{ margin: 0 }}>Add New Supplier / Seller</h4>
+            <p style={{ color: '#666', fontSize: '13.5px', marginTop: '4px', marginBottom: '1.5rem' }}>
+              Register a verified manufacturer, wholesaler, or distributor to a main product category.
+            </p>
+            <form onSubmit={handleAddSeller}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div className={styles.formGroup} style={{ gridColumn: 'span 2' }}>
+                  <label className={styles.formLabel}>Company / Supplier Name *</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. KalaNiketan Apparels & Textiles Pvt Ltd"
+                    className={styles.loginInput}
+                    value={newSellerName}
+                    onChange={(e) => setNewSellerName(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label className={styles.formLabel}>Main Category *</label>
+                  <select
+                    className={styles.formSelect}
+                    value={newSellerMainCategory}
+                    onChange={(e) => setNewSellerMainCategory(e.target.value)}
+                    required
+                  >
+                    <option value="">Select Category</option>
+                    {categories.map((c) => (
+                      <option key={c.id} value={c.name}>{c.name}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label className={styles.formLabel}>Location (City, State) *</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Surat, Gujarat"
+                    className={styles.loginInput}
+                    value={newSellerLocation}
+                    onChange={(e) => setNewSellerLocation(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label className={styles.formLabel}>GST Number (Optional)</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. 24AAPCK1029F1Z2"
+                    className={styles.loginInput}
+                    value={newSellerGst}
+                    onChange={(e) => setNewSellerGst(e.target.value)}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label className={styles.formLabel}>Contact Person</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Pravinbhai Patel"
+                    className={styles.loginInput}
+                    value={newSellerContactPerson}
+                    onChange={(e) => setNewSellerContactPerson(e.target.value)}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label className={styles.formLabel}>Phone / Mobile</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. +91 98251 44556"
+                    className={styles.loginInput}
+                    value={newSellerPhone}
+                    onChange={(e) => setNewSellerPhone(e.target.value)}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label className={styles.formLabel}>Email Address</label>
+                  <input
+                    type="email"
+                    placeholder="e.g. sales@company.in"
+                    className={styles.loginInput}
+                    value={newSellerEmail}
+                    onChange={(e) => setNewSellerEmail(e.target.value)}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label className={styles.formLabel}>Nature of Business</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Manufacturer & Direct Exporter"
+                    className={styles.loginInput}
+                    value={newSellerNature}
+                    onChange={(e) => setNewSellerNature(e.target.value)}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label className={styles.formLabel}>Trust Badge</label>
+                  <select
+                    className={styles.formSelect}
+                    value={newSellerTrustScore}
+                    onChange={(e) => setNewSellerTrustScore(e.target.value)}
+                  >
+                    <option value="Verified TrustSEAL">Verified TrustSEAL</option>
+                    <option value="Leading Supplier">Leading Supplier</option>
+                    <option value="Star Supplier">Star Supplier</option>
+                    <option value="Certified Wholesaler">Certified Wholesaler</option>
+                  </select>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                className={styles.loginBtn}
+                style={{
+                  marginTop: '1.5rem',
+                  width: '100%',
+                  backgroundColor: '#00a8b5',
+                  border: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 600
+                }}
+              >
+                + Register Supplier
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Seller Modal */}
+      {editingSeller && (
+        <div className={styles.modalOverlay} onClick={() => setEditingSeller(null)}>
+          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()} style={{ maxWidth: '620px' }}>
+            <button className={styles.modalClose} onClick={() => setEditingSeller(null)}>×</button>
+            <h4 className={styles.modalTitle} style={{ margin: 0 }}>Edit Supplier / Seller</h4>
+            <p style={{ color: '#666', fontSize: '13.5px', marginTop: '4px', marginBottom: '1.5rem' }}>
+              Update verified supplier credentials and assigned main category.
+            </p>
+            <form onSubmit={handleSaveSeller}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div className={styles.formGroup} style={{ gridColumn: 'span 2' }}>
+                  <label className={styles.formLabel}>Company / Supplier Name *</label>
+                  <input
+                    type="text"
+                    className={styles.loginInput}
+                    value={editSellerName}
+                    onChange={(e) => setEditSellerName(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label className={styles.formLabel}>Main Category *</label>
+                  <select
+                    className={styles.formSelect}
+                    value={editSellerMainCategory}
+                    onChange={(e) => setEditSellerMainCategory(e.target.value)}
+                    required
+                  >
+                    <option value="">Select Category</option>
+                    {categories.map((c) => (
+                      <option key={c.id} value={c.name}>{c.name}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label className={styles.formLabel}>Location (City, State) *</label>
+                  <input
+                    type="text"
+                    className={styles.loginInput}
+                    value={editSellerLocation}
+                    onChange={(e) => setEditSellerLocation(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label className={styles.formLabel}>GST Number</label>
+                  <input
+                    type="text"
+                    className={styles.loginInput}
+                    value={editSellerGst}
+                    onChange={(e) => setEditSellerGst(e.target.value)}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label className={styles.formLabel}>Contact Person</label>
+                  <input
+                    type="text"
+                    className={styles.loginInput}
+                    value={editSellerContactPerson}
+                    onChange={(e) => setEditSellerContactPerson(e.target.value)}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label className={styles.formLabel}>Phone / Mobile</label>
+                  <input
+                    type="text"
+                    className={styles.loginInput}
+                    value={editSellerPhone}
+                    onChange={(e) => setEditSellerPhone(e.target.value)}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label className={styles.formLabel}>Email Address</label>
+                  <input
+                    type="email"
+                    className={styles.loginInput}
+                    value={editSellerEmail}
+                    onChange={(e) => setEditSellerEmail(e.target.value)}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label className={styles.formLabel}>Nature of Business</label>
+                  <input
+                    type="text"
+                    className={styles.loginInput}
+                    value={editSellerNature}
+                    onChange={(e) => setEditSellerNature(e.target.value)}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label className={styles.formLabel}>Status</label>
+                  <select
+                    className={styles.formSelect}
+                    value={editSellerStatus}
+                    onChange={(e) => setEditSellerStatus(e.target.value)}
+                  >
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                  </select>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                className={styles.loginBtn}
+                style={{
+                  marginTop: '1.5rem',
+                  width: '100%',
+                  backgroundColor: '#00a8b5',
+                  border: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 600
+                }}
+              >
+                Save Supplier Changes
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* Add category modal */}
       {isAddCategoryOpen && (
         <div className={styles.modalOverlay} onClick={() => setIsAddCategoryOpen(false)}>
@@ -6379,13 +7033,22 @@ export default function AdminDashboardPage() {
 
                   {/* Organization */}
                   <div className={styles.modalSection}>
-                    <h5 className={styles.modalSectionTitle}>Organization</h5>
+                    <h5 className={styles.modalSectionTitle}>Organization & Supplier</h5>
                     <div className={styles.formGroup}>
                       <label className={styles.formLabel}>Category *</label>
                       <select
                         className={styles.formSelect}
                         value={newProdCategory}
-                        onChange={(e) => setNewProdCategory(e.target.value)}
+                        onChange={(e) => {
+                          const catVal = e.target.value;
+                          setNewProdCategory(catVal);
+                          const matched = sellers.find(s => s.mainCategory.toLowerCase() === catVal.toLowerCase());
+                          if (matched) {
+                            setNewProdSellerId(matched.id);
+                            setNewProdSellerName(matched.name);
+                            setNewProdSellerLocation(matched.location);
+                          }
+                        }}
                         required
                       >
                         <option value="">Select Category</option>
@@ -6405,6 +7068,32 @@ export default function AdminDashboardPage() {
                         <option value="">Select Brand</option>
                         {brands.map((b) => (
                           <option key={b.id} value={b.name}>{b.name}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className={styles.formGroup}>
+                      <label className={styles.formLabel}>Supplier / Seller</label>
+                      <select
+                        className={styles.formSelect}
+                        value={newProdSellerId}
+                        onChange={(e) => {
+                          const sid = e.target.value;
+                          setNewProdSellerId(sid);
+                          const sel = sellers.find(s => s.id === sid);
+                          if (sel) {
+                            setNewProdSellerName(sel.name);
+                            setNewProdSellerLocation(sel.location);
+                          } else {
+                            setNewProdSellerName('');
+                            setNewProdSellerLocation('');
+                          }
+                        }}
+                      >
+                        <option value="">Auto-Assign by Category</option>
+                        {sellers.map((s) => (
+                          <option key={s.id} value={s.id}>
+                            {s.name} ({s.mainCategory} - {s.location})
+                          </option>
                         ))}
                       </select>
                     </div>
@@ -6610,6 +7299,33 @@ export default function AdminDashboardPage() {
                         <option value="">Select Brand</option>
                         {brands.map((b) => (
                           <option key={b.id} value={b.name}>{b.name}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className={styles.formGroup}>
+                      <label className={styles.formLabel}>Supplier / Seller</label>
+                      <select
+                        className={styles.formSelect}
+                        value={editProdSellerId}
+                        onChange={(e) => {
+                          const sid = e.target.value;
+                          setEditProdSellerId(sid);
+                          const sel = sellers.find(s => s.id === sid);
+                          if (sel) {
+                            setEditProdSellerName(sel.name);
+                            setEditProdSellerLocation(sel.location);
+                          } else {
+                            setEditProdSellerName('');
+                            setEditProdSellerLocation('');
+                          }
+                        }}
+                      >
+                        <option value="">Select / Reassign Supplier</option>
+                        {sellers.map((s) => (
+                          <option key={s.id} value={s.id}>
+                            {s.name} ({s.mainCategory} - {s.location})
+                          </option>
                         ))}
                       </select>
                     </div>
