@@ -3,17 +3,86 @@ import { getDb } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 import { logActivity } from '@/lib/activity';
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
     const db = await getDb();
-    const products = await db.collection('products').find().toArray();
-    
+    const collection = db.collection('products');
+    const { searchParams } = new URL(request.url);
+
+    const exportAll = searchParams.get('export') === 'true';
+    const allParam = searchParams.get('all') === 'true';
+
+    // If exporting CSV or explicitly requesting export
+    if (exportAll) {
+      const products = await collection.find({}, {
+        projection: {
+          name: 1, sku: 1, category: 1, sellerName: 1, sellerLocation: 1,
+          price: 1, stock: 1, status: 1, brand: 1, mrp: 1, discount: 1
+        }
+      }).sort({ _id: -1 }).toArray();
+
+      const formatted = products.map(doc => ({
+        id: doc._id.toString(),
+        name: doc.name,
+        price: doc.price,
+        category: doc.category,
+        brand: doc.brand || '',
+        sku: doc.sku || '',
+        stock: doc.stock !== undefined ? doc.stock : 10,
+        status: doc.status || 'PUBLISHED',
+        sellerName: doc.sellerName || '',
+        sellerLocation: doc.sellerLocation || ''
+      }));
+      return NextResponse.json({ success: true, products: formatted, total: formatted.length });
+    }
+
+    const pageParam = parseInt(searchParams.get('page') || '1', 10);
+    const page = Math.max(1, isNaN(pageParam) ? 1 : pageParam);
+
+    const limitParam = parseInt(searchParams.get('limit') || '25', 10);
+    const limit = allParam ? 200 : Math.min(Math.max(1, isNaN(limitParam) ? 25 : limitParam), 200);
+
+    const search = (searchParams.get('search') || '').trim();
+    const category = searchParams.get('category');
+    const status = searchParams.get('status');
+
+    const escapeRegex = (s: string) => s.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+
+    const filter: any = {};
+    if (search) {
+      const sReg = { $regex: escapeRegex(search), $options: 'i' };
+      filter.$or = [
+        { name: sReg },
+        { sku: sReg },
+        { category: sReg },
+        { sellerName: sReg },
+        { brand: sReg }
+      ];
+    }
+
+    if (category && category !== 'All') {
+      filter.category = { $regex: new RegExp(`^${escapeRegex(category)}$`, 'i') };
+    }
+
+    if (status && status !== 'All') {
+      filter.status = status;
+    }
+
+    const [total, products] = await Promise.all([
+      collection.countDocuments(filter),
+      collection.find(filter)
+        .sort({ _id: -1 })
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .toArray()
+    ]);
+
     const formatted = products.map(doc => ({
       id: doc._id.toString(),
       slug: doc.slug || doc.name.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-'),
       name: doc.name,
-      price: doc.price,
-      image: doc.image,
+      price: doc.price || `₹${(doc.numericPrice || 0).toLocaleString('en-IN')}`,
+      image: doc.image || '/images/default_product.png',
       link: doc.link,
       category: doc.category,
       brand: doc.brand || 'Dell',
@@ -34,7 +103,16 @@ export async function GET() {
       sellerTrustScore: doc.sellerTrustScore || ''
     }));
 
-    return NextResponse.json({ success: true, products: formatted });
+    return NextResponse.json({
+      success: true,
+      products: formatted,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit) || 1
+      }
+    });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }

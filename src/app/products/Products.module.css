@@ -301,6 +301,7 @@
   border: 1px solid #e1e1e6;
   border-radius: 12px;
   padding: 1.25rem 1.15rem;
+  overflow: hidden;
 }
 
 .widgetTitle {
@@ -321,9 +322,10 @@
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  max-height: 250px;
+  gap: 0.35rem;
+  max-height: 290px;
   overflow-y: auto;
+  overflow-x: hidden;
   padding-right: 6px;
 }
 
@@ -347,22 +349,35 @@
 
 .widgetItem {
   font-family: 'Outfit', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 300;
-  color: #555555;
+  font-size: 0.92rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #4b5563;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.15s ease;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 4px 6px;
-  border-radius: 6px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  gap: 10px;
+  flex-shrink: 0;
+  min-height: 36px;
+}
+
+.widgetItem span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 175px;
+  line-height: 1.4;
+  text-transform: capitalize;
 }
 
 .widgetItem:hover {
   color: var(--primary);
   background-color: var(--primary-light, #fff0ed);
-  transform: translateX(3px);
+  transform: translateX(2px);
 }
 
 .activeWidgetItem {
@@ -372,11 +387,14 @@
 }
 
 .itemCount {
-  font-size: 0.8rem;
-  color: #888888;
-  background-color: #f0f0f4;
-  padding: 2px 7px;
-  border-radius: 10px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #6b7280;
+  background-color: #f3f4f6;
+  padding: 2px 8px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  line-height: 1.3;
 }
 
 .headerActionsWrapper {

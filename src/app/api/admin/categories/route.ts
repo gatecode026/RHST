@@ -6,8 +6,24 @@ export async function GET() {
   try {
     const db = await getDb();
     const categories = await db.collection('categories').find().toArray();
+
+    const isGarbageCategory = (name: string) => {
+      if (!name || typeof name !== 'string') return true;
+      const str = name.trim();
+      if (str.length === 0 || str.length > 40) return true;
+      if (/^https?:\/\//i.test(str)) return true;
+      if (/www\./i.test(str)) return true;
+      if (/\.(com|org|net|html|php|jpg|png|jpeg)\b/i.test(str)) return true;
+      if (/%25|%20|\/c\/product|\.p\?/i.test(str)) return true;
+      if (/^\d{4}-\d{2}-\d{2}/.test(str)) return true;
+      if (/^(true|false|undefined|null|none|n\/a)$/i.test(str)) return true;
+      if (/^[A-Z0-9]{10}$/.test(str)) return true;
+      return false;
+    };
+
+    const cleanCategories = categories.filter(c => !isGarbageCategory(c.name));
     
-    const formatted = categories.map(doc => ({
+    const formatted = cleanCategories.map(doc => ({
       id: doc._id.toString(),
       name: doc.name,
       image: doc.image,

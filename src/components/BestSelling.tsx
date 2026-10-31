@@ -30,7 +30,7 @@ export default function BestSelling() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch('/api/products?t=' + Date.now(), { cache: 'no-store' });
+        const res = await fetch('/api/products?limit=12', { cache: 'no-store' });
         const data = await res.json();
         if (data.success) {
           setProducts(data.products);

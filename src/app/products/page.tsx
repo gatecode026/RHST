@@ -65,119 +65,236 @@ function ProductsCatalogContent() {
   }, [searchParams]);
 
   // Dynamic products states
-  const [dbProducts, setDbProducts] = useState<any[]>([]);
+  const [products, setProducts] = useState<any[]>([]);
+  const [totalProducts, setTotalProducts] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
   const [dbCategories, setDbCategories] = useState<any[]>([]);
   const [dbBrands, setDbBrands] = useState<any[]>([]);
   const [dbSellers, setDbSellers] = useState<any[]>([]);
+  const [facetCounts, setFacetCounts] = useState<{
+    total: number;
+    categories: Record<string, number>;
+    brands: Record<string, number>;
+    sellers: Record<string, number>;
+    priceRanges: Record<string, number>;
+  }>({ total: 0, categories: {}, brands: {}, sellers: {}, priceRanges: {} });
   const [loading, setLoading] = useState(true);
 
+  // Load initial catalog metadata (categories, brands, sellers, fast facet counts)
   useEffect(() => {
-    const loadDynamicData = async () => {
+    const loadMetadata = async () => {
       try {
-        const [prodRes, catRes, brandRes, sellerRes] = await Promise.all([
-          fetch('/api/products?t=' + Date.now(), { cache: 'no-store' }),
+        const [catRes, brandRes, sellerRes, facetRes] = await Promise.all([
           fetch('/api/categories?t=' + Date.now(), { cache: 'no-store' }),
           fetch('/api/brands?t=' + Date.now(), { cache: 'no-store' }),
-          fetch('/api/sellers?t=' + Date.now(), { cache: 'no-store' })
+          fetch('/api/sellers?t=' + Date.now(), { cache: 'no-store' }),
+          fetch('/api/products/facets?t=' + Date.now(), { cache: 'no-store' })
         ]);
-        const prodData = await prodRes.json();
         const catData = await catRes.json();
         const brandData = await brandRes.json();
         const sellerData = await sellerRes.json();
-        if (prodData.success) {
-          setDbProducts(prodData.products);
-        }
-        if (catData.success) {
-          setDbCategories(catData.categories);
-        }
-        if (brandData.success) {
-          setDbBrands(brandData.brands);
-        }
-        if (sellerData.success) {
-          setDbSellers(sellerData.sellers);
+        const facetData = await facetRes.json();
+
+        if (catData.success && catData.categories) setDbCategories(catData.categories);
+        if (brandData.success && brandData.brands) setDbBrands(brandData.brands);
+        if (sellerData.success && sellerData.sellers) setDbSellers(sellerData.sellers);
+
+        if (facetData.success) {
+          const catMap: Record<string, number> = {};
+          (facetData.categories || []).forEach((c: any) => {
+            if (c.name) catMap[c.name.toLowerCase()] = c.count;
+          });
+          const brandMap: Record<string, number> = {};
+          (facetData.brands || []).forEach((b: any) => {
+            if (b.name) brandMap[b.name.toLowerCase()] = b.count;
+          });
+          const sellerMap: Record<string, number> = {};
+          (facetData.sellers || []).forEach((s: any) => {
+            if (s.name) sellerMap[s.name.toLowerCase()] = s.count;
+          });
+          setFacetCounts({
+            total: facetData.total || 0,
+            categories: catMap,
+            brands: brandMap,
+            sellers: sellerMap,
+            priceRanges: facetData.priceRanges || {}
+          });
         }
       } catch (err) {
-        console.error('Failed to load products/categories/brands/sellers in catalog:', err);
-      } finally {
-        setLoading(false);
+        console.error('Failed to load catalog metadata:', err);
       }
     };
-    loadDynamicData();
+    loadMetadata();
   }, []);
 
-  const parsePrice = (priceVal: any): number => {
-    if (typeof priceVal === 'number') return priceVal;
-    if (typeof priceVal === 'string') {
-      return parseInt(priceVal.replace(/[^\d]/g, ''), 10) || 0;
-    }
-    return 0;
-  };
+  // Server-side paginated & filtered products fetch
+  useEffect(() => {
+    let isCancelled = false;
+    const fetchPaginatedProducts = async () => {
+      setLoading(true);
+      try {
+        const params = new URLSearchParams();
+        params.set('page', String(currentPage));
+        params.set('limit', '24');
+        if (activeCategory && activeCategory !== 'All') params.set('category', activeCategory);
+        if (activeBrand && activeBrand !== 'All') params.set('brand', activeBrand);
+        if (activeSeller && activeSeller !== 'All') params.set('seller', activeSeller);
+        if (activePriceRange) params.set('priceRange', activePriceRange);
+        if (sortOption && sortOption !== 'default') params.set('sort', sortOption);
+        if (searchQuery.trim()) params.set('search', searchQuery.trim());
 
-  const allProducts = useMemo(() => {
-    return dbProducts.map(p => ({
-      id: p.id,
-      slug: p.slug || p.name.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-'),
-      name: p.name,
-      price: parsePrice(p.price),
-      image: p.image,
-      category: p.category,
-      brand: p.brand || 'Dell',
-      stock: p.stock !== undefined ? p.stock : 99,
-      sellerId: p.sellerId,
-      sellerName: p.sellerName || 'Apex Tech Systems Pvt Ltd',
-      sellerLocation: p.sellerLocation || 'Jaipur, Rajasthan',
-      sellerRating: p.sellerRating || 4.8,
-      sellerVerified: p.sellerVerified !== undefined ? p.sellerVerified : true,
-      sellerTrustScore: p.sellerTrustScore || 'Verified TrustSEAL'
-    }));
-  }, [dbProducts]);
+        const res = await fetch(`/api/products?${params.toString()}`, { cache: 'no-store' });
+        const data = await res.json();
+        if (!isCancelled && data.success) {
+          setProducts(data.products || []);
+          if (data.pagination) {
+            setTotalProducts(data.pagination.total);
+            setTotalPages(data.pagination.totalPages);
+          } else {
+            setTotalProducts((data.products || []).length);
+            setTotalPages(1);
+          }
+        }
+      } catch (err) {
+        if (!isCancelled) console.error('Failed to load products in catalog:', err);
+      } finally {
+        if (!isCancelled) setLoading(false);
+      }
+    };
+    fetchPaginatedProducts();
+    return () => {
+      isCancelled = true;
+    };
+  }, [currentPage, activeCategory, activeBrand, activeSeller, activePriceRange, sortOption, searchQuery]);
 
   const categoriesList = useMemo(() => {
     const list = [{ key: 'All', display: 'All' }];
     const seen = new Set(['all']);
 
+    const isValidCat = (name: string) => {
+      if (!name || typeof name !== 'string') return false;
+      const str = name.trim();
+      if (str.length === 0 || str.length > 35) return false;
+      if (/^https?:\/\//i.test(str)) return false;
+      if (/www\./i.test(str)) return false;
+      if (/\.(com|org|net|html|php|jpg|png|jpeg)\b/i.test(str)) return false;
+      if (/%25|%20|\/c\/product|\.p\?/i.test(str)) return false;
+      if (/^\d{4}-\d{2}-\d{2}/.test(str)) return false;
+      if (/^(true|false|undefined|null|none|n\/a)$/i.test(str)) return false;
+      if (/^[A-Z0-9]{10}$/.test(str)) return false;
+      return true;
+    };
+
+    // First add categories that have actual products in the catalog (sorted by highest product count)
+    const activeCatsWithCounts = Object.entries(facetCounts.categories)
+      .filter(([k, count]) => isValidCat(k) && count > 0)
+      .sort((a, b) => b[1] - a[1]);
+
+    activeCatsWithCounts.forEach(([catKey]) => {
+      const lower = catKey.toLowerCase();
+      if (!seen.has(lower)) {
+        seen.add(lower);
+        const display = catKey.charAt(0).toUpperCase() + catKey.slice(1);
+        list.push({ key: display, display });
+      }
+    });
+
+    // Then add registered dbCategories that are valid and have products
     if (dbCategories.length > 0) {
       dbCategories.forEach(cat => {
-        const keyLower = cat.name.toLowerCase();
-        if (!seen.has(keyLower)) {
+        if (!isValidCat(cat.name)) return;
+        const keyLower = (cat.name || '').toLowerCase();
+        // Do not add if category has 0 products
+        if ((facetCounts.categories[keyLower] || 0) === 0) return;
+        if (keyLower && !seen.has(keyLower)) {
           seen.add(keyLower);
           list.push({ key: cat.name, display: cat.name });
         }
       });
-    } else if (loading) {
-      const baseKeys = ['Hardware', 'Networking', 'Computer Access', 'Office Equipment', 'Gaming Products'];
-      baseKeys.forEach(k => {
-        list.push({ key: k, display: k });
-      });
     }
+
     return list;
-  }, [dbCategories, loading]);
+  }, [dbCategories, facetCounts.categories]);
 
   const brandsList = useMemo(() => {
     const list = [{ key: 'All', display: 'All' }];
     const seen = new Set(['all']);
 
+    const isValidBrand = (name: string) => {
+      if (!name || typeof name !== 'string') return false;
+      const str = name.trim();
+      if (str.length === 0 || str.length > 35) return false;
+      if (/^https?:\/\//i.test(str) || /www\./i.test(str)) return false;
+      if (/\.(com|org|net|html|php|jpg|png|jpeg)\b/i.test(str)) return false;
+      if (/^\d{4}-\d{2}-\d{2}/.test(str)) return false;
+      if (/^(true|false|undefined|null|none|n\/a)$/i.test(str)) return false;
+      return true;
+    };
+
+    // Brands with actual products sorted by count
+    const activeBrands = Object.entries(facetCounts.brands)
+      .filter(([k, count]) => isValidBrand(k) && count > 0)
+      .sort((a, b) => b[1] - a[1]);
+
+    activeBrands.forEach(([brandKey]) => {
+      const lower = brandKey.toLowerCase();
+      if (!seen.has(lower)) {
+        seen.add(lower);
+        const display = brandKey.charAt(0).toUpperCase() + brandKey.slice(1);
+        list.push({ key: display, display });
+      }
+    });
+
     if (dbBrands.length > 0) {
       dbBrands.forEach(b => {
-        if (b.status === 'Hidden') return;
-        const keyLower = b.name.toLowerCase();
-        if (!seen.has(keyLower)) {
+        if (b.status === 'Hidden' || !isValidBrand(b.name)) return;
+        const keyLower = (b.name || '').toLowerCase();
+        if ((facetCounts.brands[keyLower] || 0) === 0) return;
+        if (keyLower && !seen.has(keyLower)) {
           seen.add(keyLower);
           list.push({ key: b.name, display: b.name });
         }
       });
-    } else if (loading) {
-      const baseKeys = ['Asus', 'Samsung', 'Dell'];
-      baseKeys.forEach(k => {
-        list.push({ key: k, display: k });
+    }
+
+    return list;
+  }, [dbBrands, facetCounts.brands]);
+
+  const sellersList = useMemo(() => {
+    const list = [{ key: 'All', display: 'All Verified Suppliers' }];
+    const seen = new Set(['all']);
+
+    // Top verified sellers with actual products sorted by count
+    const activeSellers = Object.entries(facetCounts.sellers)
+      .filter(([k, count]) => count > 0)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 40);
+
+    activeSellers.forEach(([sKey]) => {
+      const lower = sKey.toLowerCase();
+      if (!seen.has(lower)) {
+        seen.add(lower);
+        const display = sKey.charAt(0).toUpperCase() + sKey.slice(1);
+        list.push({ key: display, display });
+      }
+    });
+
+    if (dbSellers.length > 0) {
+      dbSellers.forEach(s => {
+        const keyLower = (s.name || '').toLowerCase();
+        if ((facetCounts.sellers[keyLower] || 0) === 0) return;
+        if (keyLower && !seen.has(keyLower)) {
+          seen.add(keyLower);
+          list.push({ key: s.name, display: s.name });
+        }
       });
     }
+
     return list;
-  }, [dbBrands, loading]);
+  }, [dbSellers, facetCounts.sellers]);
 
   // Scroll to top of window when current page changes
   useEffect(() => {
-    // Only scroll to top if we are NOT restoring scroll from a product detail view
     const saved = sessionStorage.getItem('scroll_pos_before_product_detail');
     if (saved) {
       try {
@@ -226,104 +343,14 @@ function ProductsCatalogContent() {
     setTypedSearch('');
     setActiveCategory('All');
     setActiveBrand('All');
+    setActiveSeller('All');
     setActivePriceRange(null);
     setSortOption('default');
     setCurrentPage(1);
   };
 
-  // Filtered and sorted products
-  const filteredProducts = useMemo(() => {
-    let result = [...allProducts];
-
-    // Search filter
-    if (searchQuery.trim() !== '') {
-      result = result.filter(p =>
-        p.name.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-
-    // Category filter
-    if (activeCategory !== 'All') {
-      result = result.filter(p => p.category.toLowerCase() === activeCategory.toLowerCase());
-    }
-
-    // Brand filter
-    if (activeBrand !== 'All') {
-      result = result.filter(p => p.brand.toLowerCase() === activeBrand.toLowerCase());
-    }
-
-    // Seller filter
-    if (activeSeller !== 'All') {
-      result = result.filter(p => (p.sellerName || '').toLowerCase() === activeSeller.toLowerCase());
-    }
-
-    // Price filter
-    if (activePriceRange) {
-      if (activePriceRange === 'less15') {
-        result = result.filter(p => p.price < 15000);
-      } else if (activePriceRange === '15_25') {
-        result = result.filter(p => p.price >= 15000 && p.price <= 25000);
-      } else if (activePriceRange === '25_50') {
-        result = result.filter(p => p.price >= 25000 && p.price <= 50000);
-      } else if (activePriceRange === '50_75') {
-        result = result.filter(p => p.price >= 50000 && p.price <= 75000);
-      } else if (activePriceRange === '75_100') {
-        result = result.filter(p => p.price >= 75000 && p.price <= 100000);
-      } else if (activePriceRange === '100_125') {
-        result = result.filter(p => p.price >= 100000 && p.price <= 125000);
-      }
-    }
-
-    // Sorting options
-    if (sortOption === 'price_asc') {
-      result.sort((a, b) => a.price - b.price);
-    } else if (sortOption === 'price_desc') {
-      result.sort((a, b) => b.price - a.price);
-    } else if (sortOption === 'name_asc') {
-      result.sort((a, b) => a.name.localeCompare(b.name));
-    }
-
-    return result;
-  }, [allProducts, searchQuery, activeCategory, activeBrand, activeSeller, activePriceRange, sortOption]);
-
-  const sellersList = useMemo(() => {
-    const list = [{ key: 'All', display: 'All Verified Sellers' }];
-    const seen = new Set(['all']);
-
-    if (dbSellers.length > 0) {
-      dbSellers.forEach(s => {
-        const keyLower = s.name.toLowerCase();
-        if (!seen.has(keyLower)) {
-          seen.add(keyLower);
-          list.push({ key: s.name, display: s.name });
-        }
-      });
-    } else {
-      allProducts.forEach(p => {
-        if (p.sellerName) {
-          const keyLower = p.sellerName.toLowerCase();
-          if (!seen.has(keyLower)) {
-            seen.add(keyLower);
-            list.push({ key: p.sellerName, display: p.sellerName });
-          }
-        }
-      });
-    }
-    return list;
-  }, [dbSellers, allProducts]);
-
-  const getSellerCount = (sellerName: string) => {
-    if (sellerName === 'All') return allProducts.length;
-    return allProducts.filter(p => (p.sellerName || '').toLowerCase() === sellerName.toLowerCase()).length;
-  };
-
-  // Pagination logic (24 items per page to fill page cleanly without white space)
   const itemsPerPage = 24;
-  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage) || 1;
-  const paginatedProducts = useMemo(() => {
-    const start = (currentPage - 1) * itemsPerPage;
-    return filteredProducts.slice(start, start + itemsPerPage);
-  }, [filteredProducts, currentPage]);
+  const paginatedProducts = products;
 
   // Generate sliding window of around 5 pages with Prev and Next
   const getPageNumbers = () => {
@@ -349,23 +376,22 @@ function ProductsCatalogContent() {
 
   // Dynamic counts for sidebar widgets
   const getCategoryCount = (catName: string) => {
-    if (catName === 'All') return allProducts.length;
-    return allProducts.filter(p => p.category.toLowerCase() === catName.toLowerCase()).length;
+    if (catName === 'All') return facetCounts.total || totalProducts;
+    return facetCounts.categories[catName.toLowerCase()] || 0;
   };
 
   const getBrandCount = (brandName: string) => {
-    return allProducts.filter(p => p.brand.toLowerCase() === brandName.toLowerCase()).length;
+    return facetCounts.brands[brandName.toLowerCase()] || 0;
+  };
+
+  const getSellerCount = (sellerName: string) => {
+    if (sellerName === 'All') return facetCounts.total || totalProducts;
+    return facetCounts.sellers[sellerName.toLowerCase()] || 0;
   };
 
   const getPriceRangeCount = (rangeKey: string) => {
-    if (rangeKey === 'All') return allProducts.length;
-    if (rangeKey === 'less15') return allProducts.filter(p => p.price < 15000).length;
-    if (rangeKey === '15_25') return allProducts.filter(p => p.price >= 15000 && p.price <= 25000).length;
-    if (rangeKey === '25_50') return allProducts.filter(p => p.price >= 25000 && p.price <= 50000).length;
-    if (rangeKey === '50_75') return allProducts.filter(p => p.price >= 50000 && p.price <= 75000).length;
-    if (rangeKey === '75_100') return allProducts.filter(p => p.price >= 75000 && p.price <= 100000).length;
-    if (rangeKey === '100_125') return allProducts.filter(p => p.price >= 100000 && p.price <= 125000).length;
-    return 0;
+    if (rangeKey === 'All') return facetCounts.total || totalProducts;
+    return facetCounts.priceRanges[rangeKey] || 0;
   };
 
   return (
@@ -387,7 +413,7 @@ function ProductsCatalogContent() {
                 <div className={styles.catalogHeader}>
                   <div className={styles.resultsCount}>
                     Showing {paginatedProducts.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0}–
-                    {Math.min(currentPage * itemsPerPage, filteredProducts.length)} of {filteredProducts.length} results
+                    {Math.min(currentPage * itemsPerPage, totalProducts)} of {totalProducts} results
                   </div>
                   <div className={styles.headerActionsWrapper}>
                     <button
@@ -470,7 +496,11 @@ function ProductsCatalogContent() {
                           >
                             <h3 className={styles.name}>{prod.name}</h3>
                           </Link>
-                          <span className={styles.price}>₹{prod.price.toLocaleString()}</span>
+                          <span className={styles.price}>
+                            {typeof prod.price === 'string' && prod.price.startsWith('₹')
+                              ? prod.price
+                              : '₹' + Number(prod.price || 0).toLocaleString('en-IN')}
+                          </span>
 
                           {/* IndiaMART Seller Info on Product Card */}
                           <div style={{

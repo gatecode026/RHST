@@ -699,7 +699,8 @@ export async function ensureSellersSeeded() {
   }));
 }
 
-export async function assignSellersToProducts() {
+export async function assignSellersToProducts(options?: { forceReassign?: boolean }) {
+  const force = options?.forceReassign ?? false;
   try {
     const db = await getDb();
     const sellers = await ensureSellersSeeded();
@@ -725,24 +726,76 @@ export async function assignSellersToProducts() {
       sellersByCategory[key].push(s);
     }
 
-    // Fetch all products
-    const allProducts = await productsColl.find().toArray();
+    // Keyword to mainCategory mapping
+    const KEYWORD_MAPPINGS: Array<[RegExp, string]> = [
+      [/storage|drive|disk|memory|sd card|micro\s*sd|flash|usb|ssd|hdd/i, 'storage devices'],
+      [/laptop|computer|notebook|pc|desktop|macbook/i, 'laptops & computers'],
+      [/keyboard|mouse|pointing|touchpad|trackball/i, 'keyboard & mouse'],
+      [/printer|scanner|copier|ink|toner|cartridge/i, 'printers & scanners'],
+      [/television|tv|monitor|display|projector/i, 'television'],
+      [/camera|camcorder|dslr|lens|gopro/i, 'camera'],
+      [/speaker|headphone|earphone|headset|audio|soundbar|bluetooth speaker/i, "speaker's"],
+      [/shoe|sneaker|footwear|sandal|boot/i, 'shoes'],
+      [/women|saree|kurti|dress|blouse|ethnic/i, "women's"],
+      [/cloth|apparel|garment|shirt|pant|wear|t-shirt|jeans/i, 'clothes'],
+      [/bag|backpack|luggage|suitcase/i, 'bags'],
+      [/fan|ceiling fan|table fan/i, 'fans'],
+      [/air conditioner|cooler|\bac\b/i, 'ac'],
+      [/mixer|grinder|blender/i, 'mixer'],
+      [/vacuum|vaccum|cleaner/i, 'vaccum'],
+      [/refrigerator|fridge/i, 'refrigerator'],
+      [/washing machine|washer|dryer/i, 'washing machine'],
+      [/geyser|water heater/i, 'geysers'],
+      [/clock|watch|timepiece/i, 'clocks'],
+      [/microwave|oven/i, 'microwave'],
+      [/toaster/i, 'toaster'],
+      [/juicer/i, 'juicer'],
+      [/dishwasher/i, 'dishwasher'],
+      [/induction/i, 'induction'],
+      [/appliance/i, 'home appliances'],
+      [/nike/i, 'nike'],
+      [/puma/i, 'puma'],
+      [/toy|plush/i, 'soft toys'],
+      [/electronics|gadget/i, 'electronics']
+    ];
+
+    // Query all products with lightweight projection
+    const allProducts = await productsColl.find(
+      {},
+      { projection: { _id: 1, category: 1, sellerName: 1, sellerId: 1, name: 1 } }
+    ).toArray();
+
+    const bulkOps: any[] = [];
+    let updatedCount = 0;
 
     for (let i = 0; i < allProducts.length; i++) {
       const prod = allProducts[i];
       const cat = (prod.category || '').trim().toLowerCase();
       const parent = parentLookup[cat] || '';
+      const prodName = (prod.name || '').toLowerCase();
 
       // Find matching sellers:
       // 1. Exact match on product category
       let matchingSellers = sellersByCategory[cat] || [];
 
-      // 2. If no exact match, check parent group (e.g. "CLOTHES" for "Women's", "Electronics" for "Laptops & Computers")
+      // 2. Keyword match against product category and name
+      if (matchingSellers.length === 0) {
+        for (const [pattern, targetCat] of KEYWORD_MAPPINGS) {
+          if (pattern.test(cat) || pattern.test(prodName)) {
+            if (sellersByCategory[targetCat] && sellersByCategory[targetCat].length > 0) {
+              matchingSellers = sellersByCategory[targetCat];
+              break;
+            }
+          }
+        }
+      }
+
+      // 3. Match parent group
       if (matchingSellers.length === 0 && parent) {
         matchingSellers = sellersByCategory[parent] || [];
       }
 
-      // 3. If still no match, partial word match
+      // 4. Partial category match
       if (matchingSellers.length === 0) {
         for (const [sCat, sList] of Object.entries(sellersByCategory)) {
           if (cat.includes(sCat) || sCat.includes(cat) || (parent && (parent.includes(sCat) || sCat.includes(parent)))) {
@@ -752,42 +805,61 @@ export async function assignSellersToProducts() {
         }
       }
 
-      // 4. Default fallback: Pick from diverse pool rotated by index so different products get different sellers
+      // 5. Default fallback: Pick from diverse pool rotated by index
       if (matchingSellers.length === 0) {
         matchingSellers = [sellers[i % sellers.length]];
       }
 
-      // Select seller distributed across matching candidates
       const assignedSeller = matchingSellers[i % matchingSellers.length];
 
-      // Always update if current seller is missing or was defaulted to Apex Tech Systems for a non-tech category like Women's or Shoes
+      // Check if update is needed
       const currentSeller = prod.sellerName || '';
       const isMismatch = (
         !currentSeller ||
         (currentSeller === 'Apex Tech Systems Pvt Ltd' && cat !== 'laptops & computers' && cat !== 'electronics' && cat !== 'hardware')
       );
 
-      if (isMismatch || !prod.sellerId) {
-        await productsColl.updateOne(
-          { _id: prod._id },
-          {
-            $set: {
-              sellerId: assignedSeller.id,
-              sellerName: assignedSeller.name,
-              sellerLocation: assignedSeller.location,
-              sellerRating: assignedSeller.rating,
-              sellerVerified: assignedSeller.verified,
-              sellerMainCategory: assignedSeller.mainCategory,
-              sellerGst: assignedSeller.gstNumber,
-              sellerTrustScore: assignedSeller.trustScore,
-              sellerPhone: assignedSeller.phone,
-              sellerEmail: assignedSeller.email
+      if (force || isMismatch || !prod.sellerId) {
+        bulkOps.push({
+          updateOne: {
+            filter: { _id: prod._id },
+            update: {
+              $set: {
+                sellerId: assignedSeller.id,
+                sellerName: assignedSeller.name,
+                sellerLocation: assignedSeller.location,
+                sellerRating: assignedSeller.rating,
+                sellerVerified: assignedSeller.verified,
+                sellerMainCategory: assignedSeller.mainCategory,
+                sellerGst: assignedSeller.gstNumber,
+                sellerTrustScore: assignedSeller.trustScore,
+                sellerPhone: assignedSeller.phone,
+                sellerEmail: assignedSeller.email
+              }
             }
           }
-        );
+        });
+
+        if (bulkOps.length >= 1000) {
+          await productsColl.bulkWrite(bulkOps, { ordered: false });
+          updatedCount += bulkOps.length;
+          bulkOps.length = 0;
+        }
       }
     }
-  } catch (err) {
+
+    if (bulkOps.length > 0) {
+      await productsColl.bulkWrite(bulkOps, { ordered: false });
+      updatedCount += bulkOps.length;
+    }
+
+    return {
+      success: true,
+      totalProducts: allProducts.length,
+      updatedCount
+    };
+  } catch (err: any) {
     console.warn('Error in assignSellersToProducts:', err);
+    return { success: false, error: err.message };
   }
 }

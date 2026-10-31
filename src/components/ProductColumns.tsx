@@ -36,7 +36,7 @@ export default function ProductColumns() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch('/api/products?t=' + Date.now(), { cache: 'no-store' });
+        const res = await fetch('/api/products?limit=18', { cache: 'no-store' });
         const data = await res.json();
         if (data.success && data.products) {
           setProducts(data.products);

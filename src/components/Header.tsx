@@ -76,7 +76,7 @@ export default function Header() {
     if (isSearchOpen) {
       const fetchDbProducts = async () => {
         try {
-          const res = await fetch('/api/products?t=' + Date.now(), { cache: 'no-store' });
+          const res = await fetch('/api/products?limit=10', { cache: 'no-store' });
           const data = await res.json();
           if (data.success && data.products) {
             setDbProducts(data.products);
@@ -241,16 +241,32 @@ export default function Header() {
     }));
   };
 
-  const executeSearch = (query: string) => {
+  const executeSearch = async (query: string) => {
     if (query.trim() === '') {
       setSearchResults([]);
       return;
     }
-    const pool = getSearchableProducts();
-    const filtered = pool.filter(p =>
-      p.name.toLowerCase().includes(query.toLowerCase())
-    );
-    setSearchResults(filtered);
+    try {
+      const res = await fetch(`/api/products?search=${encodeURIComponent(query.trim())}&limit=8`);
+      const data = await res.json();
+      if (data.success && data.products) {
+        const formatted = data.products.map((p: any) => ({
+          id: p.id,
+          name: p.name,
+          price: typeof p.price === 'number' ? p.price : (parseInt(String(p.price).replace(/[^\d]/g, ''), 10) || 0),
+          image: p.image,
+          link: `/products/${p.slug || p.id}`,
+          stock: p.stock !== undefined ? p.stock : 12
+        }));
+        setSearchResults(formatted);
+      }
+    } catch {
+      const pool = getSearchableProducts();
+      const filtered = pool.filter(p =>
+        p.name.toLowerCase().includes(query.toLowerCase())
+      );
+      setSearchResults(filtered);
+    }
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {

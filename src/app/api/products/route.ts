@@ -10,7 +10,7 @@ const DEFAULT_PRODUCTS = [
     mrp: 135000,
     discount: 7,
     price: '₹1,25,000',
-    image: 'https://ik.imagekit.io/zp0tch54w/RHST/wmremove-transformed.png',
+    image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0',
     link: '#ipad',
     category: 'Hardware',
     brand: 'Dell',
@@ -295,107 +295,204 @@ const DEFAULT_PRODUCTS = [
   }
 ];
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
     const db = await getDb();
     const collection = db.collection('products');
 
-    // Check if the extended seeding has run
-    const seedingMeta = db.collection('seeding_meta');
-    const flag = await seedingMeta.findOne({ key: 'extended_seeded' });
+    const url = new URL(request.url);
+    const searchParams = url.searchParams;
 
-    if (!flag) {
-      // Seed products non-destructively
-      for (const p of DEFAULT_PRODUCTS) {
-        const exists = await collection.findOne({ name: p.name });
-        const slug = p.name.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-');
-        if (!exists) {
-          await collection.insertOne({
-            ...p,
-            slug,
-            createdAt: new Date()
-          });
-        } else if (!exists.slug) {
-          await collection.updateOne({ _id: exists._id }, { $set: { slug } });
+    const pageParam = parseInt(searchParams.get('page') || '1', 10);
+    const page = Math.max(1, isNaN(pageParam) ? 1 : pageParam);
+
+    const allParam = searchParams.get('all') === 'true';
+    const limitParam = searchParams.get('limit');
+    let limit = 24;
+    if (allParam) {
+      limit = 200;
+    } else if (limitParam) {
+      const parsedLimit = parseInt(limitParam, 10);
+      limit = Math.min(Math.max(1, isNaN(parsedLimit) ? 24 : parsedLimit), 200);
+    }
+
+    const categoryParam = searchParams.get('category');
+    const brandParam = searchParams.get('brand');
+    const sellerParam = searchParams.get('seller');
+    const searchParam = (searchParams.get('search') || searchParams.get('q') || '').trim();
+    const priceRangeParam = searchParams.get('priceRange');
+    const sortParam = searchParams.get('sort') || 'default';
+    const featuredParam = searchParams.get('featured');
+    const onOfferParam = searchParams.get('onOffer');
+    const facetsParam = searchParams.get('facets') === 'true';
+
+    const escapeRegex = (s: string) => s.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+
+    // Build filter
+    const filter: any = {};
+
+    if (categoryParam && categoryParam !== 'All') {
+      filter.category = { $regex: new RegExp(`^${escapeRegex(categoryParam)}$`, 'i') };
+    }
+
+    if (brandParam && brandParam !== 'All') {
+      filter.brand = { $regex: new RegExp(`^${escapeRegex(brandParam)}$`, 'i') };
+    }
+
+    if (sellerParam && sellerParam !== 'All') {
+      filter.sellerName = { $regex: new RegExp(`^${escapeRegex(sellerParam)}$`, 'i') };
+    }
+
+    if (featuredParam === 'true') {
+      filter.featured = true;
+    }
+
+    if (onOfferParam === 'true') {
+      filter.onOffer = true;
+    }
+
+    if (searchParam) {
+      const sReg = { $regex: escapeRegex(searchParam), $options: 'i' };
+      filter.$or = [
+        { name: sReg },
+        { category: sReg },
+        { brand: sReg },
+        { sellerName: sReg }
+      ];
+    }
+
+    // Price range filter
+    if (priceRangeParam) {
+      if (priceRangeParam === 'less15') {
+        filter.numericPrice = { $lt: 15000 };
+      } else if (priceRangeParam === '15_25') {
+        filter.numericPrice = { $gte: 15000, $lte: 25000 };
+      } else if (priceRangeParam === '25_50') {
+        filter.numericPrice = { $gte: 25000, $lte: 50000 };
+      } else if (priceRangeParam === '50_75') {
+        filter.numericPrice = { $gte: 50000, $lte: 75000 };
+      } else if (priceRangeParam === '75_100') {
+        filter.numericPrice = { $gte: 75000, $lte: 100000 };
+      } else if (priceRangeParam === '100_125') {
+        filter.numericPrice = { $gte: 100000, $lte: 125000 };
+      }
+    }
+
+    // Sort order
+    let sortObj: any = { _id: -1 };
+    if (sortParam === 'price_asc') {
+      sortObj = { numericPrice: 1, _id: -1 };
+    } else if (sortParam === 'price_desc') {
+      sortObj = { numericPrice: -1, _id: -1 };
+    } else if (sortParam === 'name_asc') {
+      sortObj = { name: 1, _id: -1 };
+    }
+
+    // Projection for compact, fast response
+    const projection = {
+      _id: 1,
+      slug: 1,
+      name: 1,
+      price: 1,
+      mrp: 1,
+      discount: 1,
+      numericPrice: 1,
+      image: 1,
+      link: 1,
+      category: 1,
+      brand: 1,
+      sku: 1,
+      stock: 1,
+      status: 1,
+      description: 1,
+      featured: 1,
+      onOffer: 1,
+      warranty: 1,
+      lowStockThreshold: 1,
+      sellerId: 1,
+      sellerName: 1,
+      sellerLocation: 1,
+      sellerRating: 1,
+      sellerVerified: 1,
+      sellerMainCategory: 1,
+      sellerTrustScore: 1
+    };
+
+    // Execute count and paginated query in parallel
+    const [total, rawProducts] = await Promise.all([
+      collection.countDocuments(filter),
+      collection.find(filter, { projection })
+        .sort(sortObj)
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .toArray()
+    ]);
+
+    const formatted = rawProducts.map(doc => ({
+      id: doc._id.toString(),
+      slug: doc.slug || doc.name.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-'),
+      name: doc.name,
+      price: doc.price || `₹${(doc.numericPrice || 0).toLocaleString('en-IN')}`,
+      image: doc.image || '/images/default_product.png',
+      link: doc.link || ('#product-' + doc._id.toString()),
+      category: doc.category || 'Electronics',
+      brand: doc.brand || 'Dell',
+      sku: doc.sku || ('SKU-' + doc._id.toString().substring(18).toUpperCase()),
+      stock: doc.stock !== undefined ? doc.stock : 10,
+      status: doc.status || 'PUBLISHED',
+      description: doc.description || '',
+      mrp: doc.mrp !== undefined ? doc.mrp : (doc.numericPrice || 0),
+      discount: doc.discount !== undefined ? doc.discount : 0,
+      featured: doc.featured !== undefined ? doc.featured : false,
+      onOffer: doc.onOffer !== undefined ? doc.onOffer : false,
+      warranty: doc.warranty !== undefined ? doc.warranty : 0,
+      lowStockThreshold: doc.lowStockThreshold !== undefined ? doc.lowStockThreshold : 10,
+      sellerId: doc.sellerId || 'seller-default',
+      sellerName: doc.sellerName || 'Apex Tech Systems Pvt Ltd',
+      sellerLocation: doc.sellerLocation || 'Jaipur, Rajasthan',
+      sellerRating: doc.sellerRating || 4.8,
+      sellerVerified: doc.sellerVerified !== undefined ? doc.sellerVerified : true,
+      sellerMainCategory: doc.sellerMainCategory || doc.category || 'Electronics',
+      sellerTrustScore: doc.sellerTrustScore || 'Verified TrustSEAL'
+    }));
+
+    let facetsData: any = null;
+    if (facetsParam) {
+      try {
+        const facetRes = await collection.aggregate([
+          {
+            $facet: {
+              categories: [
+                { $group: { _id: "$category", count: { $sum: 1 } } },
+                { $sort: { count: -1 } }
+              ],
+              brands: [
+                { $group: { _id: "$brand", count: { $sum: 1 } } },
+                { $sort: { count: -1 } },
+                { $limit: 30 }
+              ]
+            }
+          }
+        ]).toArray();
+        if (facetRes && facetRes[0]) {
+          facetsData = facetRes[0];
         }
+      } catch (fErr) {
+        console.warn('Facets computation error:', fErr);
       }
-      await seedingMeta.updateOne(
-        { key: 'extended_seeded' },
-        { $set: { key: 'extended_seeded', value: true } },
-        { upsert: true }
-      );
     }
 
-    // Run migration for any other products in DB that are missing slug field
-    try {
-      const missingSlugs = await collection.find({ slug: { $exists: false } }).toArray();
-      for (const doc of missingSlugs) {
-        const slug = doc.name.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-');
-        await collection.updateOne({ _id: doc._id }, { $set: { slug } });
-      }
-    } catch (migErr) {
-      console.warn("Products slug migration failed:", migErr);
-    }
-
-    // Seed sellers and assign to products
-    try {
-      await ensureSellersSeeded();
-      await assignSellersToProducts();
-    } catch (sellerErr) {
-      console.warn("Seller seeding/assignment warning:", sellerErr);
-    }
-
-    const products = await collection.find().toArray();
-    const formatted = products.map(doc => {
-      // Fallback seller based on category if not yet updated
-      const cat = doc.category || 'Hardware';
-      const defaultSellerName = cat === 'Gaming Products'
-        ? 'HyperDrive Gaming & Peripherals'
-        : cat === 'Office Equipment'
-        ? 'Zenith Office Tech & Display Solutions'
-        : cat === 'Computer Access'
-        ? 'Paramount Digital Accessories Co.'
-        : 'Apex Tech Systems Pvt Ltd';
-
-      const defaultSellerLocation = cat === 'Gaming Products'
-        ? 'Bengaluru, Karnataka'
-        : cat === 'Office Equipment'
-        ? 'New Delhi, Delhi'
-        : cat === 'Computer Access'
-        ? 'Mumbai, Maharashtra'
-        : 'Jaipur, Rajasthan';
-
-      return {
-        id: doc._id.toString(),
-        slug: doc.slug || doc.name.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-'),
-        name: doc.name,
-        price: doc.price,
-        image: doc.image,
-        link: doc.link,
-        category: doc.category,
-        brand: doc.brand || 'Dell',
-        sku: doc.sku || ('SKU-' + doc._id.toString().substring(18).toUpperCase()),
-        stock: doc.stock !== undefined ? doc.stock : 10,
-        status: doc.status || 'PUBLISHED',
-        description: doc.description || '',
-        mrp: doc.mrp !== undefined ? doc.mrp : parseInt((doc.price || '').replace(/[^\d]/g, ''), 10),
-        discount: doc.discount !== undefined ? doc.discount : 0,
-        featured: doc.featured !== undefined ? doc.featured : false,
-        onOffer: doc.onOffer !== undefined ? doc.onOffer : false,
-        warranty: doc.warranty !== undefined ? doc.warranty : 0,
-        lowStockThreshold: doc.lowStockThreshold !== undefined ? doc.lowStockThreshold : 10,
-        // IndiaMART Seller attributes
-        sellerId: doc.sellerId || 'seller-default',
-        sellerName: doc.sellerName || defaultSellerName,
-        sellerLocation: doc.sellerLocation || defaultSellerLocation,
-        sellerRating: doc.sellerRating || 4.8,
-        sellerVerified: doc.sellerVerified !== undefined ? doc.sellerVerified : true,
-        sellerMainCategory: doc.sellerMainCategory || cat,
-        sellerTrustScore: doc.sellerTrustScore || 'Verified TrustSEAL'
-      };
+    return NextResponse.json({
+      success: true,
+      products: formatted,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit) || 1
+      },
+      ...(facetsData ? { facets: facetsData } : {})
     });
-
-    return NextResponse.json({ success: true, products: formatted });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
