@@ -24,7 +24,7 @@ interface Order {
 export default function ProfileClient() {
   const router = useRouter();
   const { logoutCleanup } = useCart();
-  
+
   // Navigation tabs
   const [activeTab, setActiveTab] = useState<'account' | 'orders' | 'address' | 'settings'>('account');
   const [currentUser, setCurrentUser] = useState<any>(null);
@@ -65,7 +65,7 @@ export default function ProfileClient() {
     if (savedUser) {
       try {
         const parsedUser = JSON.parse(savedUser);
-        
+
         // Fetch latest details (including address) from backend
         const fetchUserData = async () => {
           try {
@@ -76,7 +76,7 @@ export default function ProfileClient() {
               setEditName(data.user.name || '');
               setEditPhone(data.user.phone || '');
               setEditImage(data.user.image || '');
-              
+
               if (data.user.address) {
                 setAddressStreet(data.user.address.street || '');
                 setAddressCity(data.user.address.city || '');
@@ -84,7 +84,7 @@ export default function ProfileClient() {
                 setAddressZip(data.user.address.zip || '');
                 setAddressCountry(data.user.address.country || 'India');
               }
-              
+
               // Keep session storage in sync
               localStorage.setItem('currentUser', JSON.stringify(data.user));
             } else {
@@ -349,11 +349,11 @@ export default function ProfileClient() {
   return (
     <div className="container" style={{ marginBottom: '5rem' }}>
       <div className={styles.dashboardGrid}>
-        
+
         {/* Left Sidebar Menu */}
         <div className={styles.sidebar}>
           <div className={styles.sidebarMenu}>
-            <button 
+            <button
               className={`${styles.sidebarItem} ${activeTab === 'account' ? styles.sidebarItemActive : ''}`}
               onClick={() => setActiveTab('account')}
             >
@@ -364,7 +364,7 @@ export default function ProfileClient() {
               My Account
             </button>
 
-            <button 
+            <button
               className={`${styles.sidebarItem} ${activeTab === 'orders' ? styles.sidebarItemActive : ''}`}
               onClick={() => setActiveTab('orders')}
             >
@@ -376,7 +376,7 @@ export default function ProfileClient() {
               My Enquiries & Quotes
             </button>
 
-            <button 
+            <button
               className={`${styles.sidebarItem} ${activeTab === 'address' ? styles.sidebarItemActive : ''}`}
               onClick={() => setActiveTab('address')}
             >
@@ -387,7 +387,7 @@ export default function ProfileClient() {
               Address Book
             </button>
 
-            <button 
+            <button
               className={`${styles.sidebarItem} ${activeTab === 'settings' ? styles.sidebarItemActive : ''}`}
               onClick={() => setActiveTab('settings')}
             >
@@ -411,7 +411,7 @@ export default function ProfileClient() {
 
         {/* Right Panel Card Display */}
         <div className={styles.mainCard}>
-          
+
           {/* TAB 1: MY ACCOUNT (PROFILE VIEW) */}
           {activeTab === 'account' && (
             <div>
@@ -468,10 +468,10 @@ export default function ProfileClient() {
                   <div className={styles.formGrid}>
                     <div className={styles.formGroup}>
                       <label className={styles.formLabel}>FULL NAME</label>
-                      <input 
-                        type="text" 
-                        className={styles.formInput} 
-                        disabled={!isEditing} 
+                      <input
+                        type="text"
+                        className={styles.formInput}
+                        disabled={!isEditing}
                         value={editName}
                         onChange={(e) => setEditName(e.target.value)}
                       />
@@ -479,11 +479,11 @@ export default function ProfileClient() {
 
                     <div className={styles.formGroup}>
                       <label className={styles.formLabel}>EMAIL ADDRESS</label>
-                      <input 
-                        type="email" 
-                        className={styles.formInput} 
-                        disabled 
-                        value={currentUser.email} 
+                      <input
+                        type="email"
+                        className={styles.formInput}
+                        disabled
+                        value={currentUser.email}
                         style={{ backgroundColor: '#f5f6fa', cursor: 'not-allowed' }}
                       />
                       <span className={styles.formLabelTip}>Email cannot be changed after registration</span>
@@ -491,12 +491,12 @@ export default function ProfileClient() {
 
                     <div className={styles.formGroup}>
                       <label className={styles.formLabel}>MOBILE NUMBER</label>
-                      <input 
-                        type="tel" 
+                      <input
+                        type="tel"
                         pattern="[6-9][0-9]{9}"
                         maxLength={10}
-                        className={styles.formInput} 
-                        disabled={!isEditing} 
+                        className={styles.formInput}
+                        disabled={!isEditing}
                         value={editPhone}
                         onChange={(e) => {
                           const val = e.target.value.replace(/[^\d]/g, '');
@@ -511,10 +511,10 @@ export default function ProfileClient() {
                     {isEditing && (
                       <div className={styles.formGroup} style={{ gridColumn: 'span 2' }}>
                         <label className={styles.formLabel}>PROFILE PHOTO</label>
-                        <input 
-                          type="file" 
+                        <input
+                          type="file"
                           accept="image/*"
-                          className={styles.formInput} 
+                          className={styles.formInput}
                           onChange={handleImageChange}
                         />
                         <span className={styles.formLabelTip}>Upload profile photo (Max 2MB)</span>
@@ -655,9 +655,9 @@ export default function ProfileClient() {
                   <div className={styles.formGrid}>
                     <div className={styles.formGroup} style={{ gridColumn: 'span 2' }}>
                       <label className={styles.formLabel}>STREET ADDRESS</label>
-                      <input 
-                        type="text" 
-                        className={styles.formInput} 
+                      <input
+                        type="text"
+                        className={styles.formInput}
                         disabled={!isEditingAddress}
                         placeholder="House number and street name"
                         value={addressStreet}
@@ -667,9 +667,9 @@ export default function ProfileClient() {
 
                     <div className={styles.formGroup}>
                       <label className={styles.formLabel}>TOWN / CITY</label>
-                      <input 
-                        type="text" 
-                        className={styles.formInput} 
+                      <input
+                        type="text"
+                        className={styles.formInput}
                         disabled={!isEditingAddress}
                         placeholder="City"
                         value={addressCity}
@@ -679,9 +679,9 @@ export default function ProfileClient() {
 
                     <div className={styles.formGroup}>
                       <label className={styles.formLabel}>STATE</label>
-                      <input 
-                        type="text" 
-                        className={styles.formInput} 
+                      <input
+                        type="text"
+                        className={styles.formInput}
                         disabled={!isEditingAddress}
                         placeholder="State"
                         value={addressState}
@@ -691,9 +691,9 @@ export default function ProfileClient() {
 
                     <div className={styles.formGroup}>
                       <label className={styles.formLabel}>ZIP CODE</label>
-                      <input 
-                        type="text" 
-                        className={styles.formInput} 
+                      <input
+                        type="text"
+                        className={styles.formInput}
                         disabled={!isEditingAddress}
                         placeholder="ZIP/Postal Code"
                         value={addressZip}
@@ -703,9 +703,9 @@ export default function ProfileClient() {
 
                     <div className={styles.formGroup}>
                       <label className={styles.formLabel}>COUNTRY</label>
-                      <input 
-                        type="text" 
-                        className={styles.formInput} 
+                      <input
+                        type="text"
+                        className={styles.formInput}
                         disabled={!isEditingAddress}
                         placeholder="Country"
                         value={addressCountry}
@@ -744,10 +744,10 @@ export default function ProfileClient() {
                 <form onSubmit={handlePasswordUpdate} className={styles.profileForm} style={{ maxWidth: '500px' }}>
                   <div className={styles.formGroup}>
                     <label className={styles.formLabel}>CURRENT PASSWORD</label>
-                    <input 
-                      type="password" 
+                    <input
+                      type="password"
                       required
-                      className={styles.formInput} 
+                      className={styles.formInput}
                       value={currentPassword}
                       onChange={(e) => setCurrentPassword(e.target.value)}
                     />
@@ -755,10 +755,10 @@ export default function ProfileClient() {
 
                   <div className={styles.formGroup}>
                     <label className={styles.formLabel}>NEW PASSWORD</label>
-                    <input 
-                      type="password" 
+                    <input
+                      type="password"
                       required
-                      className={styles.formInput} 
+                      className={styles.formInput}
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
                     />
@@ -766,10 +766,10 @@ export default function ProfileClient() {
 
                   <div className={styles.formGroup}>
                     <label className={styles.formLabel}>CONFIRM NEW PASSWORD</label>
-                    <input 
-                      type="password" 
+                    <input
+                      type="password"
                       required
-                      className={styles.formInput} 
+                      className={styles.formInput}
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                     />
