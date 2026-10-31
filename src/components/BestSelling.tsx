@@ -30,10 +30,17 @@ export default function BestSelling() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch('/api/products?limit=12', { cache: 'no-store' });
+        const res = await fetch('/api/products?banner=true&limit=8', { cache: 'no-store' });
         const data = await res.json();
-        if (data.success) {
-          setProducts(data.products);
+        if (data.success && Array.isArray(data.products)) {
+          const seen = new Set<string>();
+          const unique = data.products.filter((p: Product) => {
+            const key = (p.name || '').trim().toLowerCase();
+            if (!key || seen.has(key)) return false;
+            seen.add(key);
+            return true;
+          }).slice(0, 8);
+          setProducts(unique);
         }
       } catch (err) {
         console.error('Failed to load products', err);
@@ -112,7 +119,12 @@ export default function BestSelling() {
                       }));
                     }}
                   >
-                    <img src={prod.image} alt={prod.name} className={styles.image} />
+                    <img 
+                      src={prod.image} 
+                      alt={prod.name} 
+                      className={styles.image} 
+                      onError={(e) => { (e.target as HTMLImageElement).src = '/images/default_product.png'; }}
+                    />
                   </Link>
 
                   <div className={styles.info}>

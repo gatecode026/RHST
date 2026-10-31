@@ -8,9 +8,6 @@ export async function GET() {
     const db = await getDb();
     const collection = db.collection('categories');
 
-    // Clean up existing seeded 'Software' category
-    await collection.deleteOne({ name: 'Software' });
-
     const isGarbageCategory = (name: string) => {
       if (!name || typeof name !== 'string') return true;
       const str = name.trim();

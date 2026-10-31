@@ -36,10 +36,17 @@ export default function ProductColumns() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch('/api/products?limit=18', { cache: 'no-store' });
+        const res = await fetch('/api/products?columns=true&limit=12', { cache: 'no-store' });
         const data = await res.json();
-        if (data.success && data.products) {
-          setProducts(data.products);
+        if (data.success && Array.isArray(data.products)) {
+          const seen = new Set<string>();
+          const unique = data.products.filter((p: Product) => {
+            const key = (p.name || '').trim().toLowerCase();
+            if (!key || seen.has(key)) return false;
+            seen.add(key);
+            return true;
+          });
+          setProducts(unique);
         }
       } catch (err) {
         console.error('Failed to load columns products:', err);
@@ -105,38 +112,53 @@ export default function ProductColumns() {
       ];
     }
 
-    // Filter dynamic lists
-    const featuredList = products.filter(p => p.featured === true).slice(0, 3);
-    const saleList = products.filter(p => (p.discount && p.discount > 0) || p.onOffer).slice(0, 3);
-    const latestList = [...products].sort((a, b) => String(b.id).localeCompare(String(a.id))).slice(0, 3);
-    const bestReviewedList = [...products].sort((a, b) => parsePrice(b.price) - parsePrice(a.price)).slice(0, 3);
-
-    const fillList = (list: Product[]) => {
-      const needed = 3 - list.length;
-      if (needed <= 0) return list;
-      const extra = products.filter(p => !list.some(el => el.id === p.id)).slice(0, needed);
-      return [...list, ...extra];
+    // Ensure completely unique products across all 4 columns
+    const usedIds = new Set<string | number>();
+    const takeDistinct = (filterFn: (p: Product) => boolean, count: number): Product[] => {
+      const result: Product[] = [];
+      for (const p of products) {
+        if (!usedIds.has(p.id) && filterFn(p)) {
+          usedIds.add(p.id);
+          result.push(p);
+          if (result.length >= count) break;
+        }
+      }
+      if (result.length < count) {
+        for (const p of products) {
+          if (!usedIds.has(p.id)) {
+            usedIds.add(p.id);
+            result.push(p);
+            if (result.length >= count) break;
+          }
+        }
+      }
+      return result;
     };
+
+    const col1 = takeDistinct(p => !!p.sellerVerified || !!p.featured, 3);
+    const col2 = takeDistinct(() => true, 3);
+    const col3 = takeDistinct(p => parsePrice(p.price) > 5000, 3);
+    const col4 = takeDistinct(p => (p.discount && p.discount > 0) || !!p.onOffer, 3).map(p => ({
+      ...p,
+      oldPrice: p.mrp && p.mrp > parsePrice(p.price) ? `₹${p.mrp.toLocaleString()}` : undefined
+    }));
 
     return [
       {
         title: 'Featured Suppliers',
-        products: fillList(featuredList)
+        products: col1
       },
       {
         title: 'Latest Products',
-        products: fillList(latestList)
+        products: col2
       },
       {
         title: 'Verified Quotations',
-        products: fillList(bestReviewedList)
+        products: col3
       },
       {
         title: 'Bulk Deals',
-        products: fillList(saleList).map(p => ({
-          ...p,
-          oldPrice: p.mrp && p.mrp > parsePrice(p.price) ? `₹${p.mrp.toLocaleString()}` : undefined
-        }))
+        products: col4
       }
     ];
   };
@@ -182,7 +204,12 @@ export default function ProductColumns() {
                         }));
                       }}
                     >
-                      <img src={prod.image} alt={prod.name} className={styles.image} />
+                      <img 
+                        src={prod.image} 
+                        alt={prod.name} 
+                        className={styles.image} 
+                        onError={(e) => { (e.target as HTMLImageElement).src = '/images/default_product.png'; }}
+                      />
                     </Link>
 
                     <div className={styles.info}>
