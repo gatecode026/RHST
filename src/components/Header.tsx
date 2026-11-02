@@ -510,6 +510,30 @@ export default function Header() {
 
               <div className={styles.dropdown}>
                 <Link 
+                  href="/suppliers" 
+                  className={`${styles.dropdownBtn} ${pathname.startsWith("/suppliers") ? styles.activeLink : ""}`}
+                >
+                  VERIFIED SUPPLIERS<span className={styles.chevron}>▾</span>
+                </Link>
+                <div className={styles.dropdownContent} style={{ minWidth: "275px" }}>
+                  <Link 
+                    href="/suppliers" 
+                    style={{ fontWeight: 700, color: "#16a34a", borderBottom: "1px solid #f1f5f9", paddingBottom: "8px", marginBottom: "4px" }}
+                  >
+                    🏢 All 1,000+ Verified Suppliers →
+                  </Link>
+                  <Link href="/suppliers?category=Laptops%20%26%20Computers">Laptops & Computers Suppliers</Link>
+                  <Link href="/suppliers?category=Electronics">Electronics & IT Hardware</Link>
+                  <Link href="/suppliers?category=Television">Commercial Displays & Televisions</Link>
+                  <Link href="/suppliers?category=Speaker%27s">Audio & Sound Systems</Link>
+                  <Link href="/suppliers?category=Camera">Camera & Surveillance Equipment</Link>
+                  <Link href="/suppliers?category=Storage%20Devices">Storage Devices & Networking</Link>
+                  <Link href="/suppliers?category=Keyboard%20%26%20Mouse">Keyboard, Mouse & Peripherals</Link>
+                </div>
+              </div>
+
+              <div className={styles.dropdown}>
+                <Link 
                   href="/#services" 
                   className={`${styles.dropdownBtn} ${pathname.startsWith('/services') ? styles.activeLink : ''}`}
                 >
@@ -739,6 +763,27 @@ export default function Header() {
                   </div>
                 );
               })}
+            </div>
+          </div>
+
+          <div className={styles.mobileNavGroup}>
+            <Link 
+              href="/suppliers" 
+              className={styles.mobileNavHeader} 
+              style={{ display: "flex", justifyContent: "space-between", alignItems: "center", textDecoration: "none", color: "inherit" }}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <span>VERIFIED SUPPLIERS</span>
+              <span style={{ fontSize: "11px", color: "#16a34a", fontWeight: 700 }}>1,000+</span>
+            </Link>
+            <div className={styles.mobileSubLinks}>
+              <Link href="/suppliers" onClick={() => setIsMobileMenuOpen(false)} style={{ color: "#16a34a", fontWeight: 600 }}>All Verified Suppliers →</Link>
+              <Link href="/suppliers?category=Laptops%20%26%20Computers" onClick={() => setIsMobileMenuOpen(false)}>Laptops & Computers</Link>
+              <Link href="/suppliers?category=Electronics" onClick={() => setIsMobileMenuOpen(false)}>Electronics & IT Hardware</Link>
+              <Link href="/suppliers?category=Television" onClick={() => setIsMobileMenuOpen(false)}>Televisions & Displays</Link>
+              <Link href="/suppliers?category=Speaker%27s" onClick={() => setIsMobileMenuOpen(false)}>Audio & Speakers</Link>
+              <Link href="/suppliers?category=Camera" onClick={() => setIsMobileMenuOpen(false)}>Camera & Optics</Link>
+              <Link href="/suppliers?category=Storage%20Devices" onClick={() => setIsMobileMenuOpen(false)}>Storage Devices</Link>
             </div>
           </div>
 
