@@ -3,8 +3,16 @@ import { getDb } from '@/lib/mongodb';
 
 export const dynamic = 'force-dynamic';
 
+let cachedFacetsResponse: any = null;
+let lastCacheTime = 0;
+const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes cache
+
 export async function GET() {
   try {
+    if (cachedFacetsResponse && Date.now() - lastCacheTime < CACHE_TTL_MS) {
+      return NextResponse.json(cachedFacetsResponse);
+    }
+
     const db = await getDb();
     const collection = db.collection('products');
 
@@ -63,15 +71,23 @@ export async function GET() {
       else if (b._id === 100000) priceMap['100_125'] = b.count;
     });
 
-    return NextResponse.json({
+    const responseData = {
       success: true,
       total: totalCount,
       categories: (data.categories || []).map((c: any) => ({ name: c._id || 'Uncategorized', count: c.count })),
       brands: (data.brands || []).map((b: any) => ({ name: b._id || 'Unknown', count: b.count })),
       sellers: (data.sellers || []).map((s: any) => ({ name: s._id || 'Unknown', count: s.count })),
       priceRanges: priceMap
-    });
+    };
+
+    cachedFacetsResponse = responseData;
+    lastCacheTime = Date.now();
+
+    return NextResponse.json(responseData);
   } catch (error: any) {
+    if (cachedFacetsResponse) {
+      return NextResponse.json(cachedFacetsResponse);
+    }
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }

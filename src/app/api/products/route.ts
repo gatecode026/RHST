@@ -512,8 +512,13 @@ export async function GET(request: Request) {
     let rawProducts: any[] = [];
 
     if (needCount) {
+      const isFiltered = Object.keys(filter).length > 0;
+      const countPromise = isFiltered
+        ? collection.countDocuments(filter)
+        : collection.estimatedDocumentCount();
+
       [total, rawProducts] = await Promise.all([
-        collection.countDocuments(filter),
+        countPromise,
         collection.find(filter, { projection })
           .sort(sortObj)
           .skip((page - 1) * limit)

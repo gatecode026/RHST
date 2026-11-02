@@ -70,7 +70,6 @@ function ProductsCatalogContent() {
   const [totalPages, setTotalPages] = useState(1);
   const [dbCategories, setDbCategories] = useState<any[]>([]);
   const [dbBrands, setDbBrands] = useState<any[]>([]);
-  const [dbSellers, setDbSellers] = useState<any[]>([]);
   const [facetCounts, setFacetCounts] = useState<{
     total: number;
     categories: Record<string, number>;
@@ -80,25 +79,24 @@ function ProductsCatalogContent() {
   }>({ total: 0, categories: {}, brands: {}, sellers: {}, priceRanges: {} });
   const [loading, setLoading] = useState(true);
 
-  // Load initial catalog metadata (categories, brands, sellers, fast facet counts)
+  // Load initial catalog metadata (categories, brands, fast cached facet counts)
   useEffect(() => {
-    const loadMetadata = async () => {
-      try {
-        const [catRes, brandRes, sellerRes, facetRes] = await Promise.all([
-          fetch('/api/categories?t=' + Date.now(), { cache: 'no-store' }),
-          fetch('/api/brands?t=' + Date.now(), { cache: 'no-store' }),
-          fetch('/api/sellers?t=' + Date.now(), { cache: 'no-store' }),
-          fetch('/api/products/facets?t=' + Date.now(), { cache: 'no-store' })
-        ]);
-        const catData = await catRes.json();
-        const brandData = await brandRes.json();
-        const sellerData = await sellerRes.json();
-        const facetData = await facetRes.json();
+    // 1. Fetch categories
+    fetch('/api/categories?t=' + Date.now(), { cache: 'no-store' })
+      .then(r => r.json())
+      .then(d => { if (d.success && d.categories) setDbCategories(d.categories); })
+      .catch(e => console.warn('Categories load error:', e));
 
-        if (catData.success && catData.categories) setDbCategories(catData.categories);
-        if (brandData.success && brandData.brands) setDbBrands(brandData.brands);
-        if (sellerData.success && sellerData.sellers) setDbSellers(sellerData.sellers);
+    // 2. Fetch brands
+    fetch('/api/brands?t=' + Date.now(), { cache: 'no-store' })
+      .then(r => r.json())
+      .then(d => { if (d.success && d.brands) setDbBrands(d.brands); })
+      .catch(e => console.warn('Brands load error:', e));
 
+    // 3. Fetch facets (cached in-memory on server for instant response)
+    fetch('/api/products/facets?t=' + Date.now(), { cache: 'no-store' })
+      .then(r => r.json())
+      .then(facetData => {
         if (facetData.success) {
           const catMap: Record<string, number> = {};
           (facetData.categories || []).forEach((c: any) => {
@@ -120,11 +118,8 @@ function ProductsCatalogContent() {
             priceRanges: facetData.priceRanges || {}
           });
         }
-      } catch (err) {
-        console.error('Failed to load catalog metadata:', err);
-      }
-    };
-    loadMetadata();
+      })
+      .catch(e => console.warn('Facets load error:', e));
   }, []);
 
   // Server-side paginated & filtered products fetch
@@ -201,11 +196,12 @@ function ProductsCatalogContent() {
 
     // Then add registered dbCategories that are valid and have products
     if (dbCategories.length > 0) {
+      const hasCounts = Object.keys(facetCounts.categories).length > 0;
       dbCategories.forEach(cat => {
         if (!isValidCat(cat.name)) return;
         const keyLower = (cat.name || '').toLowerCase();
-        // Do not add if category has 0 products
-        if ((facetCounts.categories[keyLower] || 0) === 0) return;
+        // Do not add if category has 0 products and counts are loaded
+        if (hasCounts && (facetCounts.categories[keyLower] || 0) === 0) return;
         if (keyLower && !seen.has(keyLower)) {
           seen.add(keyLower);
           list.push({ key: cat.name, display: cat.name });
@@ -246,10 +242,11 @@ function ProductsCatalogContent() {
     });
 
     if (dbBrands.length > 0) {
+      const hasCounts = Object.keys(facetCounts.brands).length > 0;
       dbBrands.forEach(b => {
         if (b.status === 'Hidden' || !isValidBrand(b.name)) return;
         const keyLower = (b.name || '').toLowerCase();
-        if ((facetCounts.brands[keyLower] || 0) === 0) return;
+        if (hasCounts && (facetCounts.brands[keyLower] || 0) === 0) return;
         if (keyLower && !seen.has(keyLower)) {
           seen.add(keyLower);
           list.push({ key: b.name, display: b.name });
@@ -279,19 +276,8 @@ function ProductsCatalogContent() {
       }
     });
 
-    if (dbSellers.length > 0) {
-      dbSellers.forEach(s => {
-        const keyLower = (s.name || '').toLowerCase();
-        if ((facetCounts.sellers[keyLower] || 0) === 0) return;
-        if (keyLower && !seen.has(keyLower)) {
-          seen.add(keyLower);
-          list.push({ key: s.name, display: s.name });
-        }
-      });
-    }
-
     return list;
-  }, [dbSellers, facetCounts.sellers]);
+  }, [facetCounts.sellers]);
 
   // Scroll to top of window when current page changes
   useEffect(() => {
