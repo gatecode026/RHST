@@ -88,21 +88,23 @@
 .navLinks {
   display: flex;
   align-items: center;
-  gap: 2.25rem;
+  gap: clamp(1rem, 1.6vw, 1.75rem);
   margin: 0 auto;
 }
 
 .navLinks a {
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   font-family: 'Outfit', sans-serif;
-  font-weight: 300;
+  font-weight: 400;
   color: #333333;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
   transition: color var(--transition-fast);
   padding: 0.5rem 0;
   text-transform: uppercase;
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  white-space: nowrap;
+  gap: 3px;
 }
 
 .navLinks a:hover {
@@ -114,8 +116,8 @@
 }
 
 .chevron {
-  font-size: 0.75rem;
-  margin-left: 0.15rem;
+  font-size: 0.72rem;
+  margin-left: 3px;
   display: inline-block;
   vertical-align: middle;
   color: inherit;
@@ -126,10 +128,16 @@
 /* Dropdown styling */
 .dropdown {
   position: relative;
+  display: inline-flex;
+  align-items: center;
 }
 
 .dropdownBtn {
   cursor: pointer;
+  display: inline-flex !important;
+  align-items: center !important;
+  white-space: nowrap !important;
+  gap: 3px;
 }
 
 .dropdownContent {
