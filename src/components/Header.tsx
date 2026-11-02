@@ -508,6 +508,7 @@ export default function Header() {
                 </div>
               </div>
 
+
               <div className={styles.dropdown}>
                 <Link 
                   href="/suppliers" 
@@ -531,7 +532,6 @@ export default function Header() {
                   <Link href="/suppliers?category=Keyboard%20%26%20Mouse">Keyboard, Mouse & Peripherals</Link>
                 </div>
               </div>
-
               <div className={styles.dropdown}>
                 <Link 
                   href="/#services" 
