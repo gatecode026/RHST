@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import styles from './Admin.module.css';
 
@@ -216,6 +216,11 @@ export default function AdminDashboardPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [brands, setBrands] = useState<Brand[]>([]);
   const [adminProducts, setAdminProducts] = useState<Product[]>([]);
+  const [adminProductsPage, setAdminProductsPage] = useState(1);
+  const [adminProductsLimit, setAdminProductsLimit] = useState(25);
+  const [adminProductsTotal, setAdminProductsTotal] = useState(0);
+  const [adminProductsTotalPages, setAdminProductsTotalPages] = useState(1);
+  const [adminProductsLoading, setAdminProductsLoading] = useState(false);
   const [sellers, setSellers] = useState<Seller[]>([]);
   const [coupons, setCoupons] = useState<Coupon[]>([]);
   const [logs, setLogs] = useState<ActivityLog[]>([]);
@@ -243,10 +248,30 @@ export default function AdminDashboardPage() {
   const [isAddSellerOpen, setIsAddSellerOpen] = useState(false);
   const [isAddCouponOpen, setIsAddCouponOpen] = useState(false);
 
+  // Import Modal States
+  const [isImportProductOpen, setIsImportProductOpen] = useState(false);
+  const [isImportSellerOpen, setIsImportSellerOpen] = useState(false);
+  const [productImportRows, setProductImportRows] = useState<Record<string, string>[]>([]);
+  const [productImportFileName, setProductImportFileName] = useState('');
+  const [productImportLoading, setProductImportLoading] = useState(false);
+  const [productImportMessage, setProductImportMessage] = useState('');
+  const [productImportError, setProductImportError] = useState('');
+  const [productUsdRate, setProductUsdRate] = useState<number>(85.0);
+  const [autoConvertCurrency, setAutoConvertCurrency] = useState<boolean>(true);
+
+  const [sellerImportRows, setSellerImportRows] = useState<Record<string, string>[]>([]);
+  const [sellerImportFileName, setSellerImportFileName] = useState('');
+  const [sellerImportLoading, setSellerImportLoading] = useState(false);
+  const [sellerImportMessage, setSellerImportMessage] = useState('');
+  const [sellerImportError, setSellerImportError] = useState('');
+  const [isAssigningSellers, setIsAssigningSellers] = useState(false);
+
   // Sellers Search & Filter States
   const [editingSeller, setEditingSeller] = useState<Seller | null>(null);
   const [sellerSearchQuery, setSellerSearchQuery] = useState('');
   const [sellerCategoryFilter, setSellerCategoryFilter] = useState('All');
+  const [adminSellersPage, setAdminSellersPage] = useState(1);
+  const [adminSellersLimit, setAdminSellersLimit] = useState(25);
 
   // Add Seller Form State
   const [newSellerName, setNewSellerName] = useState('');
@@ -482,6 +507,8 @@ export default function AdminDashboardPage() {
       isAddBrandOpen ||
       isAddProductOpen ||
       isAddSellerOpen ||
+      isImportProductOpen ||
+      isImportSellerOpen ||
       editingSeller !== null ||
       isAddCouponOpen ||
       isBlogModalOpen ||
@@ -501,6 +528,8 @@ export default function AdminDashboardPage() {
     isAddBrandOpen,
     isAddProductOpen,
     isAddSellerOpen,
+    isImportProductOpen,
+    isImportSellerOpen,
     editingSeller,
     isAddCouponOpen,
     isBlogModalOpen,
@@ -657,10 +686,34 @@ export default function AdminDashboardPage() {
     if (data.success) setBrands(data.brands);
   };
 
-  const fetchAdminProducts = async () => {
-    const res = await fetch('/api/admin/products');
-    const data = await res.json();
-    if (data.success) setAdminProducts(data.products.reverse());
+  const fetchAdminProducts = async (page = 1, limit = 25, search = '', category = 'All') => {
+    setAdminProductsLoading(true);
+    try {
+      const params = new URLSearchParams();
+      params.set('page', String(page));
+      params.set('limit', String(limit));
+      if (search.trim()) params.set('search', search.trim());
+      if (category && category !== 'All') params.set('category', category);
+
+      const res = await fetch(`/api/admin/products?${params.toString()}`);
+      const data = await res.json();
+      if (data.success && data.products) {
+        setAdminProducts(data.products);
+        if (data.pagination) {
+          setAdminProductsTotal(data.pagination.total);
+          setAdminProductsTotalPages(data.pagination.totalPages);
+          setAdminProductsPage(data.pagination.page);
+        } else {
+          setAdminProductsTotal(data.products.length);
+          setAdminProductsTotalPages(1);
+          setAdminProductsPage(1);
+        }
+      }
+    } catch (e) {
+      console.error('Error fetching admin products:', e);
+    } finally {
+      setAdminProductsLoading(false);
+    }
   };
 
   const fetchAdminSellers = async () => {
@@ -1312,6 +1365,496 @@ export default function AdminDashboardPage() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  // Robust RFC 4180 CSV Parser (preserves commas and newlines inside quoted fields)
+  const parseCSV = (text: string): Record<string, string>[] => {
+    if (!text || !text.trim()) return [];
+
+    const rows: string[][] = [];
+    let currentRow: string[] = [];
+    let currentVal = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < text.length; i++) {
+      const char = text[i];
+      const nextChar = text[i + 1];
+
+      if (char === '"') {
+        if (inQuotes && nextChar === '"') {
+          currentVal += '"';
+          i++;
+        } else {
+          inQuotes = !inQuotes;
+        }
+      } else if (char === ',' && !inQuotes) {
+        currentRow.push(currentVal.trim());
+        currentVal = '';
+      } else if ((char === '\r' || char === '\n') && !inQuotes) {
+        if (char === '\r' && nextChar === '\n') i++;
+        currentRow.push(currentVal.trim());
+        currentVal = '';
+        if (currentRow.some(c => c !== '')) {
+          rows.push(currentRow);
+        }
+        currentRow = [];
+      } else {
+        currentVal += char;
+      }
+    }
+
+    if (currentVal || currentRow.length > 0) {
+      currentRow.push(currentVal.trim());
+      if (currentRow.some(c => c !== '')) {
+        rows.push(currentRow);
+      }
+    }
+
+    if (rows.length < 2) return [];
+
+    const headers = rows[0].map(h => h.replace(/^["\xEF\xBB\xBF\uFEFF]+|["]+$/g, '').trim());
+    const result: Record<string, string>[] = [];
+
+    for (let r = 1; r < rows.length; r++) {
+      const rowVals = rows[r];
+      if (rowVals.every(v => v === '')) continue;
+      const rowObj: Record<string, string> = {};
+      headers.forEach((h, idx) => {
+        rowObj[h] = rowVals[idx] !== undefined ? rowVals[idx] : '';
+      });
+      result.push(rowObj);
+    }
+
+    return result;
+  };
+
+  // Products CSV Export
+  const handleExportProductsCSV = async () => {
+    try {
+      const res = await fetch('/api/admin/products?export=true');
+      const data = await res.json();
+      if (!data.success || !data.products || data.products.length === 0) {
+        alert('No products to export.');
+        return;
+      }
+      const headers = [
+        'Product ID',
+        'Name',
+        'SKU',
+        'Category',
+        'Brand',
+        'Price',
+        'Stock',
+        'Supplier',
+        'Seller Location',
+        'Status'
+      ];
+      const rows = data.products.map((p: any) => [
+        p.id || '',
+        p.name || '',
+        p.sku || '',
+        p.category || '',
+        p.brand || '',
+        p.price || '',
+        p.stock !== undefined ? p.stock : 0,
+        p.sellerName || '',
+        p.sellerLocation || '',
+        p.status || 'PUBLISHED'
+      ]);
+      const csvContent = [headers.join(','), ...rows.map((r: any[]) => r.map(val => `"${String(val).replace(/"/g, '""')}"`).join(','))].join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', `products_export_${new Date().toISOString().slice(0, 10)}.csv`);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch {
+      alert('Failed to export products.');
+    }
+  };
+
+  // Sellers CSV Export
+  const handleExportSellersCSV = () => {
+    if (filteredSellers.length === 0) {
+      alert('No sellers to export.');
+      return;
+    }
+    const headers = [
+      'Company Name',
+      'Main Category',
+      'Location',
+      'GST Number',
+      'Contact Person',
+      'Phone',
+      'Email',
+      'Nature of Business',
+      'Trust Score',
+      'Rating',
+      'Response Time',
+      'Status'
+    ];
+    const rows = filteredSellers.map(s => [
+      s.name,
+      s.mainCategory,
+      s.location,
+      s.gstNumber || '',
+      s.contactPerson || '',
+      s.phone || '',
+      s.email || '',
+      s.natureOfBusiness || '',
+      s.trustScore || '',
+      s.rating || 5,
+      s.responseTime || '< 2 Hours',
+      s.status || 'Active'
+    ]);
+    const csvContent = [headers.join(','), ...rows.map(r => r.map(val => `"${String(val).replace(/"/g, '""')}"`).join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `sellers_export_${new Date().toISOString().slice(0, 10)}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  // Sample CSV Templates
+  const handleDownloadProductSampleCSV = () => {
+    const headers = [
+      'Product Name',
+      'Category',
+      'Brand',
+      'MRP',
+      'Discount (%)',
+      'Stock',
+      'SKU',
+      'Status',
+      'Supplier',
+      'Seller Location',
+      'Seller GST',
+      'Image URL',
+      'Description'
+    ];
+    const sampleRows = [
+      [
+        'Logitech MX Master 3S Wireless Mouse',
+        'Keyboard & Mouse',
+        'Logitech',
+        8995,
+        15,
+        25,
+        'SKU-LOGI-MX3S',
+        'PUBLISHED',
+        'Apex Tech Systems Pvt Ltd',
+        'Jaipur, Rajasthan',
+        '08AABCA1234F1Z1',
+        'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46',
+        'Quiet clicks 8K DPI any-surface tracking ergonomics.'
+      ],
+      [
+        'Women Embroidered Cotton Kurti',
+        "Women's",
+        'KalaNiketan',
+        1899,
+        20,
+        50,
+        'SKU-W-KURTI-01',
+        'PUBLISHED',
+        'KalaNiketan Apparels & Textiles Pvt Ltd',
+        'Surat, Gujarat',
+        '24AAPCK1029F1Z2',
+        'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b',
+        'Pure cotton designer kurti for festive and casual wear.'
+      ]
+    ];
+    const csvContent = [headers.join(','), ...sampleRows.map(r => r.map(val => `"${String(val).replace(/"/g, '""')}"`).join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'sample_products_template.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleDownloadKaggleSampleCSV = () => {
+    const headers = [
+      'prices.amountMin',
+      'prices.availability',
+      'prices.condition',
+      'prices.currency',
+      'prices.dateSeen',
+      'prices.isSale',
+      'prices.merchant',
+      'prices.shipping',
+      'prices.sourceURLs',
+      'asins',
+      'brand',
+      'categories',
+      'dateAdded',
+      'dateUpdated',
+      'ean',
+      'imageURLs',
+      'keys',
+      'manufacturer',
+      'manufacturerNumber',
+      'name',
+      'primaryCategories',
+      'sourceURLs',
+      'upc',
+      'weight'
+    ];
+    const sampleRows = [
+      [
+        '104.80',
+        'Yes',
+        'New',
+        'USD',
+        '2023-09-08T06:50:00Z',
+        'FALSE',
+        'Best Buy',
+        'Free Shipping',
+        'https://example.com/sandisk',
+        'B00C20LO99',
+        'SanDisk',
+        'Electronics, Storage Devices, Memory Cards',
+        '2023-01-01T00:00:00Z',
+        '2023-06-01T00:00:00Z',
+        '0619659134013',
+        'https://images-na.ssl-images-amazon.com/images/I/71oVh2UO8xL._SL1500_.jpg',
+        'sandisk/sdsqunc064gan6ia',
+        'SanDisk',
+        'SDSQUNC-064G-AN6IA',
+        'SanDisk Ultra 64GB microSDXC UHS-I Card with Adapter',
+        'Electronics',
+        'https://example.com/sandisk-ultra',
+        '619659134013',
+        '1.6 ounces'
+      ]
+    ];
+    const csvContent = [headers.join(','), ...sampleRows.map(r => r.map(val => `"${String(val).replace(/"/g, '""')}"`).join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'kaggle_electronic_products_sample.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleDownloadSellerSampleCSV = () => {
+    const headers = [
+      'Company Name',
+      'Main Category',
+      'Location',
+      'Phone',
+      'Email',
+      'GST Number',
+      'Contact Person',
+      'Nature of Business',
+      'Trust Score',
+      'Rating',
+      'Response Time',
+      'Status'
+    ];
+    const sampleRows = [
+      [
+        'Apex Tech Systems Pvt Ltd',
+        'Laptops & Computers',
+        'Jaipur, Rajasthan',
+        '+91 98290 12345',
+        'sales@apextechsystems.in',
+        '08AABCA1234F1Z1',
+        'Rajesh Sharma',
+        'Wholesale Supplier & Manufacturer',
+        'Verified TrustSEAL',
+        4.9,
+        '< 1 Hour',
+        'Active'
+      ],
+      [
+        'KalaNiketan Apparels & Textiles Pvt Ltd',
+        "Women's",
+        'Surat, Gujarat',
+        '+91 98251 44556',
+        'sales@kalaniketanapparels.in',
+        '24AAPCK1029F1Z2',
+        'Pravinbhai Patel',
+        'Manufacturer & Direct Exporter',
+        'Verified TrustSEAL',
+        4.9,
+        '< 2 Hours',
+        'Active'
+      ]
+    ];
+    const csvContent = [headers.join(','), ...sampleRows.map(r => r.map(val => `"${String(val).replace(/"/g, '""')}"`).join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'sample_sellers_template.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  // Products Import File Handler
+  const handleProductCsvFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setProductImportFileName(file.name);
+    setProductImportError('');
+    setProductImportMessage('');
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const text = event.target?.result as string;
+        const rows = parseCSV(text);
+        if (rows.length === 0) {
+          setProductImportError('The selected file appears to be empty or has an invalid CSV format.');
+          setProductImportRows([]);
+        } else {
+          setProductImportRows(rows);
+        }
+      } catch (err: any) {
+        setProductImportError('Failed to parse CSV file: ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+  };
+
+  // Execute Products Import
+  const handleExecuteProductImport = async () => {
+    if (productImportRows.length === 0) {
+      alert('Please select a valid CSV file first.');
+      return;
+    }
+    setProductImportLoading(true);
+    setProductImportError('');
+    setProductImportMessage('');
+    try {
+      const res = await fetch('/api/admin/products/import', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          products: productImportRows,
+          usdExchangeRate: autoConvertCurrency ? productUsdRate : 1.0
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setProductImportMessage(data.message || `Successfully imported ${data.count} products!`);
+        await fetchAdminProducts();
+        fetchLogs();
+        setTimeout(() => {
+          setIsImportProductOpen(false);
+          setProductImportRows([]);
+          setProductImportFileName('');
+          setProductImportMessage('');
+        }, 1800);
+      } else {
+        setProductImportError(data.error || 'Failed to import products.');
+      }
+    } catch (err: any) {
+      setProductImportError('Network error while importing products.');
+    } finally {
+      setProductImportLoading(false);
+    }
+  };
+
+  // Sellers Import File Handler
+  const handleSellerCsvFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setSellerImportFileName(file.name);
+    setSellerImportError('');
+    setSellerImportMessage('');
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const text = event.target?.result as string;
+        const rows = parseCSV(text);
+        if (rows.length === 0) {
+          setSellerImportError('The selected file appears to be empty or has an invalid CSV format.');
+          setSellerImportRows([]);
+        } else {
+          setSellerImportRows(rows);
+        }
+      } catch (err: any) {
+        setSellerImportError('Failed to parse CSV file: ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+  };
+
+  // Execute Sellers Import
+  const handleExecuteSellerImport = async () => {
+    if (sellerImportRows.length === 0) {
+      alert('Please select a valid CSV file first.');
+      return;
+    }
+    setSellerImportLoading(true);
+    setSellerImportError('');
+    setSellerImportMessage('');
+    try {
+      const res = await fetch('/api/admin/sellers/import', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sellers: sellerImportRows })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setSellerImportMessage(data.message || `Successfully imported ${data.count} sellers!`);
+        await fetchAdminSellers();
+        await fetchAdminProducts();
+        fetchLogs();
+        setTimeout(() => {
+          setIsImportSellerOpen(false);
+          setSellerImportRows([]);
+          setSellerImportFileName('');
+          setSellerImportMessage('');
+        }, 1800);
+      } else {
+        setSellerImportError(data.error || 'Failed to import sellers.');
+      }
+    } catch (err: any) {
+      setSellerImportError('Network error while importing sellers.');
+    } finally {
+      setSellerImportLoading(false);
+    }
+  };
+
+  // Assign Sellers to All Products
+  const handleAssignSellersToAllProducts = async () => {
+    if (!confirm('Assign verified IndiaMART suppliers to all products in your catalog?')) return;
+    setIsAssigningSellers(true);
+    try {
+      const res = await fetch('/api/admin/sellers/assign-all', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ forceReassign: true })
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert(data.message || 'Successfully mapped sellers to all products!');
+        await fetchAdminProducts();
+        fetchLogs();
+      } else {
+        alert('Failed: ' + (data.error || 'Unknown error'));
+      }
+    } catch (err: any) {
+      alert('Network error while assigning sellers: ' + err.message);
+    } finally {
+      setIsAssigningSellers(false);
+    }
   };
 
   const handlePrintInvoice = (order: Order) => {
@@ -2079,7 +2622,7 @@ export default function AdminDashboardPage() {
   const totalSales = orders.reduce((sum, order) => sum + order.subtotal, 0);
   const totalOrders = orders.length;
   const totalInquiries = submissions.length;
-  const totalProducts = adminProducts.length;
+  const totalProducts = adminProductsTotal || adminProducts.length;
 
   // Orders list statistics & calculations
   const ordersPendingCount = orders.filter(o => o.status === 'Pending').length;
@@ -2351,11 +2894,16 @@ export default function AdminDashboardPage() {
     (b.description || '').toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const filteredProducts = adminProducts.filter(prod =>
-    (prod.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (prod.category || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (prod.sellerName || '').toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredProducts = adminProducts;
+
+  useEffect(() => {
+    if (activeTab === 'products') {
+      const timer = setTimeout(() => {
+        fetchAdminProducts(1, adminProductsLimit, searchQuery);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [searchQuery, activeTab, adminProductsLimit]);
 
   const filteredSellers = sellers.filter(seller => {
     const matchesCategory = sellerCategoryFilter === 'All' || seller.mainCategory.toLowerCase() === sellerCategoryFilter.toLowerCase();
@@ -2368,6 +2916,13 @@ export default function AdminDashboardPage() {
       (seller.gstNumber || '').toLowerCase().includes(query);
     return matchesCategory && matchesSearch;
   });
+
+  const paginatedSellers = useMemo(() => {
+    const start = (adminSellersPage - 1) * adminSellersLimit;
+    return filteredSellers.slice(start, start + adminSellersLimit);
+  }, [filteredSellers, adminSellersPage, adminSellersLimit]);
+
+  const totalSellerPages = Math.ceil(filteredSellers.length / adminSellersLimit) || 1;
 
 
 
@@ -3673,9 +4228,38 @@ export default function AdminDashboardPage() {
                 <div className={styles.panelCard}>
                   <div className={styles.panelHeader}>
                     <h3 className={styles.panelTitle}>Product Inventory</h3>
-                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', gap: '0.65rem', alignItems: 'center', flexWrap: 'wrap' }}>
                       <button className={styles.addBtn} onClick={() => setIsAddProductOpen(true)}>
                         + Add Product
+                      </button>
+                      <button className={styles.exportBtn} onClick={() => setIsImportProductOpen(true)}>
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                          <polyline points="17 8 12 3 7 8" />
+                          <line x1="12" y1="3" x2="12" y2="15" />
+                        </svg>
+                        Import CSV
+                      </button>
+                      <button className={styles.exportBtn} onClick={handleExportProductsCSV}>
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                          <polyline points="7 10 12 15 17 10" />
+                          <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                        Export CSV
+                      </button>
+                      <button
+                        className={styles.exportBtn}
+                        onClick={handleAssignSellersToAllProducts}
+                        disabled={isAssigningSellers}
+                        title="Auto-map verified sellers to all products by category"
+                      >
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="23 4 23 10 17 10" />
+                          <polyline points="1 20 1 14 7 14" />
+                          <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+                        </svg>
+                        {isAssigningSellers ? 'Assigning...' : 'Assign Sellers'}
                       </button>
                       <div className={styles.searchWrapper}>
                         <input
@@ -3690,7 +4274,9 @@ export default function AdminDashboardPage() {
                   </div>
 
                   <div className={styles.tableWrapper}>
-                    {filteredProducts.length === 0 ? (
+                    {adminProductsLoading ? (
+                      <div className={styles.emptyState}>Loading inventory records...</div>
+                    ) : filteredProducts.length === 0 ? (
                       <div className={styles.emptyState}>No products found in database.</div>
                     ) : (
                       <table className={styles.table}>
@@ -3751,6 +4337,82 @@ export default function AdminDashboardPage() {
                       </table>
                     )}
                   </div>
+
+                  {adminProductsTotalPages > 1 && (
+                    <div style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      padding: '1.25rem 2rem',
+                      borderTop: '1px solid #edf2f7',
+                      backgroundColor: '#fafbfc',
+                      flexWrap: 'wrap',
+                      gap: '1rem',
+                      borderRadius: '0 0 12px 12px'
+                    }}>
+                      <div style={{ fontSize: '13.5px', color: '#64748b', fontWeight: 500 }}>
+                        Showing {(adminProductsPage - 1) * adminProductsLimit + 1} to {Math.min(adminProductsPage * adminProductsLimit, adminProductsTotal)} of {adminProductsTotal.toLocaleString()} products
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                        <select
+                          value={adminProductsLimit}
+                          onChange={(e) => {
+                            const newLimit = parseInt(e.target.value, 10);
+                            setAdminProductsLimit(newLimit);
+                            fetchAdminProducts(1, newLimit, searchQuery);
+                          }}
+                          style={{
+                            padding: '6px 10px',
+                            borderRadius: '6px',
+                            border: '1px solid #cbd5e1',
+                            fontSize: '13px',
+                            color: '#334155',
+                            backgroundColor: '#fff',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          <option value={25}>25 / page</option>
+                          <option value={50}>50 / page</option>
+                          <option value={100}>100 / page</option>
+                        </select>
+                        <button
+                          disabled={adminProductsPage <= 1}
+                          onClick={() => fetchAdminProducts(adminProductsPage - 1, adminProductsLimit, searchQuery)}
+                          style={{
+                            padding: '6px 14px',
+                            borderRadius: '6px',
+                            border: '1px solid #cbd5e1',
+                            backgroundColor: adminProductsPage <= 1 ? '#f1f5f9' : '#fff',
+                            color: adminProductsPage <= 1 ? '#94a3b8' : '#0f172a',
+                            fontSize: '13px',
+                            fontWeight: 600,
+                            cursor: adminProductsPage <= 1 ? 'not-allowed' : 'pointer'
+                          }}
+                        >
+                          Prev
+                        </button>
+                        <span style={{ fontSize: '13px', fontWeight: 600, color: '#334155', padding: '0 6px' }}>
+                          Page {adminProductsPage} of {adminProductsTotalPages}
+                        </span>
+                        <button
+                          disabled={adminProductsPage >= adminProductsTotalPages}
+                          onClick={() => fetchAdminProducts(adminProductsPage + 1, adminProductsLimit, searchQuery)}
+                          style={{
+                            padding: '6px 14px',
+                            borderRadius: '6px',
+                            border: '1px solid #cbd5e1',
+                            backgroundColor: adminProductsPage >= adminProductsTotalPages ? '#f1f5f9' : '#fff',
+                            color: adminProductsPage >= adminProductsTotalPages ? '#94a3b8' : '#0f172a',
+                            fontSize: '13px',
+                            fontWeight: 600,
+                            cursor: adminProductsPage >= adminProductsTotalPages ? 'not-allowed' : 'pointer'
+                          }}
+                        >
+                          Next
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -3767,13 +4429,44 @@ export default function AdminDashboardPage() {
                           IndiaMART-style verified suppliers, manufacturers & distributors assigned to main product categories.
                         </p>
                       </div>
-                      <button className={styles.addBtn} onClick={() => setIsAddSellerOpen(true)} style={{ backgroundColor: '#00a8b5', border: 'none', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                          <line x1="12" y1="5" x2="12" y2="19" />
-                          <line x1="5" y1="12" x2="19" y2="12" />
-                        </svg>
-                        + Add Supplier
-                      </button>
+                      <div style={{ display: 'flex', gap: '0.65rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                        <button className={styles.addBtn} onClick={() => setIsAddSellerOpen(true)} style={{ backgroundColor: '#00a8b5', border: 'none', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                          </svg>
+                          + Add Supplier
+                        </button>
+                        <button className={styles.exportBtn} onClick={() => setIsImportSellerOpen(true)}>
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="17 8 12 3 7 8" />
+                            <line x1="12" y1="3" x2="12" y2="15" />
+                          </svg>
+                          Import CSV
+                        </button>
+                        <button className={styles.exportBtn} onClick={handleExportSellersCSV}>
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="7 10 12 15 17 10" />
+                            <line x1="12" y1="15" x2="12" y2="3" />
+                          </svg>
+                          Export CSV
+                        </button>
+                        <button
+                          className={styles.exportBtn}
+                          onClick={handleAssignSellersToAllProducts}
+                          disabled={isAssigningSellers}
+                          title="Assign verified suppliers to all products in catalog"
+                        >
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="23 4 23 10 17 10" />
+                            <polyline points="1 20 1 14 7 14" />
+                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+                          </svg>
+                          {isAssigningSellers ? 'Assigning...' : 'Assign to All Products'}
+                        </button>
+                      </div>
                     </div>
 
                     <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.5rem', flexWrap: 'wrap', gap: '0.75rem' }}>
@@ -3828,7 +4521,7 @@ export default function AdminDashboardPage() {
                           </tr>
                         </thead>
                         <tbody>
-                          {filteredSellers.map((s) => (
+                          {paginatedSellers.map((s: Seller) => (
                             <tr key={s.id} className={styles.tr}>
                               <td className={styles.td}>
                                 <div>
@@ -3890,6 +4583,81 @@ export default function AdminDashboardPage() {
                       </table>
                     )}
                   </div>
+
+                  {totalSellerPages > 1 && (
+                    <div style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      padding: '1.25rem 2rem',
+                      borderTop: '1px solid #edf2f7',
+                      backgroundColor: '#fafbfc',
+                      flexWrap: 'wrap',
+                      gap: '1rem',
+                      borderRadius: '0 0 12px 12px'
+                    }}>
+                      <div style={{ fontSize: '13.5px', color: '#64748b', fontWeight: 500 }}>
+                        Showing {(adminSellersPage - 1) * adminSellersLimit + 1} to {Math.min(adminSellersPage * adminSellersLimit, filteredSellers.length)} of {filteredSellers.length.toLocaleString()} suppliers
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                        <select
+                          value={adminSellersLimit}
+                          onChange={(e) => {
+                            setAdminSellersLimit(parseInt(e.target.value, 10));
+                            setAdminSellersPage(1);
+                          }}
+                          style={{
+                            padding: '6px 10px',
+                            borderRadius: '6px',
+                            border: '1px solid #cbd5e1',
+                            fontSize: '13px',
+                            color: '#334155',
+                            backgroundColor: '#fff',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          <option value={25}>25 / page</option>
+                          <option value={50}>50 / page</option>
+                          <option value={100}>100 / page</option>
+                        </select>
+                        <button
+                          disabled={adminSellersPage <= 1}
+                          onClick={() => setAdminSellersPage(prev => Math.max(1, prev - 1))}
+                          style={{
+                            padding: '6px 14px',
+                            borderRadius: '6px',
+                            border: '1px solid #cbd5e1',
+                            backgroundColor: adminSellersPage <= 1 ? '#f1f5f9' : '#fff',
+                            color: adminSellersPage <= 1 ? '#94a3b8' : '#0f172a',
+                            fontSize: '13px',
+                            fontWeight: 600,
+                            cursor: adminSellersPage <= 1 ? 'not-allowed' : 'pointer'
+                          }}
+                        >
+                          Prev
+                        </button>
+                        <span style={{ fontSize: '13px', fontWeight: 600, color: '#334155', padding: '0 6px' }}>
+                          Page {adminSellersPage} of {totalSellerPages}
+                        </span>
+                        <button
+                          disabled={adminSellersPage >= totalSellerPages}
+                          onClick={() => setAdminSellersPage(prev => Math.min(totalSellerPages, prev + 1))}
+                          style={{
+                            padding: '6px 14px',
+                            borderRadius: '6px',
+                            border: '1px solid #cbd5e1',
+                            backgroundColor: adminSellersPage >= totalSellerPages ? '#f1f5f9' : '#fff',
+                            color: adminSellersPage >= totalSellerPages ? '#94a3b8' : '#0f172a',
+                            fontSize: '13px',
+                            fontWeight: 600,
+                            cursor: adminSellersPage >= totalSellerPages ? 'not-allowed' : 'pointer'
+                          }}
+                        >
+                          Next
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -6393,6 +7161,360 @@ export default function AdminDashboardPage() {
                 Save Changes
               </button>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Import Products Modal */}
+      {isImportProductOpen && (
+        <div className={styles.modalOverlay} onClick={() => { setIsImportProductOpen(false); setProductImportRows([]); setProductImportFileName(''); setProductImportError(''); setProductImportMessage(''); }}>
+          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()} style={{ maxWidth: '640px' }}>
+            <button className={styles.modalClose} onClick={() => { setIsImportProductOpen(false); setProductImportRows([]); setProductImportFileName(''); setProductImportError(''); setProductImportMessage(''); }}>×</button>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px', flexWrap: 'wrap', gap: '8px' }}>
+              <h4 className={styles.modalTitle} style={{ margin: 0 }}>Import Products via CSV</h4>
+              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                <button
+                  type="button"
+                  className={styles.sampleTemplateBtn}
+                  onClick={handleDownloadKaggleSampleCSV}
+                  title="Download Kaggle / Datafiniti format sample CSV template"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                  </svg>
+                  Kaggle / Datafiniti Template (USD)
+                </button>
+                <button
+                  type="button"
+                  className={styles.sampleTemplateBtn}
+                  onClick={handleDownloadProductSampleCSV}
+                  title="Download standard CSV template"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                  </svg>
+                  Standard Template
+                </button>
+              </div>
+            </div>
+            <p style={{ color: '#666', fontSize: '13.5px', marginTop: '4px', marginBottom: '1rem' }}>
+              Bulk import products from CSV. Supports standard catalogs and <strong>Kaggle/Datafiniti Electronic Products datasets</strong> with automatic currency conversion to Indian Rupee (₹).
+            </p>
+
+            {/* Currency Converter Card */}
+            <div className={styles.currencyConverterCard}>
+              <div className={styles.currencyConverterHeader}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                  <span style={{ fontSize: '18px' }}>💱</span>
+                  <span style={{ fontWeight: 700, fontSize: '13.5px', color: '#0369a1' }}>
+                    Indian Rupee (₹ INR) Price Currency Converter
+                  </span>
+                  {productImportRows.length > 0 && ('prices.amountMin' in productImportRows[0] || 'prices.currency' in productImportRows[0]) && (
+                    <span className={styles.formatBadge}>
+                      Kaggle / Datafiniti Format Detected
+                    </span>
+                  )}
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <label style={{ fontSize: '12.5px', fontWeight: 600, color: '#334155' }}>
+                    1 USD = ₹
+                  </label>
+                  <input
+                    type="number"
+                    step="0.5"
+                    min="1"
+                    className={styles.currencyRateInput}
+                    value={productUsdRate}
+                    onChange={(e) => setProductUsdRate(parseFloat(e.target.value) || 85)}
+                  />
+                  <span style={{ fontSize: '12px', color: '#64748b', fontWeight: 600 }}>INR</span>
+                </div>
+              </div>
+              <div style={{ fontSize: '12.5px', color: '#475569', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
+                <span>
+                  Foreign prices (e.g. <strong>$104.80 USD</strong>) will convert to <strong>₹{Math.round(104.80 * (productUsdRate || 85)).toLocaleString('en-IN')} INR</strong> with automatic wholesale MRP & IndiaMART supplier mapping.
+                </span>
+                <label style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '12px', cursor: 'pointer', color: '#0f172a', fontWeight: 600 }}>
+                  <input
+                    type="checkbox"
+                    checked={autoConvertCurrency}
+                    onChange={(e) => setAutoConvertCurrency(e.target.checked)}
+                  />
+                  Convert to INR (₹)
+                </label>
+              </div>
+            </div>
+
+            {productImportError && (
+              <div style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#b91c1c', padding: '10px 14px', borderRadius: '8px', fontSize: '13.5px', marginBottom: '1rem' }}>
+                ⚠️ {productImportError}
+              </div>
+            )}
+
+            {productImportMessage && (
+              <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', color: '#15803d', padding: '10px 14px', borderRadius: '8px', fontSize: '13.5px', marginBottom: '1rem', fontWeight: 600 }}>
+                ✓ {productImportMessage}
+              </div>
+            )}
+
+            <label className={styles.dropZone}>
+              <input
+                type="file"
+                accept=".csv"
+                style={{ display: 'none' }}
+                onChange={handleProductCsvFileSelect}
+              />
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#0284c7" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="17 8 12 3 7 8" />
+                <line x1="12" y1="3" x2="12" y2="15" />
+              </svg>
+              <div>
+                <span style={{ fontWeight: 600, color: '#0f172a', fontSize: '14.5px' }}>
+                  {productImportFileName ? productImportFileName : 'Click to select CSV or drag file here'}
+                </span>
+                <div style={{ color: '#64748b', fontSize: '12.5px', marginTop: '2px' }}>
+                  Supports Kaggle (prices.amountMin, asins, imageURLs) & standard CSV files
+                </div>
+              </div>
+            </label>
+
+            {productImportRows.length > 0 && (
+              <div style={{ marginTop: '1.1rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: '13px', fontWeight: 600, color: '#334155' }}>
+                    CSV Preview ({productImportRows.length} {productImportRows.length === 1 ? 'row' : 'rows'} detected):
+                  </span>
+                  <span style={{ fontSize: '12px', color: '#64748b' }}>Showing first 3 rows</span>
+                </div>
+                <div className={styles.csvPreviewTableWrapper}>
+                  {(() => {
+                    const firstRow = productImportRows[0];
+                    const isKaggle = 'prices.amountMin' in firstRow || 'prices.currency' in firstRow;
+
+                    if (isKaggle) {
+                      return (
+                        <table className={styles.csvPreviewTable}>
+                          <thead>
+                            <tr>
+                              <th>Product Name</th>
+                              <th>Image (from CSV)</th>
+                              <th>Categories</th>
+                              <th>Brand</th>
+                              <th>Original Price</th>
+                              <th style={{ color: '#0369a1' }}>Converted Price (₹ INR)</th>
+                              <th>ASIN / SKU</th>
+                              <th>Stock</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {productImportRows.slice(0, 3).map((row, idx) => {
+                              const rawPrice = Number(String(row['prices.amountMin'] || row.price || '0').replace(/[^\d.]/g, '')) || 0;
+                              const curr = row['prices.currency'] || 'USD';
+                              const inrPrice = autoConvertCurrency
+                                ? (curr.includes('INR') || curr.includes('₹') ? rawPrice : Math.round(rawPrice * productUsdRate))
+                                : rawPrice;
+                              const rawImgStr = String(
+                                row.imageURLs ||
+                                row.imageurls ||
+                                row.imageUrls ||
+                                row.imageURL ||
+                                row.image ||
+                                row['Image URL'] ||
+                                row.images ||
+                                row['Image'] ||
+                                ''
+                              );
+                              const matchedUrl = rawImgStr.match(/https?:\/\/[^\s,"'<>[\]{}|]+/i)?.[0] || '';
+
+                              return (
+                                <tr key={idx}>
+                                  <td style={{ fontWeight: 600 }}>{row.name || row['Product Name'] || '-'}</td>
+                                  <td>
+                                    {matchedUrl ? (
+                                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                        <img src={matchedUrl} alt="" style={{ width: '28px', height: '28px', objectFit: 'contain', borderRadius: '4px', border: '1px solid #e2e8f0' }} onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                                        <span style={{ fontSize: '11px', color: '#64748b', maxWidth: '100px', overflow: 'hidden', textOverflow: 'ellipsis' }}>{matchedUrl}</span>
+                                      </div>
+                                    ) : (
+                                      <span style={{ color: '#94a3b8' }}>Default</span>
+                                    )}
+                                  </td>
+                                  <td>{row.categories || row.primaryCategories || row.category || '-'}</td>
+                                  <td>{row.brand || row.manufacturer || 'General'}</td>
+                                  <td>{curr} {rawPrice ? rawPrice.toFixed(2) : '-'}</td>
+                                  <td style={{ fontWeight: 700, color: '#059669' }}>
+                                    ₹{inrPrice.toLocaleString('en-IN')}
+                                  </td>
+                                  <td>{row.asins || row.sku || row.upc || '-'}</td>
+                                  <td>{row['prices.availability'] || 'In Stock'}</td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      );
+                    }
+
+                    return (
+                      <table className={styles.csvPreviewTable}>
+                        <thead>
+                          <tr>
+                            {Object.keys(firstRow).slice(0, 6).map((headerKey) => (
+                              <th key={headerKey}>{headerKey}</th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {productImportRows.slice(0, 3).map((row, idx) => (
+                            <tr key={idx}>
+                              {Object.keys(firstRow).slice(0, 6).map((headerKey) => (
+                                <td key={headerKey}>{row[headerKey] || '-'}</td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    );
+                  })()}
+                </div>
+              </div>
+            )}
+
+            <button
+              type="button"
+              className={styles.loginBtn}
+              onClick={handleExecuteProductImport}
+              disabled={productImportLoading || productImportRows.length === 0}
+              style={{
+                marginTop: '1.5rem',
+                width: '100%',
+                backgroundColor: '#00a8b5',
+                border: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px'
+              }}
+            >
+              {productImportLoading ? 'Importing Products...' : `Import ${productImportRows.length > 0 ? productImportRows.length : ''} Products to Database`}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Import Sellers Modal */}
+      {isImportSellerOpen && (
+        <div className={styles.modalOverlay} onClick={() => { setIsImportSellerOpen(false); setSellerImportRows([]); setSellerImportFileName(''); setSellerImportError(''); setSellerImportMessage(''); }}>
+          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()} style={{ maxWidth: '640px' }}>
+            <button className={styles.modalClose} onClick={() => { setIsImportSellerOpen(false); setSellerImportRows([]); setSellerImportFileName(''); setSellerImportError(''); setSellerImportMessage(''); }}>×</button>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px', flexWrap: 'wrap', gap: '8px' }}>
+              <h4 className={styles.modalTitle} style={{ margin: 0 }}>Import Suppliers & Sellers via CSV</h4>
+              <button
+                type="button"
+                className={styles.sampleTemplateBtn}
+                onClick={handleDownloadSellerSampleCSV}
+                title="Download sample CSV template for sellers"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                Download Sample CSV
+              </button>
+            </div>
+            <p style={{ color: '#666', fontSize: '13.5px', marginTop: '4px', marginBottom: '1.25rem' }}>
+              Upload your verified vendor catalog to bulk insert suppliers with auto-category & product mapping.
+            </p>
+
+            {sellerImportError && (
+              <div style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#b91c1c', padding: '10px 14px', borderRadius: '8px', fontSize: '13.5px', marginBottom: '1rem' }}>
+                ⚠️ {sellerImportError}
+              </div>
+            )}
+
+            {sellerImportMessage && (
+              <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', color: '#15803d', padding: '10px 14px', borderRadius: '8px', fontSize: '13.5px', marginBottom: '1rem', fontWeight: 600 }}>
+                ✓ {sellerImportMessage}
+              </div>
+            )}
+
+            <label className={styles.dropZone}>
+              <input
+                type="file"
+                accept=".csv"
+                style={{ display: 'none' }}
+                onChange={handleSellerCsvFileSelect}
+              />
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#00a8b5" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="17 8 12 3 7 8" />
+                <line x1="12" y1="3" x2="12" y2="15" />
+              </svg>
+              <div>
+                <span style={{ fontWeight: 600, color: '#0f172a', fontSize: '14.5px' }}>
+                  {sellerImportFileName ? sellerImportFileName : 'Click to select CSV or drag file here'}
+                </span>
+                <div style={{ color: '#64748b', fontSize: '12.5px', marginTop: '2px' }}>
+                  Supports CSV with Company Name, Main Category, Location, GST, Phone, Email
+                </div>
+              </div>
+            </label>
+
+            {sellerImportRows.length > 0 && (
+              <div style={{ marginTop: '1.1rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: '13px', fontWeight: 600, color: '#334155' }}>
+                    CSV Preview ({sellerImportRows.length} {sellerImportRows.length === 1 ? 'row' : 'rows'} detected):
+                  </span>
+                  <span style={{ fontSize: '12px', color: '#64748b' }}>Showing first 3 rows</span>
+                </div>
+                <div className={styles.csvPreviewTableWrapper}>
+                  <table className={styles.csvPreviewTable}>
+                    <thead>
+                      <tr>
+                        {Object.keys(sellerImportRows[0]).slice(0, 6).map((headerKey) => (
+                          <th key={headerKey}>{headerKey}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {sellerImportRows.slice(0, 3).map((row, idx) => (
+                        <tr key={idx}>
+                          {Object.keys(sellerImportRows[0]).slice(0, 6).map((headerKey) => (
+                            <td key={headerKey}>{row[headerKey] || '-'}</td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            <button
+              type="button"
+              className={styles.loginBtn}
+              onClick={handleExecuteSellerImport}
+              disabled={sellerImportLoading || sellerImportRows.length === 0}
+              style={{
+                marginTop: '1.5rem',
+                width: '100%',
+                backgroundColor: '#00a8b5',
+                border: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px'
+              }}
+            >
+              {sellerImportLoading ? 'Importing Suppliers...' : `Import ${sellerImportRows.length > 0 ? sellerImportRows.length : ''} Suppliers to Database`}
+            </button>
           </div>
         </div>
       )}

@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic';
 
 // Mock data catalogs to resolve mock IDs
 const BASE_CATALOG_PRODUCTS = [
-  { name: 'Ipad 9th Gen', price: 125000, image: 'https://ik.imagekit.io/zp0tch54w/RHST/wmremove-transformed.png', category: 'Hardware', brand: 'Dell' },
+  { name: 'Ipad 9th Gen', price: 125000, image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0', category: 'Hardware', brand: 'Dell' },
   { name: 'Drone With Camera', price: 42000, image: '/images/drone.png', category: 'Hardware', brand: 'Samsung' },
   { name: 'Watch Stylist', price: 15000, image: '/images/bestselling_watch.png', category: 'Hardware', brand: 'Dell' },
   { name: 'Ultra HD TV', price: 75000, image: '/images/bestselling_tv.png', category: 'Office Equipment', brand: 'Samsung' },
