@@ -1,0 +1,59 @@
+# VALNQIX
+
+> VALNQIX (a brand under RHST E-Commerce Pvt. Ltd.) is an Indian B2B IT hardware marketplace, supplier directory, and enterprise technology solutions platform.
+
+## Overview
+
+VALNQIX connects businesses, procurement managers, and individual buyers with verified manufacturers, wholesalers, and distributors of IT hardware, networking infrastructure, and enterprise computing equipment across India. The platform facilitates direct buying requirements, competitive price quotations, and verified supplier sourcing.
+
+- **Brand:** VALNQIX
+- **Parent Company:** RHST E-Commerce Pvt. Ltd.
+- **Website:** https://www.valnqix.com
+- **Contact Email:** info@valnqix.in
+- **Platform Focus:** B2B IT Hardware Catalog, Verified Supplier Directory, Request for Quotation (RFQ), Managed IT Services
+
+---
+
+## Core IT Hardware Categories
+
+VALNQIX offers over 14,000 active IT hardware products across major categories:
+
+- [Laptops & Computers](https://www.valnqix.com/products?category=Laptops%20%26%20Computers): Business laptops, workstations, commercial PCs, thin clients, and computing accessories.
+- [Desktop PCs & Hardware](https://www.valnqix.com/products?category=Electronics): Custom desktop assemblies, motherboards, processors, graphics units, power supplies, and internal hardware.
+- [Storage Devices](https://www.valnqix.com/products?category=Storage%20devices): Enterprise SSDs, NVMe drives, internal/external HDDs, server storage, and NAS solutions.
+- [Networking & Infrastructure](https://www.valnqix.com/products?category=Electronics): Enterprise routers, network switches, structured cabling, Wi-Fi access points, and rack cabinets.
+- [Keyboards & Input Devices](https://www.valnqix.com/products?category=Keyboard%20%26%20mouse): Mechanical keyboards, ergonomic mice, commercial peripherals, and barcode scanners.
+- [Monitors & Commercial Displays](https://www.valnqix.com/products?category=Television): High-resolution desktop monitors, ultra-wide screens, commercial display panels, and mounting hardware.
+- [Cameras & Security Systems](https://www.valnqix.com/products?category=Camera): CCTV surveillance cameras, security hardware, webcams, and digital monitoring solutions.
+- [Audio & Multimedia](https://www.valnqix.com/products?category=Speaker%27s): Conference audio, business sound systems, headsets, and multimedia equipment.
+
+---
+
+## Professional & Enterprise IT Services
+
+VALNQIX provides end-to-end technical support and enterprise IT infrastructure management:
+
+- [IT Annual Maintenance Contract (AMC)](https://www.valnqix.com/services/amc): Comprehensive preventive maintenance, remote monitoring, and hardware coverage for office networks and IT assets.
+- [Cloud Solutions & Migration](https://www.valnqix.com/services/cloud): Cloud environment architecture, secure data migration, cloud backup, and cloud-native workload optimization.
+- [IT Consultation Services](https://www.valnqix.com/services/consultation): Technology infrastructure audit, digital transformation advisory, hardware sizing, and procurement strategy.
+- [Professional IT Installation](https://www.valnqix.com/services/installation): Desktop deployment, network rack setups, firewall configurations, server deployment, and CCTV security installations.
+- [IT Support & Helpdesk](https://www.valnqix.com/services/it-support): Rapid remote assistance, on-site troubleshooting, diagnostic support, and operating system recovery.
+- [Hardware Repair & Maintenance](https://www.valnqix.com/services/repair-maintenance): Component-level diagnostics, logic board repairs, power restoration, and equipment lifecycle servicing.
+
+---
+
+## Key Site Directory & Navigation
+
+- **Home Page:** https://www.valnqix.com/
+- **Products Catalog:** https://www.valnqix.com/products
+- **Verified Suppliers Directory:** https://www.valnqix.com/suppliers
+- **Post Buy Requirement (Request Quotations):** https://www.valnqix.com/checkout
+- **Technology Blog & Guides:** https://www.valnqix.com/blog
+- **About VALNQIX:** https://www.valnqix.com/about
+- **Contact & Support:** https://www.valnqix.com/contact
+- **Frequently Asked Questions (FAQ):** https://www.valnqix.com/faq
+- **Privacy Policy:** https://www.valnqix.com/privacy-policy
+- **Terms & Conditions:** https://www.valnqix.com/terms-conditions
+- **Return & Refund Policy:** https://www.valnqix.com/return-policy
+- **Shipping Policy:** https://www.valnqix.com/shipping-policy
+- **XML Sitemap:** https://www.valnqix.com/sitemap.xml
