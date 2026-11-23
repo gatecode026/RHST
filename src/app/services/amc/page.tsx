@@ -4,6 +4,8 @@ import Header from '@/components/Header';
 import Brands from '@/components/Brands';
 import Footer from '@/components/Footer';
 import ContactForm from '@/components/ContactForm';
+import PageFAQ from '@/components/PageFAQ';
+import { AMC_FAQS } from '@/data/faqs';
 import { getCanonicalUrl } from '@/lib/seo';
 import styles from './AMC.module.css';
 
@@ -388,6 +390,14 @@ export default function AMCPage() {
             </p>
           </div>
         </section>
+
+        {/* Direct FAQ Section */}
+        <PageFAQ
+          title="Annual Maintenance Contract (AMC) FAQs"
+          subtitle="Direct answers regarding SLA response times, hardware coverage, and preventive maintenance visits."
+          badge="AMC Service Guide"
+          faqs={AMC_FAQS}
+        />
 
         {/* Contact Form Section */}
         <section className={styles.formSection}>

@@ -4,6 +4,8 @@ import Header from '@/components/Header';
 import Brands from '@/components/Brands';
 import Footer from '@/components/Footer';
 import ContactForm from '@/components/ContactForm';
+import PageFAQ from '@/components/PageFAQ';
+import { IT_SUPPORT_FAQS } from '@/data/faqs';
 import { getCanonicalUrl } from '@/lib/seo';
 import styles from './ITSupport.module.css';
 
@@ -398,6 +400,14 @@ export default function ITSupportPage() {
             </p>
           </div>
         </section>
+
+        {/* Direct FAQ Section */}
+        <PageFAQ
+          title="IT Support & Helpdesk FAQs"
+          subtitle="Direct answers regarding remote troubleshooting, response SLAs, and emergency on-site engineer dispatch."
+          badge="Helpdesk Support Guide"
+          faqs={IT_SUPPORT_FAQS}
+        />
 
         {/* Contact Form Section */}
         <section className={styles.formSection}>

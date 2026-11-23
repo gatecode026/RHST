@@ -4,6 +4,8 @@ import Header from '@/components/Header';
 import Brands from '@/components/Brands';
 import Footer from '@/components/Footer';
 import ContactForm from '@/components/ContactForm';
+import PageFAQ from '@/components/PageFAQ';
+import { INSTALLATION_FAQS } from '@/data/faqs';
 import { getCanonicalUrl } from '@/lib/seo';
 import styles from './Installation.module.css';
 
@@ -527,6 +529,14 @@ export default function InstallationServicesPage() {
             </p>
           </div>
         </section>
+
+        {/* Direct FAQ Section */}
+        <PageFAQ
+          title="IT Installation & Office Deployment FAQs"
+          subtitle="Direct answers on network cabling, server rack assembly, CCTV systems, and workstation staging."
+          badge="Deployment Guide"
+          faqs={INSTALLATION_FAQS}
+        />
 
         {/* Contact Form Section */}
         <section className={styles.formSection}>

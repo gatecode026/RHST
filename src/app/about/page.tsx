@@ -8,6 +8,8 @@ import CustomerReviews from '@/components/CustomerReviews';
 import OurBlog from '@/components/OurBlog';
 import Brands from '@/components/Brands';
 import Footer from '@/components/Footer';
+import PageFAQ from '@/components/PageFAQ';
+import { ABOUT_FAQS } from '@/data/faqs';
 import { getCanonicalUrl } from '@/lib/seo';
 import styles from './About.module.css';
 
@@ -120,6 +122,12 @@ export default function AboutPage() {
 
         {/* Reused Home Page Sections */}
         <OurServices />
+        <PageFAQ
+          title="About VALNQIX & Corporate Verification FAQs"
+          subtitle="Learn more about our relationship with RHST E-Commerce Pvt. Ltd., verified suppliers, and nationwide logistics."
+          badge="Company & Trust Verification"
+          faqs={ABOUT_FAQS}
+        />
         <CustomerReviews />
         <OurBlog />
         <Brands />

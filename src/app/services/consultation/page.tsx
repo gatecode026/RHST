@@ -4,6 +4,8 @@ import Header from '@/components/Header';
 import Brands from '@/components/Brands';
 import Footer from '@/components/Footer';
 import ContactForm from '@/components/ContactForm';
+import PageFAQ from '@/components/PageFAQ';
+import { CONSULTATION_FAQS } from '@/data/faqs';
 import { getCanonicalUrl } from '@/lib/seo';
 import styles from './Consultation.module.css';
 
@@ -451,6 +453,14 @@ export default function ConsultationServicesPage() {
             </p>
           </div>
         </section>
+
+        {/* Direct FAQ Section */}
+        <PageFAQ
+          title="IT Strategic Consultation FAQs"
+          subtitle="Direct answers on IT infrastructure audits, hardware sizing, startup setups, and procurement savings."
+          badge="Consulting Advisory Guide"
+          faqs={CONSULTATION_FAQS}
+        />
 
         {/* Contact Form Section */}
         <section className={styles.formSection}>

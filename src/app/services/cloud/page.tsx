@@ -4,6 +4,8 @@ import Header from '@/components/Header';
 import Brands from '@/components/Brands';
 import Footer from '@/components/Footer';
 import ContactForm from '@/components/ContactForm';
+import PageFAQ from '@/components/PageFAQ';
+import { CLOUD_FAQS } from '@/data/faqs';
 import { getCanonicalUrl } from '@/lib/seo';
 import styles from './Cloud.module.css';
 
@@ -453,6 +455,14 @@ export default function CloudServicesPage() {
             </p>
           </div>
         </section>
+
+        {/* Direct FAQ Section */}
+        <PageFAQ
+          title="Cloud Solutions & Migration FAQs"
+          subtitle="Direct answers on AWS/Azure migration, zero downtime switchovers, and cloud cost management."
+          badge="Cloud Advisory Guide"
+          faqs={CLOUD_FAQS}
+        />
 
         {/* Contact Form Section */}
         <section className={styles.formSection}>
