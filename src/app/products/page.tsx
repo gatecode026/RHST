@@ -2,6 +2,7 @@ import React from 'react';
 import type { Metadata } from 'next';
 import ProductsClient from './ProductsClient';
 import { getCanonicalUrl } from '@/lib/seo';
+import { getInitialProductsData } from '@/lib/serverData';
 
 export const metadata: Metadata = {
   title: 'Products Catalog | VALNQIX E-commerce & IT Solutions',
@@ -11,6 +12,15 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ProductsPage() {
-  return <ProductsClient />;
+export default async function ProductsPage() {
+  const initialData = await getInitialProductsData(24);
+
+  return (
+    <ProductsClient
+      initialProducts={initialData.products}
+      initialTotal={initialData.total}
+      initialCategories={initialData.categories}
+      initialBrands={initialData.brands}
+    />
+  );
 }

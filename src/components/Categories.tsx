@@ -11,12 +11,19 @@ interface Category {
   link: string;
 }
 
-export default function Categories({ title = 'Categories' }: { title?: string }) {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
+export default function Categories({
+  title = 'Categories',
+  initialCategories = []
+}: {
+  title?: string;
+  initialCategories?: Category[];
+}) {
+  const [categories, setCategories] = useState<Category[]>(initialCategories);
+  const [loading, setLoading] = useState(initialCategories.length === 0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (initialCategories.length > 0) return;
     const fetchCategories = async () => {
       try {
         const res = await fetch('/api/categories?t=' + Date.now(), { cache: 'no-store' });

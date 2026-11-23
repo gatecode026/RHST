@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect, useRef, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Header from '@/components/Header';
@@ -56,14 +56,25 @@ const MAJOR_STATES = [
   'West Bengal'
 ];
 
-function SuppliersCatalogContent() {
+interface SuppliersClientProps {
+  initialSellers?: Seller[];
+  initialTotal?: number;
+  initialTotalPages?: number;
+}
+
+function SuppliersCatalogContent({
+  initialSellers = [],
+  initialTotal = 0,
+  initialTotalPages = 1
+}: SuppliersClientProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [sellers, setSellers] = useState<Seller[]>([]);
-  const [total, setTotal] = useState(0);
-  const [totalPages, setTotalPages] = useState(1);
-  const [loading, setLoading] = useState(true);
+  const [sellers, setSellers] = useState<Seller[]>(initialSellers);
+  const [total, setTotal] = useState(initialTotal || initialSellers.length);
+  const [totalPages, setTotalPages] = useState(initialTotalPages || Math.max(1, Math.ceil((initialTotal || initialSellers.length) / 24)));
+  const [loading, setLoading] = useState(false);
+  const isInitialMount = useRef(true);
 
   // Filters state synced with URL params
   const [activeCategory, setActiveCategory] = useState(searchParams.get('category') || 'All');
@@ -91,6 +102,19 @@ function SuppliersCatalogContent() {
 
   // Fetch sellers when filters change
   useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      const hasFilter = (activeCategory && activeCategory !== 'All') ||
+        (activeState && activeState !== 'All') ||
+        (activeSort && activeSort !== 'rating') ||
+        searchQuery.trim() ||
+        currentPage !== 1;
+
+      if (!hasFilter && initialSellers.length > 0) {
+        return;
+      }
+    }
+
     let isCancelled = false;
     const fetchSellers = async () => {
       setLoading(true);
@@ -443,14 +467,14 @@ function SuppliersCatalogContent() {
   );
 }
 
-export default function SuppliersClient() {
+export default function SuppliersClient(props: SuppliersClientProps) {
   return (
     <Suspense fallback={
       <div style={{ textAlign: 'center', padding: '5rem 0', color: '#64748b' }}>
         <h3>Loading Verified Suppliers...</h3>
       </div>
     }>
-      <SuppliersCatalogContent />
+      <SuppliersCatalogContent {...props} />
     </Suspense>
   );
 }

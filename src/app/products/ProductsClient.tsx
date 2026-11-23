@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo, useEffect, Suspense } from 'react';
+import React, { useState, useMemo, useEffect, useRef, Suspense } from 'react';
 import Header from '@/components/Header';
 import Link from 'next/link';
 import Categories from '@/components/Categories';
@@ -37,7 +37,19 @@ const MOCKUP_REVIEWS = [
   }
 ];
 
-function ProductsCatalogContent() {
+interface ProductsClientProps {
+  initialProducts?: any[];
+  initialTotal?: number;
+  initialCategories?: any[];
+  initialBrands?: any[];
+}
+
+function ProductsCatalogContent({
+  initialProducts = [],
+  initialTotal = 0,
+  initialCategories = [],
+  initialBrands = []
+}: ProductsClientProps) {
   const searchParams = useSearchParams();
 
   // Filter local states
@@ -64,20 +76,21 @@ function ProductsCatalogContent() {
     }
   }, [searchParams]);
 
-  // Dynamic products states
-  const [products, setProducts] = useState<any[]>([]);
-  const [totalProducts, setTotalProducts] = useState(0);
-  const [totalPages, setTotalPages] = useState(1);
-  const [dbCategories, setDbCategories] = useState<any[]>([]);
-  const [dbBrands, setDbBrands] = useState<any[]>([]);
+  // Dynamic products states initialized with SSR data for instant raw HTML rendering
+  const [products, setProducts] = useState<any[]>(initialProducts);
+  const [totalProducts, setTotalProducts] = useState(initialTotal || initialProducts.length);
+  const [totalPages, setTotalPages] = useState(Math.max(1, Math.ceil((initialTotal || initialProducts.length) / 24)));
+  const [dbCategories, setDbCategories] = useState<any[]>(initialCategories);
+  const [dbBrands, setDbBrands] = useState<any[]>(initialBrands);
   const [facetCounts, setFacetCounts] = useState<{
     total: number;
     categories: Record<string, number>;
     brands: Record<string, number>;
     sellers: Record<string, number>;
     priceRanges: Record<string, number>;
-  }>({ total: 0, categories: {}, brands: {}, sellers: {}, priceRanges: {} });
-  const [loading, setLoading] = useState(true);
+  }>({ total: initialTotal || 0, categories: {}, brands: {}, sellers: {}, priceRanges: {} });
+  const [loading, setLoading] = useState(false);
+  const isInitialMount = useRef(true);
 
   // Load initial catalog metadata (categories, brands, fast cached facet counts)
   useEffect(() => {
@@ -124,6 +137,22 @@ function ProductsCatalogContent() {
 
   // Server-side paginated & filtered products fetch
   useEffect(() => {
+    // If we already rendered SSR products on initial load and no search/filter is active, avoid duplicate network fetch
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      const hasFilter = (activeCategory && activeCategory !== 'All') ||
+        (activeBrand && activeBrand !== 'All') ||
+        (activeSeller && activeSeller !== 'All') ||
+        activePriceRange ||
+        (sortOption && sortOption !== 'default') ||
+        searchQuery.trim() ||
+        currentPage !== 1;
+
+      if (!hasFilter && initialProducts.length > 0) {
+        return;
+      }
+    }
+
     let isCancelled = false;
     const fetchPaginatedProducts = async () => {
       setLoading(true);
@@ -920,14 +949,14 @@ function ProductsCatalogContent() {
   );
 }
 
-export default function ProductsClient() {
+export default function ProductsClient(props: ProductsClientProps) {
   return (
     <Suspense fallback={
       <div style={{ textAlign: 'center', padding: '4rem 0', color: 'var(--gray)' }}>
         <h3 style={{ fontSize: '20px', fontWeight: 300 }}>Loading Catalog...</h3>
       </div>
     }>
-      <ProductsCatalogContent />
+      <ProductsCatalogContent {...props} />
     </Suspense>
   );
 }

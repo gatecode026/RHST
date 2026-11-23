@@ -20,14 +20,15 @@ interface Product {
   sellerVerified?: boolean;
 }
 
-export default function BestSelling() {
+export default function BestSelling({ initialProducts = [] }: { initialProducts?: Product[] }) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState<Product[]>(initialProducts);
+  const [loading, setLoading] = useState(initialProducts.length === 0);
   const [selectedProductForEnquiry, setSelectedProductForEnquiry] = useState<EnquiryProduct | null>(null);
 
   useEffect(() => {
+    if (initialProducts.length > 0) return;
     const fetchProducts = async () => {
       try {
         const res = await fetch('/api/products?banner=true&limit=8', { cache: 'no-store' });

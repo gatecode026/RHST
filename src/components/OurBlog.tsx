@@ -31,12 +31,13 @@ const FALLBACK_BLOG_DATA = [
   }
 ];
 
-export default function OurBlog({ className = '' }: { className?: string }) {
+export default function OurBlog({ className = '', initialBlogs = [] }: { className?: string; initialBlogs?: any[] }) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const [blogs, setBlogs] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [blogs, setBlogs] = useState<any[]>(initialBlogs.length > 0 ? initialBlogs : FALLBACK_BLOG_DATA);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    if (initialBlogs.length > 0) return;
     const fetchBlogs = async () => {
       try {
         const res = await fetch('/api/blog');

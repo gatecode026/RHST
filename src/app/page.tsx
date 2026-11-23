@@ -13,6 +13,7 @@ import OurBlog from '@/components/OurBlog';
 import Brands from '@/components/Brands';
 import Footer from '@/components/Footer';
 import { getCanonicalUrl } from '@/lib/seo';
+import { getHomeInitialData } from '@/lib/serverData';
 
 export const dynamic = 'force-dynamic';
 
@@ -24,7 +25,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Home() {
+export default async function Home() {
+  const homeData = await getHomeInitialData();
+
   return (
     <>
       {/* Navigation Header */}
@@ -38,16 +41,16 @@ export default function Home() {
         <Features />
 
         {/* Categories Section */}
-        <Categories />
+        <Categories initialCategories={homeData.categories} />
 
         {/* Best Selling Products */}
-        <BestSelling />
+        <BestSelling initialProducts={homeData.bestSelling} />
 
         {/* Apple Collection Promos & Countdown */}
         <PromoBanner />
 
         {/* Multi-Column List Feed */}
-        <ProductColumns />
+        <ProductColumns initialProducts={homeData.columnsProducts} />
 
         {/* Our Services */}
         <OurServices />
@@ -56,7 +59,7 @@ export default function Home() {
         <CustomerReviews />
 
         {/* Our Blog */}
-        <OurBlog />
+        <OurBlog initialBlogs={homeData.blogs} />
 
         {/* Infinite Brand Marquee */}
         <Brands />

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import CustomerReviews from '@/components/CustomerReviews';
@@ -9,9 +9,10 @@ import Brands from '@/components/Brands';
 import Footer from '@/components/Footer';
 import styles from './Blog.module.css';
 
-export default function BlogClient() {
-  const [blogs, setBlogs] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+export default function BlogClient({ initialBlogs = [] }: { initialBlogs?: any[] }) {
+  const [blogs, setBlogs] = useState<any[]>(initialBlogs);
+  const [loading, setLoading] = useState(false);
+  const isInitialMount = useRef(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
@@ -20,6 +21,11 @@ export default function BlogClient() {
   const itemsPerPage = 9;
 
   useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      if (initialBlogs.length > 0) return;
+    }
+
     const fetchBlogs = async () => {
       try {
         const res = await fetch('/api/blog');

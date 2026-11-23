@@ -341,50 +341,45 @@ export default function ProductDetailsClient({ initialProduct }: { initialProduc
         </div>
 
         <div className={styles.tabContent}>
-          {activeTab === 'description' && (
-            <div className={styles.descriptionTab}>
-              <h3>Product Description</h3>
-              <p>{product.description}</p>
-              <p>The product is engineered to deliver exceptional performance, maximizing user efficiency and workflow reliability. It integrates cutting-edge technology platforms that blend seamless operability, fast response time, and robust configuration options suitable for contemporary systems setup.</p>
-            </div>
-          )}
+          <div className={styles.descriptionTab} style={{ display: activeTab === 'description' ? 'block' : 'none' }}>
+            <h3>Product Description</h3>
+            <p>{product.description}</p>
+            <p>The product is engineered to deliver exceptional performance, maximizing user efficiency and workflow reliability. It integrates cutting-edge technology platforms that blend seamless operability, fast response time, and robust configuration options suitable for contemporary systems setup.</p>
+          </div>
 
-          {activeTab === 'info' && (
-            <div className={styles.infoTab}>
-              <table className={styles.infoTabTable}>
-                <tbody>
-                  <tr>
-                    <td>Brand</td>
-                    <td>{product.brand}</td>
-                  </tr>
-                  <tr>
-                    <td>Operating System</td>
-                    <td>{product.os}</td>
-                  </tr>
-                  <tr>
-                    <td>Personal computer design type</td>
-                    <td>{product.designType}</td>
-                  </tr>
-                  <tr>
-                    <td>SKU</td>
-                    <td>{product.sku}</td>
-                  </tr>
-                  <tr>
-                    <td>Warranty</td>
-                    <td>{product.warranty} Months</td>
-                  </tr>
-                  <tr>
-                    <td>Stock available</td>
-                    <td>{product.stock} Units</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          )}
+          <div className={styles.infoTab} style={{ display: activeTab === 'info' ? 'block' : 'none' }}>
+            <table className={styles.infoTabTable}>
+              <tbody>
+                <tr>
+                  <td>Brand</td>
+                  <td>{product.brand}</td>
+                </tr>
+                <tr>
+                  <td>Operating System</td>
+                  <td>{product.os}</td>
+                </tr>
+                <tr>
+                  <td>Personal computer design type</td>
+                  <td>{product.designType}</td>
+                </tr>
+                <tr>
+                  <td>SKU</td>
+                  <td>{product.sku}</td>
+                </tr>
+                <tr>
+                  <td>Warranty</td>
+                  <td>{product.warranty} Months</td>
+                </tr>
+                <tr>
+                  <td>Stock available</td>
+                  <td>{product.stock} Units</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-          {activeTab === 'reviews' && (
-            <div className={styles.reviewsTab}>
-              {/* Reviews List */}
+          <div className={styles.reviewsTab} style={{ display: activeTab === 'reviews' ? 'block' : 'none' }}>
+            {/* Reviews List */}
               <div className={styles.reviewsList}>
                 {product.reviews.map((rev, idx) => (
                   <div key={idx} className={styles.reviewCard}>
@@ -512,9 +507,8 @@ export default function ProductDetailsClient({ initialProduct }: { initialProduc
                 </form>
               </div>
             </div>
-          )}
+          </div>
         </div>
-      </div>
 
       {/* Reused bottom page layouts matching the user layout exactly */}
       <div className={styles.categoriesWrapper}>

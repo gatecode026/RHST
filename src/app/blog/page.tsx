@@ -2,6 +2,7 @@ import React from 'react';
 import type { Metadata } from 'next';
 import BlogClient from './BlogClient';
 import { getCanonicalUrl } from '@/lib/seo';
+import { getInitialBlogsData } from '@/lib/serverData';
 
 export const metadata: Metadata = {
   title: 'Tech Blog & Insights | VALNQIX E-commerce & IT Solutions',
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function BlogPage() {
-  return <BlogClient />;
+export default async function BlogPage() {
+  const initialBlogs = await getInitialBlogsData();
+  return <BlogClient initialBlogs={initialBlogs} />;
 }
