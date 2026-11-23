@@ -8,16 +8,39 @@ import CustomerReviews from '@/components/CustomerReviews';
 import OurBlog from '@/components/OurBlog';
 import Brands from '@/components/Brands';
 import Footer from '@/components/Footer';
+import PageFAQ from '@/components/PageFAQ';
+import { ABOUT_FAQS } from '@/data/faqs';
+import { getCanonicalUrl } from '@/lib/seo';
+import { getOrganizationSchema, getBreadcrumbSchema } from '@/lib/schema';
 import styles from './About.module.css';
 
 export const metadata: Metadata = {
   title: 'About Us | VALNQIX E-commerce & IT Solutions',
   description: 'Learn more about VALNQIX, our mission to connect people and businesses with top-tier technology, and our vision to lead digital transformation.',
+  alternates: {
+    canonical: getCanonicalUrl('/about'),
+  },
 };
 
 export default function AboutPage() {
+  const orgSchema = getOrganizationSchema();
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: 'About Us', url: '/about' }
+  ]);
+
   return (
     <>
+      {/* Organization Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
+      />
+      {/* BreadcrumbList Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+
       {/* Navigation Header */}
       <Header />
 
@@ -114,8 +137,132 @@ export default function AboutPage() {
           </div>
         </section>
 
+        {/* Corporate Governance & E-E-A-T Details Section */}
+        <section className={styles.corporateSection}>
+          <div className="container">
+            <div className={styles.corporateHeader}>
+              <span className={styles.corporateBadge}>E-E-A-T Corporate Verification</span>
+              <h2 className={styles.corporateTitle}>Corporate Governance &amp; Legal Identity</h2>
+              <p className={styles.corporateSubtitle}>
+                VALNQIX is an enterprise IT hardware marketplace and managed technology solutions platform owned and operated by <strong>RHST E-Commerce Pvt. Ltd.</strong> We maintain complete statutory transparency, registered corporate offices, and verified tax credentials.
+              </p>
+            </div>
+
+            <div className={styles.corporateGrid}>
+              {/* Card 1: Parent Entity & Registration */}
+              <div className={styles.corporateCard}>
+                <div className={styles.corporateCardIcon}>🏛️</div>
+                <h3 className={styles.corporateCardTitle}>Parent Legal Entity</h3>
+                <ul className={styles.corporateDetailList}>
+                  <li className={styles.corporateDetailItem}>
+                    <span className={styles.corporateDetailLabel}>Company Legal Name</span>
+                    <span className={styles.corporateDetailValue}>RHST E-Commerce Pvt. Ltd.</span>
+                  </li>
+                  <li className={styles.corporateDetailItem}>
+                    <span className={styles.corporateDetailLabel}>Corporate Identity No. (CIN)</span>
+                    <span className={styles.corporateDetailValue} style={{ fontFamily: 'monospace', fontWeight: 700, color: '#0284c7' }}>
+                      U47912RJ2026PTC115018
+                    </span>
+                  </li>
+                  <li className={styles.corporateDetailItem}>
+                    <span className={styles.corporateDetailLabel}>MCA Registrar of Companies</span>
+                    <span className={styles.corporateDetailValue}>RoC Jaipur (Ministry of Corporate Affairs)</span>
+                  </li>
+                  <li className={styles.corporateDetailItem}>
+                    <span className={styles.corporateDetailLabel}>Brand / Commercial Trading Name</span>
+                    <span className={styles.corporateDetailValue}>VALNQIX</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Card 2: Tax & Statutory Compliance */}
+              <div className={styles.corporateCard}>
+                <div className={styles.corporateCardIcon}>📋</div>
+                <h3 className={styles.corporateCardTitle}>Tax &amp; Statutory Compliance</h3>
+                <ul className={styles.corporateDetailList}>
+                  <li className={styles.corporateDetailItem}>
+                    <span className={styles.corporateDetailLabel}>Goods &amp; Services Tax (GSTIN)</span>
+                    <span className={styles.corporateDetailValue} style={{ fontFamily: 'monospace', fontWeight: 700, color: '#16a34a' }}>
+                      08AAPCR9622R1Z9
+                    </span>
+                  </li>
+                  <li className={styles.corporateDetailItem}>
+                    <span className={styles.corporateDetailLabel}>State Tax Jurisdiction</span>
+                    <span className={styles.corporateDetailValue}>Rajasthan, State Code: 08</span>
+                  </li>
+                  <li className={styles.corporateDetailItem}>
+                    <span className={styles.corporateDetailLabel}>PAN Identifier</span>
+                    <span className={styles.corporateDetailValue} style={{ fontFamily: 'monospace' }}>AAPCR9622R</span>
+                  </li>
+                  <li className={styles.corporateDetailItem}>
+                    <span className={styles.corporateDetailLabel}>B2B Invoicing &amp; Tax Credits</span>
+                    <span className={styles.corporateDetailValue}>100% GST-compliant tax invoices with full Input Tax Credit (ITC) eligibility</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Card 3: Offices & Support Desks */}
+              <div className={styles.corporateCard}>
+                <div className={styles.corporateCardIcon}>📍</div>
+                <h3 className={styles.corporateCardTitle}>Offices &amp; Support Contact</h3>
+                <ul className={styles.corporateDetailList}>
+                  <li className={styles.corporateDetailItem}>
+                    <span className={styles.corporateDetailLabel}>Noida Corporate Office</span>
+                    <span className={styles.corporateDetailValue}>
+                      G-52, Sector 63, UP, NOIDA, Uttar Pradesh, India - 201301
+                    </span>
+                  </li>
+                  <li className={styles.corporateDetailItem}>
+                    <span className={styles.corporateDetailLabel}>Registered Corporate Office</span>
+                    <span className={styles.corporateDetailValue}>
+                      Khasra 5437/1641 Kali Ka, Khana Sanganer Chapola, Sanganer Bazar, Sanganer, Jaipur, Rajasthan, India - 302029
+                    </span>
+                  </li>
+                  <li className={styles.corporateDetailItem}>
+                    <span className={styles.corporateDetailLabel}>Customer Support Phone</span>
+                    <span className={styles.corporateDetailValue}>
+                      <a href="tel:+919829012345" className={styles.corporateDetailLink} style={{ fontWeight: 700 }}>
+                        +91 98290 12345
+                      </a>
+                    </span>
+                  </li>
+                  <li className={styles.corporateDetailItem}>
+                    <span className={styles.corporateDetailLabel}>Official Support Email</span>
+                    <span className={styles.corporateDetailValue}>
+                      <a href="mailto:info@valnqix.in" className={styles.corporateDetailLink}>
+                        info@valnqix.in
+                      </a>
+                    </span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Trust Assurance Banner */}
+            <div className={styles.corporateTrustBanner}>
+              <div className={styles.trustBannerText}>
+                <h4>Enterprise Trust &amp; Procurement Guarantee</h4>
+                <p>
+                  Every commercial transaction, quotation request, and service engagement processed via VALNQIX is backed by verifiable parent company governance, audited invoices, and direct OEM brand warranty coverage.
+                </p>
+              </div>
+              <div className={styles.trustBannerBadges}>
+                <span className={styles.trustPill}>✓ MCA Verified Company</span>
+                <span className={styles.trustPill}>✓ Active GSTIN: 08AAPCR9622R1Z9</span>
+                <span className={styles.trustPill}>✓ Noida Operations Hub</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Reused Home Page Sections */}
         <OurServices />
+        <PageFAQ
+          title="About VALNQIX & Corporate Verification FAQs"
+          subtitle="Learn more about our relationship with RHST E-Commerce Pvt. Ltd., verified suppliers, and nationwide logistics."
+          badge="Company & Trust Verification"
+          faqs={ABOUT_FAQS}
+        />
         <CustomerReviews />
         <OurBlog />
         <Brands />

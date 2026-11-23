@@ -88,7 +88,7 @@
 .navLinks {
   display: flex;
   align-items: center;
-  gap: clamp(1rem, 1.6vw, 1.75rem);
+  gap: clamp(0.9rem, 1.4vw, 1.6rem);
   margin: 0 auto;
 }
 
@@ -104,7 +104,8 @@
   display: inline-flex;
   align-items: center;
   white-space: nowrap;
-  gap: 3px;
+  flex-shrink: 0;
+  gap: 2px;
 }
 
 .navLinks a:hover {
@@ -116,13 +117,14 @@
 }
 
 .chevron {
-  font-size: 0.72rem;
-  margin-left: 3px;
+  font-size: 0.68rem;
+  margin-left: 2px;
   display: inline-block;
   vertical-align: middle;
   color: inherit;
   transition: color var(--transition-fast);
   transform: scaleY(0.8);
+  flex-shrink: 0;
 }
 
 /* Dropdown styling */
@@ -130,6 +132,8 @@
   position: relative;
   display: inline-flex;
   align-items: center;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .dropdownBtn {
@@ -137,7 +141,8 @@
   display: inline-flex !important;
   align-items: center !important;
   white-space: nowrap !important;
-  gap: 3px;
+  flex-shrink: 0 !important;
+  gap: 2px !important;
 }
 
 .dropdownContent {
@@ -257,6 +262,30 @@
   display: flex;
   align-items: center;
   gap: 1.5rem;
+  flex-shrink: 0;
+}
+
+.headerRequirementBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #16a34a;
+  color: #ffffff;
+  padding: 7px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  box-shadow: 0 2px 4px rgba(22, 163, 74, 0.25);
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background-color var(--transition-fast);
+}
+
+.headerRequirementBtn:hover {
+  background-color: #15803d;
 }
 
 .actionBtn {
@@ -676,6 +705,31 @@
 }
 
 /* Responsive Media Queries */
+@media (max-width: 1260px) and (min-width: 1025px) {
+  .navWrapper {
+    gap: 0.85rem;
+  }
+
+  .navLinks {
+    gap: clamp(0.5rem, 0.9vw, 0.85rem);
+  }
+
+  .navLinks a {
+    font-size: 0.84rem;
+    letter-spacing: 0.01em;
+  }
+
+  .actions {
+    gap: 0.85rem;
+  }
+
+  .headerRequirementBtn {
+    padding: 6px 10px;
+    font-size: 11px;
+    gap: 4px;
+  }
+}
+
 @media (max-width: 1024px) {
   .topBar {
     display: none;

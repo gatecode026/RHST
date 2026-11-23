@@ -8,6 +8,7 @@ import Footer from '@/components/Footer';
 import CommentSection from '@/components/CommentSection';
 import { getDb } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
+import { getCanonicalUrl } from '@/lib/seo';
 import styles from './BlogDetail.module.css';
 import SafeImage from './SafeImage';
 
@@ -19,6 +20,7 @@ interface PageProps {
 // Dynamic route metadata query
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
+  const canonicalPath = `/blog/${id}`;
   try {
     const db = await getDb();
     const collection = db.collection('blogs');
@@ -35,6 +37,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       return {
         title: `${blog.title} | VALNQIX Blog`,
         description: blog.excerpt || `Read the latest blog post "${blog.title}" on VALNQIX E-commerce & IT Solutions.`,
+        alternates: {
+          canonical: getCanonicalUrl(canonicalPath),
+        },
       };
     }
   } catch (error) {
@@ -43,6 +48,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: 'Blog Post | VALNQIX Blog',
     description: 'Explore the latest tech news, gadgets advice, and software guidelines on the VALNQIX Blog.',
+    alternates: {
+      canonical: getCanonicalUrl(canonicalPath),
+    },
   };
 }
 

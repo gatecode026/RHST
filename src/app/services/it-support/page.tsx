@@ -4,16 +4,34 @@ import Header from '@/components/Header';
 import Brands from '@/components/Brands';
 import Footer from '@/components/Footer';
 import ContactForm from '@/components/ContactForm';
+import PageFAQ from '@/components/PageFAQ';
+import { IT_SUPPORT_FAQS } from '@/data/faqs';
+import { getCanonicalUrl } from '@/lib/seo';
+import { getBreadcrumbSchema } from '@/lib/schema';
 import styles from './ITSupport.module.css';
 
 export const metadata: Metadata = {
   title: 'IT Support & Repair Services | VALNQIX E-commerce & IT Solutions',
   description: 'At VALNQIX, we provide professional IT Support and Repair Services to keep your technology systems running smoothly and efficiently. Explore our remote and on-site support options.',
+  alternates: {
+    canonical: getCanonicalUrl('/services/it-support'),
+  },
 };
 
 export default function ITSupportPage() {
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: 'Services', url: '/#services' },
+    { name: 'IT Support & Helpdesk Services', url: '/services/it-support' }
+  ]);
+
   return (
     <>
+      {/* BreadcrumbList Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+
       {/* Navigation Header */}
       <Header />
 
@@ -394,6 +412,14 @@ export default function ITSupportPage() {
             </p>
           </div>
         </section>
+
+        {/* Direct FAQ Section */}
+        <PageFAQ
+          title="IT Support & Helpdesk FAQs"
+          subtitle="Direct answers regarding remote troubleshooting, response SLAs, and emergency on-site engineer dispatch."
+          badge="Helpdesk Support Guide"
+          faqs={IT_SUPPORT_FAQS}
+        />
 
         {/* Contact Form Section */}
         <section className={styles.formSection}>

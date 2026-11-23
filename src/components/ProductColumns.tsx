@@ -28,12 +28,13 @@ interface Column {
   products: Product[];
 }
 
-export default function ProductColumns() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+export default function ProductColumns({ initialProducts = [] }: { initialProducts?: Product[] }) {
+  const [products, setProducts] = useState<Product[]>(initialProducts);
+  const [loading, setLoading] = useState(initialProducts.length === 0);
   const [selectedProductForEnquiry, setSelectedProductForEnquiry] = useState<EnquiryProduct | null>(null);
 
   useEffect(() => {
+    if (initialProducts.length > 0) return;
     const fetchProducts = async () => {
       try {
         const res = await fetch('/api/products?columns=true&limit=12', { cache: 'no-store' });

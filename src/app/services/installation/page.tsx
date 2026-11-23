@@ -4,16 +4,34 @@ import Header from '@/components/Header';
 import Brands from '@/components/Brands';
 import Footer from '@/components/Footer';
 import ContactForm from '@/components/ContactForm';
+import PageFAQ from '@/components/PageFAQ';
+import { INSTALLATION_FAQS } from '@/data/faqs';
+import { getCanonicalUrl } from '@/lib/seo';
+import { getBreadcrumbSchema } from '@/lib/schema';
 import styles from './Installation.module.css';
 
 export const metadata: Metadata = {
   title: 'IT Installation Services & Solutions | VALNQIX E-commerce & IT Solutions',
   description: 'Explore professional IT installation services by VALNQIX IT-Ecommerce. We provide desktop setups, firmware configuration, network installations, server setups, CCTV security setups, and software installation.',
+  alternates: {
+    canonical: getCanonicalUrl('/services/installation'),
+  },
 };
 
 export default function InstallationServicesPage() {
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: 'Services', url: '/#services' },
+    { name: 'IT Installation Services', url: '/services/installation' }
+  ]);
+
   return (
     <>
+      {/* BreadcrumbList Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+
       {/* Navigation Header */}
       <Header />
 
@@ -523,6 +541,14 @@ export default function InstallationServicesPage() {
             </p>
           </div>
         </section>
+
+        {/* Direct FAQ Section */}
+        <PageFAQ
+          title="IT Installation & Office Deployment FAQs"
+          subtitle="Direct answers on network cabling, server rack assembly, CCTV systems, and workstation staging."
+          badge="Deployment Guide"
+          faqs={INSTALLATION_FAQS}
+        />
 
         {/* Contact Form Section */}
         <section className={styles.formSection}>

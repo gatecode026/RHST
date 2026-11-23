@@ -1,4 +1,5 @@
 import React from 'react';
+import type { Metadata } from 'next';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import Features from '@/components/Features';
@@ -11,12 +12,32 @@ import CustomerReviews from '@/components/CustomerReviews';
 import OurBlog from '@/components/OurBlog';
 import Brands from '@/components/Brands';
 import Footer from '@/components/Footer';
+import { getCanonicalUrl } from '@/lib/seo';
+import { getHomeInitialData } from '@/lib/serverData';
+import { getOrganizationSchema } from '@/lib/schema';
 
 export const dynamic = 'force-dynamic';
 
-export default function Home() {
+export const metadata: Metadata = {
+  title: "VALNQIX | B2B IT Hardware, Suppliers & Marketplace Directory",
+  description: "Connect directly with verified IT hardware manufacturers, wholesalers, and distributors across India. Post buy requirements, request lowest quotations, and source IT equipment directly from suppliers.",
+  alternates: {
+    canonical: getCanonicalUrl('/'),
+  },
+};
+
+export default async function Home() {
+  const homeData = await getHomeInitialData();
+  const orgSchema = getOrganizationSchema();
+
   return (
     <>
+      {/* Organization Structured Data for Search Engines & AI Crawlers */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
+      />
+
       {/* Navigation Header */}
       <Header />
 
@@ -28,16 +49,16 @@ export default function Home() {
         <Features />
 
         {/* Categories Section */}
-        <Categories />
+        <Categories initialCategories={homeData.categories} />
 
         {/* Best Selling Products */}
-        <BestSelling />
+        <BestSelling initialProducts={homeData.bestSelling} />
 
         {/* Apple Collection Promos & Countdown */}
         <PromoBanner />
 
         {/* Multi-Column List Feed */}
-        <ProductColumns />
+        <ProductColumns initialProducts={homeData.columnsProducts} />
 
         {/* Our Services */}
         <OurServices />
@@ -46,7 +67,7 @@ export default function Home() {
         <CustomerReviews />
 
         {/* Our Blog */}
-        <OurBlog />
+        <OurBlog initialBlogs={homeData.blogs} />
 
         {/* Infinite Brand Marquee */}
         <Brands />

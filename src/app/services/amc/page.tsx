@@ -4,16 +4,34 @@ import Header from '@/components/Header';
 import Brands from '@/components/Brands';
 import Footer from '@/components/Footer';
 import ContactForm from '@/components/ContactForm';
+import PageFAQ from '@/components/PageFAQ';
+import { AMC_FAQS } from '@/data/faqs';
+import { getCanonicalUrl } from '@/lib/seo';
+import { getBreadcrumbSchema } from '@/lib/schema';
 import styles from './AMC.module.css';
 
 export const metadata: Metadata = {
   title: 'AMC (Annual Maintenance Contract) | VALNQIX E-commerce & IT Solutions',
   description: 'VALNQIX provides an IT Annual Maintenance Contract (AMC) service to deliver proactive IT support to keep your systems, devices, and technology infrastructure secure, high-performing, and operational.',
+  alternates: {
+    canonical: getCanonicalUrl('/services/amc'),
+  },
 };
 
 export default function AMCPage() {
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: 'Services', url: '/#services' },
+    { name: 'Annual Maintenance Contract (AMC)', url: '/services/amc' }
+  ]);
+
   return (
     <>
+      {/* BreadcrumbList Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+
       {/* Navigation Header */}
       <Header />
 
@@ -384,6 +402,14 @@ export default function AMCPage() {
             </p>
           </div>
         </section>
+
+        {/* Direct FAQ Section */}
+        <PageFAQ
+          title="Annual Maintenance Contract (AMC) FAQs"
+          subtitle="Direct answers regarding SLA response times, hardware coverage, and preventive maintenance visits."
+          badge="AMC Service Guide"
+          faqs={AMC_FAQS}
+        />
 
         {/* Contact Form Section */}
         <section className={styles.formSection}>

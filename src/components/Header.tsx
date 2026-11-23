@@ -444,7 +444,7 @@ export default function Header() {
         <div className="container">
           <div className={styles.topBarContent}>
             <div className={styles.topBarItem}>
-              <span>Summer sale discount off 60% off! <Link href="/products" className={styles.topBarLink}>Shop Now</Link></span>
+              <span>Summer sale discount 60% off! <Link href="/products" className={styles.topBarLink}>Shop Now</Link></span>
             </div>
             <div className={styles.topBarItem}>
               2-3 business days delivery & free returns
@@ -480,7 +480,7 @@ export default function Header() {
                   href="/products" 
                   className={`${styles.dropdownBtn} ${pathname.startsWith('/products') ? styles.activeLink : ''}`}
                 >
-                  PRODUCTS<span className={styles.chevron}>▾</span>
+                  <span>PRODUCTS</span><span className={styles.chevron}>▾</span>
                 </Link>
                 <div className={styles.dropdownContent}>
                   {getMainCategories().map((mainCat) => {
@@ -514,7 +514,7 @@ export default function Header() {
                   href="/suppliers" 
                   className={`${styles.dropdownBtn} ${pathname.startsWith("/suppliers") ? styles.activeLink : ""}`}
                 >
-                  VERIFIED SUPPLIERS<span className={styles.chevron}>▾</span>
+                  <span>VERIFIED SUPPLIERS</span><span className={styles.chevron}>▾</span>
                 </Link>
                 <div className={styles.dropdownContent} style={{ minWidth: "275px" }}>
                   <Link 
@@ -537,7 +537,7 @@ export default function Header() {
                   href="/#services" 
                   className={`${styles.dropdownBtn} ${pathname.startsWith('/services') ? styles.activeLink : ''}`}
                 >
-                  SERVICES<span className={styles.chevron}>▾</span>
+                  <span>SERVICES</span><span className={styles.chevron}>▾</span>
                 </Link>
                 <div className={styles.dropdownContent}>
                   <Link href="/services/it-support">IT Support</Link>
@@ -683,21 +683,6 @@ export default function Header() {
               {/* IndiaMART Post Buy Requirement CTA */}
               <Link
                 href="/products"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  backgroundColor: '#16a34a',
-                  color: '#ffffff',
-                  padding: '7px 14px',
-                  borderRadius: '6px',
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  textDecoration: 'none',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.02em',
-                  boxShadow: '0 2px 4px rgba(22, 163, 74, 0.25)'
-                }}
                 className={styles.headerRequirementBtn}
               >
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">

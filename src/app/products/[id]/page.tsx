@@ -1,10 +1,14 @@
 import React from 'react';
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ProductDetailsClient from './ProductDetailsClient';
 import { getDb } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
+import { getCanonicalUrl } from '@/lib/seo';
+import { isNonItSlug } from '@/lib/nonItFilter';
+import { getProductSchema, getBreadcrumbSchema } from '@/lib/schema';
 
 export const dynamic = 'force-dynamic';
 
@@ -217,15 +221,33 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
   const product = await getProduct(id);
+  const canonicalPath = `/products/${product?.slug || id}`;
   if (!product) {
+    if (isNonItSlug(id)) {
+      return {
+        title: 'Product Discontinued (410 Gone) | VALNQIX',
+        description: 'This product has been permanently discontinued and removed from the VALNQIX IT hardware catalog.',
+        robots: {
+          index: false,
+          follow: false,
+        },
+      };
+    }
     return {
       title: 'Product Not Found | VALNQIX',
-      description: 'The requested product could not be found.'
+      description: 'The requested product could not be found.',
+      robots: {
+        index: false,
+        follow: false,
+      },
     };
   }
   return {
     title: `${product.name} | VALNQIX IT Products & Solutions`,
-    description: product.description
+    description: product.description,
+    alternates: {
+      canonical: getCanonicalUrl(canonicalPath),
+    },
   };
 }
 
@@ -234,23 +256,34 @@ export default async function ProductDetailPage({ params }: PageProps) {
   const product = await getProduct(id);
 
   if (!product) {
-    return (
-      <>
-        <Header />
-        <main style={{ minHeight: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' }}>
-          <h2 style={{ fontSize: '2rem', fontWeight: 300, marginBottom: '1rem', textTransform: 'uppercase' }}>Product Not Found</h2>
-          <p style={{ color: 'var(--gray)', marginBottom: '2rem' }}>We could not find the product you were looking for.</p>
-          <a href="/products" style={{ backgroundColor: 'var(--primary)', color: '#fff', padding: '10px 24px', borderRadius: '4px', fontSize: '15px' }}>
-            Back to Products Catalog
-          </a>
-        </main>
-        <Footer />
-      </>
-    );
+    notFound();
   }
+
+  const productSchema = getProductSchema(product, id);
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: 'Products', url: '/products' },
+    {
+      name: product.category || 'Hardware',
+      url: `/products?category=${encodeURIComponent(product.category || 'Hardware')}`
+    },
+    {
+      name: product.name,
+      url: `/products/${product.slug || id}`
+    }
+  ]);
 
   return (
     <>
+      {/* Product Schema (SSR Structured Data) */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+      />
+      {/* BreadcrumbList Schema (SSR Structured Data) */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <Header />
       <main style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#fff' }}>
         <ProductDetailsClient initialProduct={product} />

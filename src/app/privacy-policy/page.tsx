@@ -4,11 +4,15 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Brands from '@/components/Brands';
 import Footer from '@/components/Footer';
+import { getCanonicalUrl } from '@/lib/seo';
 import styles from './Privacy.module.css';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy | VALNQIX E-commerce & IT Solutions',
   description: 'Read the privacy policy of VALNQIX to understand how we collect, use, store, and protect your personal and technical information.',
+  alternates: {
+    canonical: getCanonicalUrl('/privacy-policy'),
+  },
 };
 
 export default function PrivacyPolicyPage() {

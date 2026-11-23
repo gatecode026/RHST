@@ -7,16 +7,31 @@ import OurBlog from '@/components/OurBlog';
 import Brands from '@/components/Brands';
 import Footer from '@/components/Footer';
 import ContactForm from '@/components/ContactForm';
+import { getCanonicalUrl } from '@/lib/seo';
+import { getBreadcrumbSchema } from '@/lib/schema';
 import styles from './Contact.module.css';
 
 export const metadata: Metadata = {
   title: 'Contact Us | VALNQIX E-commerce & IT Solutions',
-  description: 'Get in touch with VALNQIX. Contact our office or management teams, locate our store in Brooklyn, NY, or send us your questions and inquiries online.',
+  description: 'Get in touch with VALNQIX (a brand under RHST E-Commerce Pvt. Ltd.). Contact our Noida corporate office or Jaipur headquarters for IT hardware procurement and quotations.',
+  alternates: {
+    canonical: getCanonicalUrl('/contact'),
+  },
 };
 
 export default function ContactPage() {
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: 'Contact', url: '/contact' }
+  ]);
+
   return (
     <>
+      {/* BreadcrumbList Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+
       {/* Navigation Header */}
       <Header />
 
@@ -42,19 +57,27 @@ export default function ContactPage() {
               <div>
                 <h2 className={styles.sectionTitle}>CONTACT INFO</h2>
                 <p className={styles.sectionDesc}>
-                  Tortor cras enim convallis aenean et tortor at risus viverra adipiscing.
+                  Get in touch with VALNQIX, a brand operated under RHST E-Commerce Pvt. Ltd. Our corporate support desk assists enterprises and institutions with wholesale IT hardware quotations, bulk procurement, and technical service contracts.
                 </p>
 
                 <div className={styles.infoCols}>
                   <div className={styles.infoCol}>
-                    <h3 className={styles.infoTitle}>OFFICE</h3>
-                    <p className={styles.infoText}>G 52, UP, NOIDA, Uttar Pradesh, India 201301</p>
+                    <h3 className={styles.infoTitle}>NOIDA OFFICE</h3>
+                    <p className={styles.infoText}>G-52, Sector 63, UP, NOIDA, Uttar Pradesh, India - 201301</p>
+                    <p className={styles.infoText}>
+                      <a href="tel:+919829012345" style={{ color: 'var(--primary)', fontWeight: 600, textDecoration: 'none' }}>
+                        📞 +91 98290 12345
+                      </a>
+                    </p>
                     <p className={styles.infoText}>info@valnqix.in</p>
                   </div>
                   <div className={styles.infoCol}>
-                    <h3 className={styles.infoTitle}>MANAGEMENT</h3>
-                    <p className={styles.infoText}>G 52, UP, NOIDA, Uttar Pradesh, India 201301</p>
-                    <p className={styles.infoText}>info@valnqix.in</p>
+                    <h3 className={styles.infoTitle}>REGISTERED OFFICE</h3>
+                    <p className={styles.infoText}>Khasra 5437/1641 Kali Ka, Khana Sanganer Chapola, Sanganer Bazar, Sanganer, Jaipur, Rajasthan - 302029</p>
+                    <p className={styles.infoText} style={{ fontSize: '0.82rem', color: '#666' }}>
+                      CIN: U47912RJ2026PTC115018<br />
+                      GSTIN: 08AAPCR9622R1Z9
+                    </p>
                   </div>
                 </div>
               </div>
@@ -63,7 +86,7 @@ export default function ContactPage() {
               <div>
                 <h2 className={styles.sectionTitle}>ANY QUESTIONS?</h2>
                 <p className={styles.sectionDesc}>
-                  Use the form below to get in touch with us.
+                  Use the form below to get in touch with our procurement and support teams.
                 </p>
 
                 <ContactForm type="contact" styles={styles} />
@@ -74,13 +97,16 @@ export default function ContactPage() {
             {/* Store Grid Section */}
             <div className={styles.storeGrid}>
               <div className={styles.storeContent}>
-                <h2 className={styles.sectionTitle} style={{ marginBottom: '0.5rem' }}>OUR STORES</h2>
+                <h2 className={styles.sectionTitle} style={{ marginBottom: '0.5rem' }}>CORPORATE LOCATIONS</h2>
                 <p className={styles.sectionDesc} style={{ marginBottom: '1.5rem' }}>
-                  You can also directly buy products from our stores.
+                  VALNQIX and parent company RHST E-Commerce Pvt. Ltd. operate with physical presence and verified dispatch centers.
                 </p>
-                <h3 className={styles.storeName}>India</h3>
-                <p className={styles.infoText}>G 52, UP, NOIDA, Uttar Pradesh, India 201301</p>
-                <p className={styles.infoText}>info@valnqix.in</p>
+                <h3 className={styles.storeName}>Noida Operational Headquarters</h3>
+                <p className={styles.infoText}>G-52, Sector 63, UP, NOIDA, Uttar Pradesh, India - 201301</p>
+                <p className={styles.infoText}>Phone: +91 98290 12345 | Email: info@valnqix.in</p>
+                <p className={styles.infoText} style={{ marginTop: '0.5rem', fontSize: '0.85rem', color: '#777' }}>
+                  Parent Entity: RHST E-Commerce Pvt. Ltd. | CIN: U47912RJ2026PTC115018 | GSTIN: 08AAPCR9622R1Z9
+                </p>
               </div>
             </div>
 

@@ -4,16 +4,34 @@ import Header from '@/components/Header';
 import Brands from '@/components/Brands';
 import Footer from '@/components/Footer';
 import ContactForm from '@/components/ContactForm';
+import PageFAQ from '@/components/PageFAQ';
+import { CONSULTATION_FAQS } from '@/data/faqs';
+import { getCanonicalUrl } from '@/lib/seo';
+import { getBreadcrumbSchema } from '@/lib/schema';
 import styles from './Consultation.module.css';
 
 export const metadata: Metadata = {
   title: 'IT Consultation Services | VALNQIX E-commerce & IT Solutions',
   description: 'VALNQIX provides professional IT Consultation Services to help businesses make informed technology decisions. Our experienced consultants analyze your existing systems and recommend the right solutions.',
+  alternates: {
+    canonical: getCanonicalUrl('/services/consultation'),
+  },
 };
 
 export default function ConsultationServicesPage() {
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: 'Services', url: '/#services' },
+    { name: 'IT Consultation Services', url: '/services/consultation' }
+  ]);
+
   return (
     <>
+      {/* BreadcrumbList Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+
       {/* Navigation Header */}
       <Header />
 
@@ -447,6 +465,14 @@ export default function ConsultationServicesPage() {
             </p>
           </div>
         </section>
+
+        {/* Direct FAQ Section */}
+        <PageFAQ
+          title="IT Strategic Consultation FAQs"
+          subtitle="Direct answers on IT infrastructure audits, hardware sizing, startup setups, and procurement savings."
+          badge="Consulting Advisory Guide"
+          faqs={CONSULTATION_FAQS}
+        />
 
         {/* Contact Form Section */}
         <section className={styles.formSection}>

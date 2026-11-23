@@ -4,11 +4,15 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Brands from '@/components/Brands';
 import Footer from '@/components/Footer';
+import { getCanonicalUrl } from '@/lib/seo';
 import styles from './Terms.module.css';
 
 export const metadata: Metadata = {
   title: 'Terms & Conditions | VALNQIX E-commerce & IT Solutions',
   description: 'Read the terms and conditions of VALNQIX governing rules, registration, product details, billing, shipping, returns, and limitation of liability.',
+  alternates: {
+    canonical: getCanonicalUrl('/terms-conditions'),
+  },
 };
 
 export default function TermsConditionsPage() {

@@ -3,11 +3,15 @@ import type { Metadata } from 'next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CheckoutClient from './CheckoutClient';
+import { getCanonicalUrl } from '@/lib/seo';
 import styles from './Checkout.module.css';
 
 export const metadata: Metadata = {
   title: 'Post Buy Requirement | VALNQIX Verified Suppliers',
   description: 'Post your requirement to receive competitive quotations from verified IT suppliers and manufacturers across India.',
+  alternates: {
+    canonical: getCanonicalUrl('/checkout'),
+  },
 };
 
 export default function CheckoutPage() {

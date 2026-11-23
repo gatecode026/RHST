@@ -4,16 +4,34 @@ import Header from '@/components/Header';
 import Brands from '@/components/Brands';
 import Footer from '@/components/Footer';
 import ContactForm from '@/components/ContactForm';
+import PageFAQ from '@/components/PageFAQ';
+import { CLOUD_FAQS } from '@/data/faqs';
+import { getCanonicalUrl } from '@/lib/seo';
+import { getBreadcrumbSchema } from '@/lib/schema';
 import styles from './Cloud.module.css';
 
 export const metadata: Metadata = {
   title: 'Cloud Services | VALNQIX E-commerce & IT Solutions',
   description: 'At VALNQIX, we provide customized Cloud solutions and support that are engineered to align with your business requirements. We help you migrate, manage, develop, and optimize your complete IT environments on the cloud.',
+  alternates: {
+    canonical: getCanonicalUrl('/services/cloud'),
+  },
 };
 
 export default function CloudServicesPage() {
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: 'Services', url: '/#services' },
+    { name: 'Cloud Solutions & Services', url: '/services/cloud' }
+  ]);
+
   return (
     <>
+      {/* BreadcrumbList Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+
       {/* Navigation Header */}
       <Header />
 
@@ -449,6 +467,14 @@ export default function CloudServicesPage() {
             </p>
           </div>
         </section>
+
+        {/* Direct FAQ Section */}
+        <PageFAQ
+          title="Cloud Solutions & Migration FAQs"
+          subtitle="Direct answers on AWS/Azure migration, zero downtime switchovers, and cloud cost management."
+          badge="Cloud Advisory Guide"
+          faqs={CLOUD_FAQS}
+        />
 
         {/* Contact Form Section */}
         <section className={styles.formSection}>

@@ -4,11 +4,15 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Brands from '@/components/Brands';
 import Footer from '@/components/Footer';
+import { getCanonicalUrl } from '@/lib/seo';
 import styles from './Shipping.module.css';
 
 export const metadata: Metadata = {
   title: 'Shipping Policy | VALNQIX E-commerce & IT Solutions',
   description: 'Read the shipping policy of VALNQIX to understand order processing, delivery timelines, shipping charges, tracking details, and contact info.',
+  alternates: {
+    canonical: getCanonicalUrl('/shipping-policy'),
+  },
 };
 
 export default function ShippingPolicyPage() {
