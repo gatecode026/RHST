@@ -4,11 +4,15 @@ import Header from '@/components/Header';
 import Brands from '@/components/Brands';
 import Footer from '@/components/Footer';
 import ContactForm from '@/components/ContactForm';
+import { getCanonicalUrl } from '@/lib/seo';
 import styles from './AMC.module.css';
 
 export const metadata: Metadata = {
   title: 'AMC (Annual Maintenance Contract) | VALNQIX E-commerce & IT Solutions',
   description: 'VALNQIX provides an IT Annual Maintenance Contract (AMC) service to deliver proactive IT support to keep your systems, devices, and technology infrastructure secure, high-performing, and operational.',
+  alternates: {
+    canonical: getCanonicalUrl('/services/amc'),
+  },
 };
 
 export default function AMCPage() {

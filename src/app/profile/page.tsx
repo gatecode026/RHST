@@ -3,11 +3,15 @@ import type { Metadata } from 'next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ProfileClient from './ProfileClient';
+import { getCanonicalUrl } from '@/lib/seo';
 import styles from './Profile.module.css';
 
 export const metadata: Metadata = {
   title: 'Account Dashboard | VALNQIX Store',
   description: 'Manage your profile, active orders, and settings at VALNQIX Store.',
+  alternates: {
+    canonical: getCanonicalUrl('/profile'),
+  },
 };
 
 export default function ProfilePage() {

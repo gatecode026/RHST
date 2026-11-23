@@ -7,11 +7,15 @@ import OurBlog from '@/components/OurBlog';
 import Brands from '@/components/Brands';
 import Footer from '@/components/Footer';
 import ContactForm from '@/components/ContactForm';
+import { getCanonicalUrl } from '@/lib/seo';
 import styles from './Contact.module.css';
 
 export const metadata: Metadata = {
   title: 'Contact Us | VALNQIX E-commerce & IT Solutions',
   description: 'Get in touch with VALNQIX. Contact our office or management teams, locate our store in Brooklyn, NY, or send us your questions and inquiries online.',
+  alternates: {
+    canonical: getCanonicalUrl('/contact'),
+  },
 };
 
 export default function ContactPage() {

@@ -8,11 +8,15 @@ import CustomerReviews from '@/components/CustomerReviews';
 import OurBlog from '@/components/OurBlog';
 import Brands from '@/components/Brands';
 import Footer from '@/components/Footer';
+import { getCanonicalUrl } from '@/lib/seo';
 import styles from './About.module.css';
 
 export const metadata: Metadata = {
   title: 'About Us | VALNQIX E-commerce & IT Solutions',
   description: 'Learn more about VALNQIX, our mission to connect people and businesses with top-tier technology, and our vision to lead digital transformation.',
+  alternates: {
+    canonical: getCanonicalUrl('/about'),
+  },
 };
 
 export default function AboutPage() {

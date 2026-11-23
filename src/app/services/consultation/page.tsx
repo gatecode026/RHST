@@ -4,11 +4,15 @@ import Header from '@/components/Header';
 import Brands from '@/components/Brands';
 import Footer from '@/components/Footer';
 import ContactForm from '@/components/ContactForm';
+import { getCanonicalUrl } from '@/lib/seo';
 import styles from './Consultation.module.css';
 
 export const metadata: Metadata = {
   title: 'IT Consultation Services | VALNQIX E-commerce & IT Solutions',
   description: 'VALNQIX provides professional IT Consultation Services to help businesses make informed technology decisions. Our experienced consultants analyze your existing systems and recommend the right solutions.',
+  alternates: {
+    canonical: getCanonicalUrl('/services/consultation'),
+  },
 };
 
 export default function ConsultationServicesPage() {

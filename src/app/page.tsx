@@ -1,4 +1,5 @@
 import React from 'react';
+import type { Metadata } from 'next';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import Features from '@/components/Features';
@@ -11,8 +12,17 @@ import CustomerReviews from '@/components/CustomerReviews';
 import OurBlog from '@/components/OurBlog';
 import Brands from '@/components/Brands';
 import Footer from '@/components/Footer';
+import { getCanonicalUrl } from '@/lib/seo';
 
 export const dynamic = 'force-dynamic';
+
+export const metadata: Metadata = {
+  title: "VALNQIX | B2B IT Hardware, Suppliers & Marketplace Directory",
+  description: "Connect directly with verified IT hardware manufacturers, wholesalers, and distributors across India. Post buy requirements, request lowest quotations, and source IT equipment directly from suppliers.",
+  alternates: {
+    canonical: getCanonicalUrl('/'),
+  },
+};
 
 export default function Home() {
   return (

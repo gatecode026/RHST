@@ -4,11 +4,15 @@ import Header from '@/components/Header';
 import Brands from '@/components/Brands';
 import Footer from '@/components/Footer';
 import ContactForm from '@/components/ContactForm';
+import { getCanonicalUrl } from '@/lib/seo';
 import styles from './Installation.module.css';
 
 export const metadata: Metadata = {
   title: 'IT Installation Services & Solutions | VALNQIX E-commerce & IT Solutions',
   description: 'Explore professional IT installation services by VALNQIX IT-Ecommerce. We provide desktop setups, firmware configuration, network installations, server setups, CCTV security setups, and software installation.',
+  alternates: {
+    canonical: getCanonicalUrl('/services/installation'),
+  },
 };
 
 export default function InstallationServicesPage() {

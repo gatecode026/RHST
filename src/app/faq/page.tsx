@@ -5,11 +5,15 @@ import Header from '@/components/Header';
 import Brands from '@/components/Brands';
 import Footer from '@/components/Footer';
 import FaqClient from './FaqClient';
+import { getCanonicalUrl } from '@/lib/seo';
 import styles from './Faq.module.css';
 
 export const metadata: Metadata = {
   title: 'Frequently Asked Questions (FAQ) | VALNQIX E-commerce & IT Solutions',
   description: 'Find answers to frequently asked questions about VALNQIX IT-Ecommerce services, product catalog, orders, payments, shipping, returns, technical support, and account setup.',
+  alternates: {
+    canonical: getCanonicalUrl('/faq'),
+  },
 };
 
 export default function FAQPage() {

@@ -4,11 +4,15 @@ import Header from '@/components/Header';
 import Brands from '@/components/Brands';
 import Footer from '@/components/Footer';
 import ContactForm from '@/components/ContactForm';
+import { getCanonicalUrl } from '@/lib/seo';
 import styles from './Cloud.module.css';
 
 export const metadata: Metadata = {
   title: 'Cloud Services | VALNQIX E-commerce & IT Solutions',
   description: 'At VALNQIX, we provide customized Cloud solutions and support that are engineered to align with your business requirements. We help you migrate, manage, develop, and optimize your complete IT environments on the cloud.',
+  alternates: {
+    canonical: getCanonicalUrl('/services/cloud'),
+  },
 };
 
 export default function CloudServicesPage() {

@@ -4,11 +4,15 @@ import Header from '@/components/Header';
 import Brands from '@/components/Brands';
 import Footer from '@/components/Footer';
 import ContactForm from '@/components/ContactForm';
+import { getCanonicalUrl } from '@/lib/seo';
 import styles from './ITSupport.module.css';
 
 export const metadata: Metadata = {
   title: 'IT Support & Repair Services | VALNQIX E-commerce & IT Solutions',
   description: 'At VALNQIX, we provide professional IT Support and Repair Services to keep your technology systems running smoothly and efficiently. Explore our remote and on-site support options.',
+  alternates: {
+    canonical: getCanonicalUrl('/services/it-support'),
+  },
 };
 
 export default function ITSupportPage() {

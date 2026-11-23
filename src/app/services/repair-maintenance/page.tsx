@@ -4,11 +4,15 @@ import Header from '@/components/Header';
 import Brands from '@/components/Brands';
 import Footer from '@/components/Footer';
 import ContactForm from '@/components/ContactForm';
+import { getCanonicalUrl } from '@/lib/seo';
 import styles from './RepairMaintenance.module.css';
 
 export const metadata: Metadata = {
   title: 'IT Repair & Maintenance Services | VALNQIX E-commerce & IT Solutions',
   description: 'Explore the IT repair and maintenance services offered by VALNQIX IT-Ecommerce. We provide desktop and laptop repair, hardware setups, software configurations, network setups, database support, and security audits.',
+  alternates: {
+    canonical: getCanonicalUrl('/services/repair-maintenance'),
+  },
 };
 
 export default function RepairMaintenancePage() {

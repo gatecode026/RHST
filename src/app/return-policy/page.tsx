@@ -4,11 +4,15 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Brands from '@/components/Brands';
 import Footer from '@/components/Footer';
+import { getCanonicalUrl } from '@/lib/seo';
 import styles from './Return.module.css';
 
 export const metadata: Metadata = {
   title: 'Return Policy | VALNQIX E-commerce & IT Solutions',
   description: 'Read the return and replacement policy of VALNQIX to understand return eligibility, time periods, non-returnable products, and refunds.',
+  alternates: {
+    canonical: getCanonicalUrl('/return-policy'),
+  },
 };
 
 export default function ReturnPolicyPage() {

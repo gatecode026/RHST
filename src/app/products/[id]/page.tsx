@@ -5,6 +5,7 @@ import Footer from '@/components/Footer';
 import ProductDetailsClient from './ProductDetailsClient';
 import { getDb } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
+import { getCanonicalUrl } from '@/lib/seo';
 
 export const dynamic = 'force-dynamic';
 
@@ -217,15 +218,22 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
   const product = await getProduct(id);
+  const canonicalPath = `/products/${product?.slug || id}`;
   if (!product) {
     return {
       title: 'Product Not Found | VALNQIX',
-      description: 'The requested product could not be found.'
+      description: 'The requested product could not be found.',
+      alternates: {
+        canonical: getCanonicalUrl(canonicalPath),
+      },
     };
   }
   return {
     title: `${product.name} | VALNQIX IT Products & Solutions`,
-    description: product.description
+    description: product.description,
+    alternates: {
+      canonical: getCanonicalUrl(canonicalPath),
+    },
   };
 }
 
