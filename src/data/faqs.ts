@@ -159,12 +159,12 @@ export const ABOUT_FAQS: FAQItem[] = [
   {
     question: 'What is the relationship between VALNQIX and RHST E-Commerce Pvt. Ltd.?',
     answer:
-      'VALNQIX is the specialized B2B technology and IT hardware brand owned and operated under RHST E-Commerce Pvt. Ltd. It was founded to connect Indian enterprises, institutions, and consumers directly with verified IT hardware manufacturers, authorized distributors, and managed service experts.',
+      'VALNQIX is the specialized B2B technology and IT hardware brand owned and operated under RHST E-Commerce Pvt. Ltd. (CIN: U47912RJ2026PTC115018, GSTIN: 08AAPCR9622R1Z9). Operating its corporate office in Noida (G-52, Sector 63, NOIDA 201301) and registered office in Jaipur, Rajasthan, RHST E-Commerce Pvt. Ltd. governs platform compliance, GST invoicing, and verified supplier credentialing.',
   },
   {
     question: 'Where is VALNQIX located and which regions across India are serviced?',
     answer:
-      'Headquartered in India under RHST E-Commerce Pvt. Ltd., VALNQIX serves clients across all 28 states and union territories. Through strategic logistics hubs and a verified network of 1,000+ local distributors, we deliver IT equipment and on-site engineering services nationwide.',
+      'Headquartered with corporate operations at G-52, Sector 63, UP, NOIDA (201301) and registered headquarters in Sanganer, Jaipur (302029) under RHST E-Commerce Pvt. Ltd., VALNQIX serves clients across all 28 states and union territories. Dedicated customer support is accessible via phone at +91 98290 12345 and email at info@valnqix.in.',
   },
   {
     question: 'How does VALNQIX ensure fair pricing and genuine B2B transactions?',

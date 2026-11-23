@@ -7,9 +7,14 @@
 VALNQIX connects businesses, procurement managers, and individual buyers with verified manufacturers, wholesalers, and distributors of IT hardware, networking infrastructure, and enterprise computing equipment across India. The platform facilitates direct buying requirements, competitive price quotations, and verified supplier sourcing.
 
 - **Brand:** VALNQIX
-- **Parent Company:** RHST E-Commerce Pvt. Ltd.
-- **Website:** https://www.valnqix.com
+- **Parent Company:** RHST E-Commerce Pvt. Ltd. (RHST ECOMMERCE PRIVATE LIMITED)
+- **Corporate Identity Number (CIN):** U47912RJ2026PTC115018 (RoC Jaipur)
+- **GSTIN / UIN:** 08AAPCR9622R1Z9 (Rajasthan, State Code: 08)
+- **Noida Corporate Office:** G-52, Sector 63, UP, NOIDA, Uttar Pradesh, India - 201301
+- **Registered Corporate Office:** Khasra 5437/1641 Kali Ka, Khana Sanganer Chapola, Sanganer Bazar, Sanganer, Jaipur, Rajasthan, India - 302029
+- **Customer Support Phone:** +91 98290 12345 (Mon–Sat, 9:00 AM – 7:00 PM IST)
 - **Contact Email:** info@valnqix.in
+- **Website:** https://www.valnqix.com
 - **Platform Focus:** B2B IT Hardware Catalog, Verified Supplier Directory, Request for Quotation (RFQ), Managed IT Services
 
 ---

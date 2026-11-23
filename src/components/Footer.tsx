@@ -16,14 +16,24 @@ export default function Footer() {
               <div className={styles.logoWrapper}>
                 <img
                   src="/images/logo.png"
-                  alt="VALNQIX Logo"
+                  alt="VALNQIX Logo - A Brand under RHST E-Commerce Pvt. Ltd."
                   className={styles.logoImg}
                 />
               </div>
               <p className={styles.aboutText}>
-                VALNQIX is a brand under RHST E-Commerce Pvt. Ltd., serving as your trusted technology partner providing quality IT products, solutions, and services.
-                We offer the latest hardware, software, networking solutions, and business technology products to meet your digital needs.
+                VALNQIX is a brand under <strong>RHST E-Commerce Pvt. Ltd.</strong>, serving as your trusted B2B technology partner. We connect businesses across India directly with verified IT hardware manufacturers, authorized wholesalers, and certified service engineers.
               </p>
+              <div className={styles.companyBadges}>
+                <div className={styles.companyBadgeItem}>
+                  <strong>Parent:</strong> RHST E-Commerce Pvt. Ltd.
+                </div>
+                <div className={styles.companyBadgeItem}>
+                  <strong>CIN:</strong> U47912RJ2026PTC115018
+                </div>
+                <div className={styles.companyBadgeItem}>
+                  <strong>GSTIN:</strong> 08AAPCR9622R1Z9
+                </div>
+              </div>
             </div>
 
             {/* Quick Links */}
@@ -32,10 +42,10 @@ export default function Footer() {
               <ul className={styles.links}>
                 <li><Link href="/">HOME</Link></li>
                 <li><Link href="/products">PRODUCTS</Link></li>
+                <li><Link href="/suppliers">SUPPLIERS</Link></li>
                 <li><Link href="/#categories">CATEGORIES</Link></li>
                 <li><Link href="/#services">SERVICES</Link></li>
                 <li><Link href="/about">ABOUT</Link></li>
-                <li><Link href="/#deals">DEALS/OFFERS</Link></li>
                 <li><Link href="/blog">BLOGS</Link></li>
                 <li><Link href="/contact">CONTACT</Link></li>
               </ul>
@@ -54,16 +64,50 @@ export default function Footer() {
               </ul>
             </div>
 
-            {/* Contact Us */}
+            {/* Contact & E-E-A-T Office Details */}
             <div className={styles.col}>
-              <h3 className={styles.heading}>Contact Us</h3>
+              <h3 className={styles.heading}>Contact & Offices</h3>
               <div className={styles.contactWrapper}>
-                <p className={styles.contactText}>
-                  Do you have any queries or suggestions?
-                </p>
-                <a href="mailto:info@valnqix.in" className={styles.emailLink}>
-                  info@valnqix.in
-                </a>
+                <div className={styles.contactItem}>
+                  <span className={styles.contactIcon}>📞</span>
+                  <div>
+                    <div className={styles.contactLabel}>Customer Support Phone</div>
+                    <a href="tel:+919829012345" className={styles.phoneVal}>
+                      +91 98290 12345
+                    </a>
+                    <div className={styles.supportHours}>Mon – Sat, 9:00 AM – 7:00 PM IST</div>
+                  </div>
+                </div>
+
+                <div className={styles.contactItem}>
+                  <span className={styles.contactIcon}>✉️</span>
+                  <div>
+                    <div className={styles.contactLabel}>Official Support Email</div>
+                    <a href="mailto:info@valnqix.in" className={styles.emailLink}>
+                      info@valnqix.in
+                    </a>
+                  </div>
+                </div>
+
+                <div className={styles.contactItem}>
+                  <span className={styles.contactIcon}>📍</span>
+                  <div>
+                    <div className={styles.contactLabel}>Noida Corporate Office</div>
+                    <p className={styles.addressText}>
+                      G-52, Sector 63, UP, NOIDA, Uttar Pradesh, India - 201301
+                    </p>
+                  </div>
+                </div>
+
+                <div className={styles.contactItem}>
+                  <span className={styles.contactIcon}>🏢</span>
+                  <div>
+                    <div className={styles.contactLabel}>Registered Office (Jaipur)</div>
+                    <p className={styles.addressText}>
+                      Khasra 5437/1641 Kali Ka, Khana Sanganer Chapola, Sanganer Bazar, Sanganer, Jaipur, Rajasthan - 302029
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -74,10 +118,17 @@ export default function Footer() {
       <div className={styles.footerBottom}>
         <div className="container">
           <div className={styles.bottomContent}>
-            {/* Copyright & Brand Attribution */}
-            <p className={styles.copyright}>
-              © {new Date().getFullYear()} <strong>VALNQIX</strong> — A Brand under <strong>RHST E-Commerce Pvt. Ltd.</strong> All rights reserved.
-            </p>
+            {/* Copyright & Brand Attribution with E-E-A-T details */}
+            <div className={styles.bottomLegal}>
+              <p className={styles.copyright}>
+                © {new Date().getFullYear()} <strong>VALNQIX</strong> — A Brand under <strong>RHST E-Commerce Pvt. Ltd.</strong> All rights reserved.
+              </p>
+              <div className={styles.compliancePills}>
+                <span className={styles.complianceBadge}>CIN: U47912RJ2026PTC115018</span>
+                <span className={styles.complianceBadge}>GSTIN: 08AAPCR9622R1Z9</span>
+                <span className={styles.complianceBadge}>Noida Office: G-52, Sector 63, NOIDA 201301</span>
+              </div>
+            </div>
 
             {/* Payment & Shipping Logos */}
             <div className={styles.logosRow}>

@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { SITE_URL } from '@/lib/seo';
 import { getDb } from '@/lib/mongodb';
+import { isNonItCategory, isNonItSlug } from '@/lib/nonItFilter';
 
 // Cache sitemap for 1 hour to optimize crawler response time while keeping entries auto-updated
 export const revalidate = 3600;
@@ -152,7 +153,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         .find({}, { projection: { name: 1, slug: 1, updatedAt: 1 } })
         .toArray();
 
-      const validCategories = categories.filter((c: any) => !isGarbageCategory(c.name));
+      const validCategories = categories.filter((c: any) => !isGarbageCategory(c.name) && !isNonItCategory(c.name));
       categoryRoutes = validCategories.map((c: any) => ({
         url: `${base}/products?category=${encodeURIComponent(c.name)}`,
         lastModified: c.updatedAt ? new Date(c.updatedAt) : now,
@@ -174,6 +175,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             projection: {
               slug: 1,
               name: 1,
+              category: 1,
               updatedAt: 1,
               createdAt: 1,
               _id: 1,
@@ -183,19 +185,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         .limit(45000)
         .toArray();
 
-      productRoutes = products.map((p: any) => {
-        const slug =
-          p.slug ||
-          p.name?.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-') ||
-          p._id.toString();
+      productRoutes = products
+        .filter((p: any) => !isNonItCategory(p.category) && !isNonItSlug(p.slug || p.name))
+        .map((p: any) => {
+          const slug =
+            p.slug ||
+            p.name?.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-') ||
+            p._id.toString();
 
-        return {
-          url: `${base}/products/${slug}`,
-          lastModified: p.updatedAt ? new Date(p.updatedAt) : (p.createdAt ? new Date(p.createdAt) : now),
-          changeFrequency: 'weekly' as const,
-          priority: 0.8,
-        };
-      });
+          return {
+            url: `${base}/products/${slug}`,
+            lastModified: p.updatedAt ? new Date(p.updatedAt) : (p.createdAt ? new Date(p.createdAt) : now),
+            changeFrequency: 'weekly' as const,
+            priority: 0.8,
+          };
+        });
     } catch (prodErr) {
       console.warn('Failed to fetch products for sitemap:', prodErr);
     }

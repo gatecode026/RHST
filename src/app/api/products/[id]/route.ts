@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
+import { isNonItSlug } from '@/lib/nonItFilter';
 
 export const dynamic = 'force-dynamic';
 
@@ -226,6 +227,22 @@ export async function GET(
 
     // Default fallback if still not found
     if (!product) {
+      if (isNonItSlug(id)) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: 'Product permanently discontinued (Non-IT item)',
+            code: 410,
+          },
+          {
+            status: 410,
+            headers: {
+              'X-Robots-Tag': 'noindex, nofollow, gone',
+              'Cache-Control': 'public, max-age=86400, s-maxage=86400',
+            },
+          }
+        );
+      }
       return NextResponse.json({ success: false, error: 'Product not found' }, { status: 404 });
     }
 
