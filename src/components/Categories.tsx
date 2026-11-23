@@ -90,7 +90,7 @@ export default function Categories({
             {categories.map((cat) => (
               <Link key={cat.id} href={`/products?category=${encodeURIComponent(cat.name)}`} className={styles.card}>
                 <div className={styles.imageContainer}>
-                  <img src={cat.image} alt={cat.name} className={styles.image} />
+                  <img src={cat.image} alt={cat.name} width={140} height={140} loading="lazy" decoding="async" className={styles.image} />
                 </div>
                 <div className={styles.info}>
                   <h3>{cat.name}</h3>

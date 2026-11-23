@@ -123,6 +123,10 @@ export default function BestSelling({ initialProducts = [] }: { initialProducts?
                     <img 
                       src={prod.image} 
                       alt={prod.name} 
+                      width={180}
+                      height={130}
+                      loading="lazy"
+                      decoding="async"
                       className={styles.image} 
                       onError={(e) => { (e.target as HTMLImageElement).src = '/images/default_product.png'; }}
                     />

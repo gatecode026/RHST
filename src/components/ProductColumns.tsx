@@ -208,6 +208,10 @@ export default function ProductColumns({ initialProducts = [] }: { initialProduc
                       <img 
                         src={prod.image} 
                         alt={prod.name} 
+                        width={68}
+                        height={68}
+                        loading="lazy"
+                        decoding="async"
                         className={styles.image} 
                         onError={(e) => { (e.target as HTMLImageElement).src = '/images/default_product.png'; }}
                       />

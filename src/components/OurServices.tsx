@@ -51,7 +51,7 @@ export default function OurServices() {
             {SERVICES_DATA.map((service) => (
               <a key={service.id} href={service.link} className={styles.card}>
                 <div className={styles.imageWrapper}>
-                  <img src={service.image} alt={service.name} className={styles.image} />
+                  <img src={service.image} alt={service.name} width={200} height={200} loading="lazy" decoding="async" className={styles.image} />
                 </div>
                 <div className={styles.info}>
                   <h3 className={styles.name}>{service.name}</h3>

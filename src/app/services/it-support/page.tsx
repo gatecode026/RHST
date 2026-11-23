@@ -188,7 +188,7 @@ export default function ITSupportPage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20297.png"
                     alt="Remote IT Support"
-                    className={styles.splitImg}
+                    width={500} height={340} loading="lazy" decoding="async" className={styles.splitImg}
                   />
                 </div>
               </div>
@@ -221,7 +221,7 @@ export default function ITSupportPage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20298.png"
                     alt="On-Site IT Support"
-                    className={styles.splitImg}
+                    width={500} height={340} loading="lazy" decoding="async" className={styles.splitImg}
                   />
                 </div>
               </div>
@@ -309,7 +309,7 @@ export default function ITSupportPage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20299%20(1).png"
                     alt="Small Businesses"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Small Businesses</h3>
@@ -321,7 +321,7 @@ export default function ITSupportPage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20300%20(1).png"
                     alt="Corporate Offices"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Corporate Offices</h3>
@@ -333,7 +333,7 @@ export default function ITSupportPage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20301.png"
                     alt="Educational Institutions"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Educational Institutions</h3>
@@ -345,7 +345,7 @@ export default function ITSupportPage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20302%20(1).png"
                     alt="Healthcare Organisations"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Healthcare Organisations</h3>
@@ -357,7 +357,7 @@ export default function ITSupportPage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20303%20(1).png"
                     alt="Retail Businesses"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Retail Businesses</h3>
@@ -369,7 +369,7 @@ export default function ITSupportPage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20304.png"
                     alt="Startups"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Startups</h3>
@@ -381,7 +381,7 @@ export default function ITSupportPage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20305%20(1).png"
                     alt="Manufacturing Companies"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Manufacturing Companies</h3>
@@ -393,7 +393,7 @@ export default function ITSupportPage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20306%20(1).png"
                     alt="Service Providers"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Service Providers</h3>

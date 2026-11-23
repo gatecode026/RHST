@@ -66,8 +66,12 @@ export default function AboutPage() {
             <div className={styles.introGrid}>
               <div className={styles.introImageWrapper}>
                 <img
-                  src="https://ik.imagekit.io/zp0tch54w/RHST/igor-miske-CwVE4xCAA8Y-unsplash.png"
+                  src="https://ik.imagekit.io/zp0tch54w/RHST/igor-miske-CwVE4xCAA8Y-unsplash.png?tr=w-600,f-auto,q-80"
                   alt="VALNQIX Team Collaborating"
+                  width={540}
+                  height={360}
+                  loading="lazy"
+                  decoding="async"
                   className={styles.introImage}
                 />
               </div>

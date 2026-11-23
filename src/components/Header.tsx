@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 import styles from './Header.module.css';
@@ -459,9 +460,12 @@ export default function Header() {
           <div className={styles.navWrapper}>
             {/* Logo */}
             <Link href="/" className={styles.logoWrapper}>
-              <img
+              <Image
                 src="/images/logo.png"
                 alt="VALNQIX - A Brand under RHST E-Commerce Pvt. Ltd."
+                width={160}
+                height={46}
+                priority
                 className={styles.logoImage}
               />
             </Link>
@@ -903,7 +907,7 @@ export default function Header() {
           ) : (
             wishlistItems.map((item) => (
               <div key={item.id} className={styles.cartItem}>
-                <img src={item.image} alt={item.name} className={styles.itemImage} />
+                <img src={item.image} alt={item.name} width={60} height={60} loading="lazy" decoding="async" className={styles.itemImage} />
                 <div className={styles.itemDetails}>
                   <h4 style={{ fontSize: '15px', fontWeight: 500, marginBottom: '4px' }}>
                     <Link 
@@ -1028,7 +1032,7 @@ export default function Header() {
                         }}
                         style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer', textDecoration: 'none' }}
                       >
-                        <img src={prod.image} alt={prod.name} style={{ width: '45px', height: '45px', objectFit: 'contain', borderRadius: '4px', border: '1px solid #eee' }} />
+                        <img src={prod.image} alt={prod.name} width={45} height={45} loading="lazy" decoding="async" style={{ width: '45px', height: '45px', objectFit: 'contain', borderRadius: '4px', border: '1px solid #eee' }} />
                         <div>
                           <div style={{ fontSize: '15px', color: '#333', fontWeight: 500 }}>{prod.name}</div>
                           <div style={{ fontSize: '14px', color: 'var(--primary)', fontWeight: 600 }}>₹{prod.price.toLocaleString()}</div>

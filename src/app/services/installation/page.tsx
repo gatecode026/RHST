@@ -312,7 +312,7 @@ export default function InstallationServicesPage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20297%20(1).png"
                     alt="Business IT Setup Services"
-                    className={styles.splitImg}
+                    width={500} height={340} loading="lazy" decoding="async" className={styles.splitImg}
                   />
                 </div>
               </div>
@@ -390,7 +390,7 @@ export default function InstallationServicesPage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20299.png"
                     alt="Latest Technology Knowledge"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Latest Technology Knowledge</h3>
@@ -402,7 +402,7 @@ export default function InstallationServicesPage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20300.png"
                     alt="Reduced Maintenance Problems"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Reduced Maintenance Problems</h3>
@@ -414,7 +414,7 @@ export default function InstallationServicesPage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/BUS.png"
                     alt="Transparent Service Process"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Transparent Service Process</h3>
@@ -426,7 +426,7 @@ export default function InstallationServicesPage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20302.png"
                     alt="Affordable & Reliable Solutions"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Affordable & Reliable Solutions</h3>
@@ -438,7 +438,7 @@ export default function InstallationServicesPage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20303.png"
                     alt="On-Site & Remote Assistance"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>On-Site & Remote Assistance</h3>
@@ -450,7 +450,7 @@ export default function InstallationServicesPage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/LTTS"
                     alt="Long-Term Technology Support"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Long-Term Technology Support</h3>
@@ -462,7 +462,7 @@ export default function InstallationServicesPage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20305.png"
                     alt="Customer Satisfaction Focus"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Customer Satisfaction Focus</h3>
@@ -474,7 +474,7 @@ export default function InstallationServicesPage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20306.png"
                     alt="Business Growth Support"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Business Growth Support</h3>
@@ -486,7 +486,7 @@ export default function InstallationServicesPage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20310%20(1).png"
                     alt="Installation Testing & Quality Check"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Installation Testing & Quality Check</h3>
@@ -498,7 +498,7 @@ export default function InstallationServicesPage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20311.png"
                     alt="Professional & Accurate Installation"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Professional & Accurate Installation</h3>
@@ -510,7 +510,7 @@ export default function InstallationServicesPage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20312.png"
                     alt="Experienced IT Professionals"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Experienced IT Professionals</h3>
@@ -522,7 +522,7 @@ export default function InstallationServicesPage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20313.png"
                     alt="Quick & Efficient Service"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Quick & Efficient Service</h3>

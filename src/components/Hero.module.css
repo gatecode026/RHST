@@ -26,9 +26,16 @@
   background-color: #f7f7f9;
 }
 
+.slide:first-child {
+  opacity: 1;
+  visibility: visible;
+  z-index: 1;
+}
+
 .slide.active {
   opacity: 1;
   visibility: visible;
+  z-index: 2;
 }
 
 .darkTheme {
@@ -58,12 +65,13 @@
   letter-spacing: -0.03em;
   color: #333333;
   text-transform: uppercase;
-  transform: translateY(20px);
-  opacity: 0;
+  opacity: 1;
+  transform: none;
 }
 
 .slide.active .title {
-  animation: slideUp 0.6s ease forwards;
+  opacity: 1;
+  transform: none;
 }
 
 .description {
@@ -73,12 +81,13 @@
   color: #666666;
   line-height: 1.6;
   max-width: 550px;
-  transform: translateY(20px);
-  opacity: 0;
+  opacity: 1;
+  transform: none;
 }
 
 .slide.active .description {
-  animation: slideUp 0.6s ease 0.2s forwards;
+  opacity: 1;
+  transform: none;
 }
 
 .ctaButton {
@@ -97,8 +106,8 @@
   justify-content: center;
   box-shadow: 0 4px 15px rgba(255, 111, 97, 0.2);
   transition: all var(--transition-fast);
-  transform: translateY(20px);
-  opacity: 0;
+  opacity: 1;
+  transform: none;
 }
 
 .ctaButton:hover {
@@ -108,7 +117,8 @@
 }
 
 .slide.active .ctaButton {
-  animation: slideUp 0.6s ease 0.4s forwards;
+  opacity: 1;
+  transform: none;
 }
 
 /* Image Right */
@@ -252,8 +262,16 @@
     background: none;
   }
 
+  .slide:first-child {
+    display: block;
+  }
+
   .slide.active {
     display: block;
+  }
+
+  .heroImage {
+    animation: none;
   }
 
   .slideContent {

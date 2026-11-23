@@ -221,7 +221,7 @@ export default function AMCPage() {
                   <img
                     src="/images/it_support_headset_operator.png"
                     alt="AMC Plans Support"
-                    className={styles.splitImg}
+                    width={500} height={340} loading="lazy" decoding="async" className={styles.splitImg}
                   />
                 </div>
               </div>
@@ -299,7 +299,7 @@ export default function AMCPage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20305%20(2).png"
                     alt="Reduced Downtime"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Reduced Downtime</h3>
@@ -311,7 +311,7 @@ export default function AMCPage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20300%20(3).png"
                     alt="Cost Savings"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Cost Savings</h3>
@@ -323,7 +323,7 @@ export default function AMCPage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/BSP"
                     alt="Better System Performance"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Better System Performance</h3>
@@ -335,7 +335,7 @@ export default function AMCPage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20299%20(2).png?updatedAt=1783511107228"
                     alt="Expert Technical Support"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Expert Technical Support</h3>
@@ -347,7 +347,7 @@ export default function AMCPage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20303%20(3).png"
                     alt="Improved Security"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Improved Security</h3>
@@ -359,7 +359,7 @@ export default function AMCPage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/PAIT"
                     alt="Proactive Issue Detection"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Proactive Issue Detection</h3>
@@ -371,7 +371,7 @@ export default function AMCPage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/pss"
                     alt="Priority Service Support"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Priority Service Support</h3>
@@ -383,7 +383,7 @@ export default function AMCPage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20306%20(3).png"
                     alt="Complete IT Management"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Complete IT Management</h3>

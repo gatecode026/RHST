@@ -156,6 +156,10 @@ export default function EnquiryModal({ isOpen, onClose, product }: EnquiryModalP
           <img
             src={product.image || '/images/default_category.png'}
             alt={product.name}
+            width={60}
+            height={60}
+            loading="lazy"
+            decoding="async"
             className={styles.productImage}
           />
           <div className={styles.productInfo}>

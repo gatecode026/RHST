@@ -157,7 +157,7 @@ export default function ProductDetailsClient({ initialProduct }: { initialProduc
                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
               </svg>
             </button>
-            <img src={activeImage} alt={product.name} className={styles.mainImage} />
+            <img src={activeImage} alt={product.name} width={450} height={420} className={styles.mainImage} />
           </div>
 
           <div className={styles.thumbnails}>
@@ -168,7 +168,7 @@ export default function ProductDetailsClient({ initialProduct }: { initialProduc
                 onClick={() => setActiveImage(img)}
                 aria-label={`View thumbnail ${idx + 1}`}
               >
-                <img src={img} alt={`${product.name} thumbnail`} className={styles.thumbnailImg} />
+                <img src={img} alt={`${product.name} thumbnail`} width={80} height={80} loading="lazy" decoding="async" className={styles.thumbnailImg} />
               </button>
             ))}
           </div>
@@ -386,6 +386,10 @@ export default function ProductDetailsClient({ initialProduct }: { initialProduc
                     <img
                       src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80"
                       alt="User Reviewer Avatar"
+                      width={44}
+                      height={44}
+                      loading="lazy"
+                      decoding="async"
                       className={styles.reviewAvatar}
                     />
                     <div className={styles.reviewInfo}>

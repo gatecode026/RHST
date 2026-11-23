@@ -495,7 +495,7 @@ function ProductsCatalogContent({
                           }}
                         >
                           <div className={styles.imageWrapper}>
-                            <img src={prod.image} alt={prod.name} className={styles.image} />
+                            <img src={prod.image} alt={prod.name} width={180} height={130} loading="lazy" decoding="async" className={styles.image} />
                           </div>
                         </Link>
                         <div className={styles.info}>

@@ -32,6 +32,14 @@ export default async function Home() {
 
   return (
     <>
+      {/* High-Priority Preload for Above-The-Fold Mobile LCP Hero Image */}
+      <link
+        rel="preload"
+        as="image"
+        href="https://ik.imagekit.io/zp0tch54w/RHST/IMG.png?updatedAt=1781696174888"
+        fetchPriority="high"
+      />
+
       {/* Organization Structured Data for Search Engines & AI Crawlers */}
       <script
         type="application/ld+json"
