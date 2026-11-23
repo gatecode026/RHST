@@ -78,6 +78,10 @@ export default function PromoBanner() {
             <img 
               src={banner.imageUrl || "/images/promo_apple.png"} 
               alt={banner.title} 
+              width={480}
+              height={360}
+              loading="lazy"
+              decoding="async"
               className={styles.promoImage} 
             />
           </div>

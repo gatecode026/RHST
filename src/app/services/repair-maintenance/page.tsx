@@ -253,7 +253,7 @@ export default function RepairMaintenancePage() {
                   <img
                     src="https://images.unsplash.com/photo-1548345680-f5475ea5df84?w=600&q=80"
                     alt="IT Maintenance Services"
-                    className={styles.splitImg}
+                    width={500} height={340} loading="lazy" decoding="async" className={styles.splitImg}
                   />
                 </div>
               </div>
@@ -331,7 +331,7 @@ export default function RepairMaintenancePage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20299%20(2).png"
                     alt="Expert Technical Team"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Expert Technical Team</h3>
@@ -343,7 +343,7 @@ export default function RepairMaintenancePage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/BUS.png"
                     alt="Fast & Reliable Service"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Fast & Reliable Service</h3>
@@ -355,7 +355,7 @@ export default function RepairMaintenancePage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20301%20(2).png"
                     alt="Complete IT Problem Solutions"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Complete IT Problem Solutions</h3>
@@ -367,7 +367,7 @@ export default function RepairMaintenancePage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20302%20(2).png"
                     alt="Preventive Maintenance Support"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Preventive Maintenance Support</h3>
@@ -379,7 +379,7 @@ export default function RepairMaintenancePage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20303%20(2).png"
                     alt="Improved Device Performance"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Improved Device Performance</h3>
@@ -391,7 +391,7 @@ export default function RepairMaintenancePage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20304%20(2).png"
                     alt="Cost-Effective IT Solutions"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Cost-Effective IT Solutions</h3>
@@ -403,7 +403,7 @@ export default function RepairMaintenancePage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20305%20(2).png"
                     alt="Reduced Business Downtime"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Reduced Business Downtime</h3>
@@ -415,7 +415,7 @@ export default function RepairMaintenancePage() {
                   <img
                     src="https://ik.imagekit.io/zp0tch54w/RHST/Rectangle%20306%20(2).png"
                     alt="Customized Maintenance Plans"
-                    className={styles.benefitImg}
+                    width={280} height={190} loading="lazy" decoding="async" className={styles.benefitImg}
                   />
                 </div>
                 <h3 className={styles.benefitName}>Customized Maintenance Plans</h3>

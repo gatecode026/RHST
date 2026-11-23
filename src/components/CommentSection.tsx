@@ -161,6 +161,10 @@ export default function CommentSection({ postId, styles }: CommentSectionProps) 
                 <img 
                   src={comment.avatar} 
                   alt={comment.author} 
+                  width={40}
+                  height={40}
+                  loading="lazy"
+                  decoding="async"
                   className={styles.avatar}
                 />
               </div>

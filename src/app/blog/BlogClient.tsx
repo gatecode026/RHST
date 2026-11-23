@@ -236,8 +236,12 @@ export default function BlogClient({ initialBlogs = [] }: { initialBlogs?: any[]
                           <Link href={blogUrl} style={{ display: 'block', width: '100%' }}>
                             <div className={styles.imageWrapper}>
                               <img
-                                src={post.image}
+                                src={post.image?.includes('ik.imagekit.io') ? `${post.image}${post.image.includes('?') ? '&' : '?'}tr=w-600,f-auto,q-80` : post.image}
                                 alt={post.title}
+                                width={370}
+                                height={264}
+                                loading="lazy"
+                                decoding="async"
                                 className={styles.image}
                                 style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                                 onError={(e) => {

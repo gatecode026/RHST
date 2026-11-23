@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import styles from './Footer.module.css';
 
 export default function Footer() {
@@ -14,9 +15,12 @@ export default function Footer() {
             {/* Logo and About */}
             <div className={styles.col}>
               <div className={styles.logoWrapper}>
-                <img
+                <Image
                   src="/images/logo.png"
                   alt="VALNQIX Logo - A Brand under RHST E-Commerce Pvt. Ltd."
+                  width={160}
+                  height={48}
+                  loading="lazy"
                   className={styles.logoImg}
                 />
               </div>
@@ -124,12 +128,12 @@ export default function Footer() {
               <div className={styles.logoItem}>
                 <span className={styles.logoLabel}>We ship with:</span>
                 <span className={styles.logoDhl}>
-                  <img 
-                    src="https://www.google.com/s2/favicons?domain=dhl.com&sz=32" 
-                    alt="DHL" 
-                    className={styles.favicon}
-                    onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                  />
+                  <svg width="22" height="15" viewBox="0 0 32 18" fill="none" style={{ borderRadius: '2px', flexShrink: 0, marginRight: '4px', verticalAlign: 'middle' }}>
+                    <rect width="32" height="18" rx="2" fill="#FFCC00"/>
+                    <path d="M5 4h5c1.8 0 2.8.9 2.8 2.2 0 1-.7 1.8-1.7 2 1.2.3 1.9 1.1 1.9 2.2 0 1.4-1.1 2.2-2.9 2.2H5V4zm2.2 3.3h2.6c.5 0 .9-.3.9-.8s-.4-.8-.9-.8H7.2v1.6zm0 3.5h2.8c.6 0 1-.3 1-.9s-.4-.9-1-.9H7.2v1.8z" fill="#D40511"/>
+                    <path d="M16 4h2.3v3.4h4.4V4H25v10.6h-2.3V9.5h-4.4v5.1H16V4z" fill="#D40511"/>
+                    <path d="M27 4h2.3v8.5h4.2v2.1H27V4z" fill="#D40511"/>
+                  </svg>
                   DHL
                 </span>
               </div>

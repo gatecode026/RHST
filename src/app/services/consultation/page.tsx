@@ -284,7 +284,7 @@ export default function ConsultationServicesPage() {
                   <img
                     src="/images/it_support_headset_operator.png"
                     alt="IT Consulting Process"
-                    className={styles.splitImg}
+                    width={500} height={340} loading="lazy" decoding="async" className={styles.splitImg}
                   />
                 </div>
               </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import styles from './Hero.module.css';
 
 interface Slide {
@@ -82,10 +83,17 @@ export default function Hero() {
                 {/* Image Right */}
                 <div className={styles.imageContent}>
                   <div className={styles.imageWrapper}>
-                    <img
+                    <Image
                       src={slide.image}
                       alt={slide.title}
+                      width={500}
+                      height={500}
+                      priority={idx === 0}
+                      fetchPriority={idx === 0 ? "high" : "auto"}
+                      loading={idx === 0 ? "eager" : "lazy"}
+                      decoding={idx === 0 ? "sync" : "async"}
                       className={styles.heroImage}
+                      sizes="(max-width: 480px) 250px, (max-width: 900px) 320px, 500px"
                     />
                     <div className={styles.circleBg} />
                   </div>

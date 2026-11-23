@@ -4,6 +4,15 @@ import React, { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
 import styles from './OurBlog.module.css';
 
+function getOptimizedBlogImage(url?: string): string {
+  if (!url) return 'https://ik.imagekit.io/zp0tch54w/RHST/wmremove-transformed.png';
+  if (url.includes('ik.imagekit.io')) {
+    const separator = url.includes('?') ? '&' : '?';
+    return `${url}${separator}tr=w-600,f-auto,q-80`;
+  }
+  return url;
+}
+
 const FALLBACK_BLOG_DATA = [
   {
     id: 1,
@@ -106,8 +115,12 @@ export default function OurBlog({ className = '', initialBlogs = [] }: { classNa
                   <Link href={blogUrl} style={{ display: 'block', width: '100%' }}>
                     <div className={styles.imageWrapper}>
                       <img
-                        src={post.image}
+                        src={getOptimizedBlogImage(post.image)}
                         alt={post.title}
+                        width={370}
+                        height={264}
+                        loading="lazy"
+                        decoding="async"
                         className={styles.image}
                         onError={(e) => {
                           e.currentTarget.onerror = null;
