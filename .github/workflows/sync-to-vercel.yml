@@ -1,26 +1,32 @@
 
-name: Sync Code to Vercel Repository
+name: Sync RHST to Vercel Repository
 
 on:
   push:
     branches:
-      - main
+      - master
   workflow_dispatch:
 
 permissions:
   contents: read
+
+concurrency:
+  group: sync-rhst
+  cancel-in-progress: false
 
 jobs:
   sync:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source repository
+      - name: Checkout source
         uses: actions/checkout@v4
         with:
+          ref: master
           path: source
+          persist-credentials: false
 
-      - name: Checkout destination repository
+      - name: Checkout destination
         uses: actions/checkout@v4
         with:
           repository: gatecodebpo-cmd/valnqix
@@ -28,20 +34,21 @@ jobs:
           ref: main
           path: destination
 
-      - name: Sync project files
+      - name: Sync files
         run: |
           rsync -av --delete \
             --exclude='.git/' \
             --exclude='.github/workflows/' \
             source/ destination/
 
-      - name: Commit and push changes
+      - name: Commit and push
         working-directory: destination
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           git add -A
+          git status --short
 
           if git diff --cached --quiet; then
             echo "No changes to sync"
@@ -50,3 +57,5 @@ jobs:
 
           git commit -m "Auto sync from gatecode026/RHST"
           git push origin HEAD:main
+
+          echo "Sync completed successfully"
