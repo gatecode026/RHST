@@ -444,7 +444,7 @@ export default function Header() {
         <div className="container">
           <div className={styles.topBarContent}>
             <div className={styles.topBarItem}>
-              <span>Summer sale discount off 60% off! <Link href="/products" className={styles.topBarLink}>Shop Now</Link></span>
+              <span>Summer sale discount 60% off! <Link href="/products" className={styles.topBarLink}>Shop Now</Link></span>
             </div>
             <div className={styles.topBarItem}>
               2-3 business days delivery & free returns
