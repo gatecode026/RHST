@@ -36,9 +36,7 @@ const TOP_CATEGORIES = [
   'Electronics',
   'Camera',
   'Storage Devices',
-  'Keyboard & Mouse',
-  'BAGS',
-  'Clocks'
+  'Keyboard & Mouse'
 ];
 
 const MAJOR_STATES = [

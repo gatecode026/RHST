@@ -163,8 +163,7 @@ export const FALLBACK_SSR_CATEGORIES = [
   { id: 'cat-4', name: 'Television', image: '/images/category_tv.png', link: '/products?category=Television', slug: 'television' },
   { id: 'cat-5', name: 'Storage devices', image: '/images/category_storage.png', link: '/products?category=Storage%20devices', slug: 'storage-devices' },
   { id: 'cat-6', name: 'Laptops & computers', image: '/images/category_laptop.png', link: '/products?category=Laptops%20%26%20computers', slug: 'laptops-computers' },
-  { id: 'cat-7', name: 'Keyboard & mouse', image: '/images/category_keyboard.png', link: '/products?category=Keyboard%20%26%20mouse', slug: 'keyboard-mouse' },
-  { id: 'cat-8', name: 'Bags', image: '/images/category_bag.png', link: '/products?category=Bags', slug: 'bags' }
+  { id: 'cat-7', name: 'Keyboard & mouse', image: '/images/category_keyboard.png', link: '/products?category=Keyboard%20%26%20mouse', slug: 'keyboard-mouse' }
 ];
 
 export const FALLBACK_SSR_BLOGS = [
