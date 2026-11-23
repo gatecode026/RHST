@@ -14,6 +14,7 @@ import Brands from '@/components/Brands';
 import Footer from '@/components/Footer';
 import { getCanonicalUrl } from '@/lib/seo';
 import { getHomeInitialData } from '@/lib/serverData';
+import { getOrganizationSchema } from '@/lib/schema';
 
 export const dynamic = 'force-dynamic';
 
@@ -27,9 +28,16 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   const homeData = await getHomeInitialData();
+  const orgSchema = getOrganizationSchema();
 
   return (
     <>
+      {/* Organization Structured Data for Search Engines & AI Crawlers */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
+      />
+
       {/* Navigation Header */}
       <Header />
 

@@ -11,6 +11,7 @@ import Footer from '@/components/Footer';
 import PageFAQ from '@/components/PageFAQ';
 import { ABOUT_FAQS } from '@/data/faqs';
 import { getCanonicalUrl } from '@/lib/seo';
+import { getOrganizationSchema, getBreadcrumbSchema } from '@/lib/schema';
 import styles from './About.module.css';
 
 export const metadata: Metadata = {
@@ -22,8 +23,24 @@ export const metadata: Metadata = {
 };
 
 export default function AboutPage() {
+  const orgSchema = getOrganizationSchema();
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: 'About Us', url: '/about' }
+  ]);
+
   return (
     <>
+      {/* Organization Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
+      />
+      {/* BreadcrumbList Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+
       {/* Navigation Header */}
       <Header />
 
@@ -237,54 +254,6 @@ export default function AboutPage() {
             </div>
           </div>
         </section>
-
-        {/* Corporate Schema.org JSON-LD for Search Engine Knowledge Graph */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'Corporation',
-              name: 'VALNQIX',
-              legalName: 'RHST ECOMMERCE PRIVATE LIMITED',
-              alternateName: 'RHST E-Commerce Pvt. Ltd.',
-              url: 'https://www.valnqix.com',
-              logo: 'https://www.valnqix.com/images/logo.png',
-              telephone: '+91-98290-12345',
-              email: 'info@valnqix.in',
-              taxID: '08AAPCR9622R1Z9',
-              identifier: 'U47912RJ2026PTC115018',
-              address: [
-                {
-                  '@type': 'PostalAddress',
-                  streetAddress: 'G-52, Sector 63',
-                  addressLocality: 'Noida',
-                  addressRegion: 'Uttar Pradesh',
-                  postalCode: '201301',
-                  addressCountry: 'IN',
-                  name: 'Noida Corporate Office'
-                },
-                {
-                  '@type': 'PostalAddress',
-                  streetAddress: 'Khasra 5437/1641 Kali Ka, Khana Sanganer Chapola, Sanganer Bazar, Sanganer',
-                  addressLocality: 'Jaipur',
-                  addressRegion: 'Rajasthan',
-                  postalCode: '302029',
-                  addressCountry: 'IN',
-                  name: 'Registered Office'
-                }
-              ],
-              contactPoint: {
-                '@type': 'ContactPoint',
-                telephone: '+91-98290-12345',
-                contactType: 'customer service',
-                email: 'info@valnqix.in',
-                areaServed: 'IN',
-                availableLanguage: ['English', 'Hindi']
-              }
-            })
-          }}
-        />
 
         {/* Reused Home Page Sections */}
         <OurServices />

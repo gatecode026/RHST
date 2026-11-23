@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import SuppliersClient from './SuppliersClient';
 import { getCanonicalUrl } from '@/lib/seo';
 import { getInitialSuppliersData } from '@/lib/serverData';
+import { getBreadcrumbSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
   title: 'Verified Suppliers & Manufacturers Across India | VALNQIX Directory',
@@ -14,12 +15,22 @@ export const metadata: Metadata = {
 
 export default async function SuppliersPage() {
   const initialData = await getInitialSuppliersData(24);
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: 'Verified Suppliers Directory', url: '/suppliers' }
+  ]);
 
   return (
-    <SuppliersClient
-      initialSellers={initialData.sellers}
-      initialTotal={initialData.total}
-      initialTotalPages={initialData.totalPages}
-    />
+    <>
+      {/* BreadcrumbList Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <SuppliersClient
+        initialSellers={initialData.sellers}
+        initialTotal={initialData.total}
+        initialTotalPages={initialData.totalPages}
+      />
+    </>
   );
 }

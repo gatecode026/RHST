@@ -8,6 +8,7 @@ import { getDb } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 import { getCanonicalUrl } from '@/lib/seo';
 import { isNonItSlug } from '@/lib/nonItFilter';
+import { getProductSchema, getBreadcrumbSchema } from '@/lib/schema';
 
 export const dynamic = 'force-dynamic';
 
@@ -258,34 +259,30 @@ export default async function ProductDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Product',
-    name: product.name,
-    image: product.image,
-    description: product.description,
-    sku: product.sku,
-    brand: {
-      '@type': 'Brand',
-      name: product.brand,
+  const productSchema = getProductSchema(product, id);
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: 'Products', url: '/products' },
+    {
+      name: product.category || 'Hardware',
+      url: `/products?category=${encodeURIComponent(product.category || 'Hardware')}`
     },
-    offers: {
-      '@type': 'Offer',
-      priceCurrency: 'INR',
-      price: product.price,
-      availability: product.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
-      seller: {
-        '@type': 'Organization',
-        name: product.sellerName || 'VALNQIX Partner',
-      },
-    },
-  };
+    {
+      name: product.name,
+      url: `/products/${product.slug || id}`
+    }
+  ]);
 
   return (
     <>
+      {/* Product Schema (SSR Structured Data) */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+      />
+      {/* BreadcrumbList Schema (SSR Structured Data) */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
       <Header />
       <main style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#fff' }}>

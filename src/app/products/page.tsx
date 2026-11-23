@@ -5,6 +5,7 @@ import PageFAQ from '@/components/PageFAQ';
 import { PRODUCT_FAQS } from '@/data/faqs';
 import { getCanonicalUrl } from '@/lib/seo';
 import { getInitialProductsData } from '@/lib/serverData';
+import { getBreadcrumbSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
   title: 'Products Catalog | VALNQIX E-commerce & IT Solutions',
@@ -16,9 +17,17 @@ export const metadata: Metadata = {
 
 export default async function ProductsPage() {
   const initialData = await getInitialProductsData(24);
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: 'Products Catalog', url: '/products' }
+  ]);
 
   return (
     <>
+      {/* BreadcrumbList Structured Data for Category / Catalog */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <ProductsClient
         initialProducts={initialData.products}
         initialTotal={initialData.total}

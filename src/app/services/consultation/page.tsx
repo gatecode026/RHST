@@ -7,6 +7,7 @@ import ContactForm from '@/components/ContactForm';
 import PageFAQ from '@/components/PageFAQ';
 import { CONSULTATION_FAQS } from '@/data/faqs';
 import { getCanonicalUrl } from '@/lib/seo';
+import { getBreadcrumbSchema } from '@/lib/schema';
 import styles from './Consultation.module.css';
 
 export const metadata: Metadata = {
@@ -18,8 +19,19 @@ export const metadata: Metadata = {
 };
 
 export default function ConsultationServicesPage() {
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: 'Services', url: '/#services' },
+    { name: 'IT Consultation Services', url: '/services/consultation' }
+  ]);
+
   return (
     <>
+      {/* BreadcrumbList Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+
       {/* Navigation Header */}
       <Header />
 

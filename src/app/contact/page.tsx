@@ -8,19 +8,30 @@ import Brands from '@/components/Brands';
 import Footer from '@/components/Footer';
 import ContactForm from '@/components/ContactForm';
 import { getCanonicalUrl } from '@/lib/seo';
+import { getBreadcrumbSchema } from '@/lib/schema';
 import styles from './Contact.module.css';
 
 export const metadata: Metadata = {
   title: 'Contact Us | VALNQIX E-commerce & IT Solutions',
-  description: 'Get in touch with VALNQIX. Contact our office or management teams, locate our store in Brooklyn, NY, or send us your questions and inquiries online.',
+  description: 'Get in touch with VALNQIX (a brand under RHST E-Commerce Pvt. Ltd.). Contact our Noida corporate office or Jaipur headquarters for IT hardware procurement and quotations.',
   alternates: {
     canonical: getCanonicalUrl('/contact'),
   },
 };
 
 export default function ContactPage() {
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: 'Contact', url: '/contact' }
+  ]);
+
   return (
     <>
+      {/* BreadcrumbList Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+
       {/* Navigation Header */}
       <Header />
 
