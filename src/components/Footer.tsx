@@ -23,17 +23,6 @@ export default function Footer() {
               <p className={styles.aboutText}>
                 VALNQIX is a brand under <strong>RHST E-Commerce Pvt. Ltd.</strong>, serving as your trusted B2B technology partner. We connect businesses across India directly with verified IT hardware manufacturers, authorized wholesalers, and certified service engineers.
               </p>
-              <div className={styles.companyBadges}>
-                <div className={styles.companyBadgeItem}>
-                  <strong>Parent:</strong> RHST E-Commerce Pvt. Ltd.
-                </div>
-                <div className={styles.companyBadgeItem}>
-                  <strong>CIN:</strong> U47912RJ2026PTC115018
-                </div>
-                <div className={styles.companyBadgeItem}>
-                  <strong>GSTIN:</strong> 08AAPCR9622R1Z9
-                </div>
-              </div>
             </div>
 
             {/* Quick Links */}

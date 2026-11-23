@@ -159,32 +159,6 @@
   margin-top: 0.2rem;
 }
 
-.companyBadges {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  margin-top: 0.75rem;
-  padding: 0.75rem 0.9rem;
-  background-color: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-}
-
-.companyBadgeItem {
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.82rem;
-  font-weight: 400;
-  color: #334155;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-}
-
-.companyBadgeItem strong {
-  font-weight: 600;
-  color: #0f172a;
-}
-
 .contactText {
   font-family: 'Outfit', sans-serif;
   font-size: 0.95rem;
