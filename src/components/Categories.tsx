@@ -2,7 +2,12 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import styles from './Categories.module.css';
+
+// next/image can only resize local files and hosts allowed in next.config.ts
+const canOptimize = (src: string) =>
+  !!src && (src.startsWith('/') || src.startsWith('https://ik.imagekit.io/') || src.startsWith('https://images.unsplash.com/'));
 
 interface Category {
   id: string | number;
@@ -90,7 +95,11 @@ export default function Categories({
             {categories.map((cat) => (
               <Link key={cat.id} href={`/products?category=${encodeURIComponent(cat.name)}`} className={styles.card}>
                 <div className={styles.imageContainer}>
-                  <img src={cat.image} alt={cat.name} width={140} height={140} loading="lazy" decoding="async" className={styles.image} />
+                  {canOptimize(cat.image) ? (
+                    <Image src={cat.image} alt={cat.name} width={220} height={140} sizes="200px" className={styles.image} />
+                  ) : (
+                    <img src={cat.image} alt={cat.name} width={140} height={140} loading="lazy" decoding="async" className={styles.image} />
+                  )}
                 </div>
                 <div className={styles.info}>
                   <h3>{cat.name}</h3>

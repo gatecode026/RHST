@@ -1,3 +1,4 @@
+import { withHomeRevalidate } from '@/lib/revalidateHome';
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/mongodb';
 import { logActivity } from '@/lib/activity';
@@ -45,7 +46,7 @@ function getField(row: Record<string, any>, ...candidateKeys: string[]): string 
   return '';
 }
 
-export async function POST(request: Request) {
+async function handlePOST(request: Request) {
   try {
     const body = await request.json();
     const { products, usdExchangeRate = 85.0 } = body;
@@ -363,3 +364,5 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
+
+export const POST = withHomeRevalidate(handlePOST);
