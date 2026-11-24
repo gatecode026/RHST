@@ -31,7 +31,7 @@
 }
 
 .resultsCount {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-sans);
   font-size: 1.05rem;
   font-weight: 300;
   color: #666666;
@@ -43,7 +43,7 @@
   border-radius: 6px;
   background-color: #ffffff;
   color: #333333;
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-sans);
   font-size: 0.95rem;
   outline: none;
   cursor: pointer;
@@ -141,7 +141,7 @@
 }
 
 .name {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 400;
   line-height: 1.35;
@@ -162,7 +162,7 @@
 }
 
 .price {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-sans);
   font-size: 16px;
   font-weight: 600;
   line-height: 1.2;
@@ -176,7 +176,7 @@
   border: none;
   padding: 8px 16px;
   border-radius: 50px;
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-sans);
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
@@ -207,7 +207,7 @@
   border-radius: 6px;
   background-color: #ffffff;
   color: #555555;
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-sans);
   font-size: 0.9rem;
   font-weight: 500;
   display: flex;
@@ -268,7 +268,7 @@
   flex: 1;
   padding: 0.75rem 1rem;
   border: none;
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-sans);
   font-size: 0.95rem;
   color: #333333;
   outline: none;
@@ -305,7 +305,7 @@
 }
 
 .widgetTitle {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-sans);
   font-size: 1.05rem;
   font-weight: 500;
   color: #333333;
@@ -348,7 +348,7 @@
 }
 
 .widgetItem {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-sans);
   font-size: 0.92rem;
   font-weight: 400;
   line-height: 1.5;
@@ -509,7 +509,7 @@
     border: 1px solid var(--border-color);
     border-radius: 6px;
     padding: 0.6rem 1.25rem;
-    font-family: 'Outfit', sans-serif;
+    font-family: var(--font-sans);
     font-size: 0.95rem;
     color: var(--dark-gray);
     cursor: pointer;
@@ -644,7 +644,7 @@
   padding: 1.1rem 1.25rem;
   border: 1px solid var(--border-color, #e1e1e6);
   border-radius: 6px;
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-sans);
   font-size: 1rem;
   color: #333333;
   background-color: #ffffff;
@@ -662,7 +662,7 @@
   padding: 1rem 3rem;
   border: none;
   border-radius: 6px;
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-sans);
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;

@@ -5360,7 +5360,7 @@ export default function AdminDashboardPage() {
                   {/* Header Row */}
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
                     <div>
-                      <h2 style={{ fontSize: '32px', fontWeight: 700, margin: 0, color: '#1a1a1a', fontFamily: "'Outfit', sans-serif" }}>Homepage Banner</h2>
+                      <h2 style={{ fontSize: '32px', fontWeight: 700, margin: 0, color: '#1a1a1a', fontFamily: 'var(--font-sans)' }}>Homepage Banner</h2>
                       <p style={{ margin: '4px 0 0 0', color: '#666', fontSize: '15px' }}>Manage the promotional banner on your store's homepage.</p>
                     </div>
                     <button

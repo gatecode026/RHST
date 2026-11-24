@@ -22,7 +22,7 @@
 }
 
 .columnTitle {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-sans);
   font-size: 1.2rem;
   font-weight: 300;
   text-transform: uppercase;
@@ -32,7 +32,7 @@
 }
 
 .divider {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-sans);
   font-size: 0.8rem;
   color: #e1e1e6;
   letter-spacing: 1.5px;
@@ -100,7 +100,7 @@
 }
 
 .name {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-sans);
   font-size: 0.95rem;
   font-weight: 300;
   color: #333333;
@@ -125,14 +125,14 @@
 }
 
 .price {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-sans);
   font-size: 0.95rem;
   font-weight: 400;
   color: var(--primary, #ff6f61);
 }
 
 .oldPrice {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-sans);
   font-size: 0.95rem;
   font-weight: 300;
   color: #a0a0a0;
