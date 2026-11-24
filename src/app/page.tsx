@@ -16,9 +16,11 @@ import { getCanonicalUrl } from '@/lib/seo';
 import { getHomeInitialData } from '@/lib/serverData';
 import { getOrganizationSchema } from '@/lib/schema';
 
-// Serve the home page from cache and regenerate in the background at most every 5 minutes,
-// instead of querying MongoDB on every request (was the main cause of slow document response).
-export const revalidate = 300;
+// Serve the home page from cache instead of querying MongoDB on every request.
+// Admin product/category/blog changes refresh it immediately (see lib/revalidateHome.ts);
+// otherwise it regenerates in the background at most every 10 minutes (short enough that a
+// page built with fallback data, e.g. after a DB timeout during build, doesn't linger).
+export const revalidate = 600;
 
 export const metadata: Metadata = {
   title: "VALNQIX | B2B IT Hardware, Suppliers & Marketplace Directory",
