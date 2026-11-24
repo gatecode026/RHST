@@ -470,7 +470,24 @@ export async function getHomeInitialData() {
       getInitialBlogsData()
     ]);
 
-    const allProducts = productsData.products;
+    // Only send the fields the home page cards actually use. Every prop passed to a
+    // client component is embedded in the HTML and parsed during hydration.
+    const allProducts = productsData.products.map((p: any) => ({
+      id: p.id,
+      slug: p.slug,
+      name: p.name,
+      price: p.price,
+      numericPrice: p.numericPrice,
+      mrp: p.mrp,
+      discount: p.discount,
+      image: p.image,
+      category: p.category,
+      stock: p.stock,
+      sellerName: p.sellerName,
+      sellerLocation: p.sellerLocation,
+      sellerRating: p.sellerRating,
+      sellerVerified: p.sellerVerified,
+    }));
     const bestSelling = allProducts.slice(0, 8);
     const columnsProducts = allProducts.slice(0, 12);
 
