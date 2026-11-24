@@ -2,7 +2,11 @@
 
 import React, { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
-import EnquiryModal, { EnquiryProduct } from './EnquiryModal';
+import dynamic from 'next/dynamic';
+import type { EnquiryProduct } from './EnquiryModal';
+
+// Loaded only when a visitor opens an enquiry (keeps it out of the initial JS bundle)
+const EnquiryModal = dynamic(() => import('./EnquiryModal'), { ssr: false });
 import styles from './BestSelling.module.css';
 
 interface Product {
@@ -219,11 +223,13 @@ export default function BestSelling({ initialProducts = [] }: { initialProducts?
       </div>
 
       {/* Enquiry Modal */}
-      <EnquiryModal
-        isOpen={!!selectedProductForEnquiry}
-        onClose={() => setSelectedProductForEnquiry(null)}
-        product={selectedProductForEnquiry}
-      />
+      {selectedProductForEnquiry && (
+        <EnquiryModal
+          isOpen
+          onClose={() => setSelectedProductForEnquiry(null)}
+          product={selectedProductForEnquiry}
+        />
+      )}
     </section>
   );
 }
