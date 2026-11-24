@@ -11,6 +11,34 @@ import styles from './Header.module.css';
 
 // No static fallbacks are used. All categories and parent groupings are fetched dynamically from the database.
 
+/**
+ * Defers mounting a hidden overlay until it is first opened, so it does not add
+ * DOM nodes or hydration work to the initial page load. Once mounted it stays
+ * mounted. `shown` flips one frame after mount so CSS open transitions still run.
+ */
+function useDeferredMount(open: boolean) {
+  const [mounted, setMounted] = useState(false);
+  const [shown, setShown] = useState(false);
+
+  useEffect(() => {
+    if (!open) {
+      setShown(false);
+      return;
+    }
+    setMounted(true);
+    let inner = 0;
+    const outer = requestAnimationFrame(() => {
+      inner = requestAnimationFrame(() => setShown(true));
+    });
+    return () => {
+      cancelAnimationFrame(outer);
+      cancelAnimationFrame(inner);
+    };
+  }, [open]);
+
+  return { mounted, shown };
+}
+
 export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
@@ -162,6 +190,12 @@ export default function Header() {
 
   const searchInputRef = useRef<HTMLInputElement>(null);
 
+  // Overlays are only mounted once first opened (keeps initial DOM / hydration small)
+  const mobileMenuOverlay = useDeferredMount(isMobileMenuOpen);
+  const wishlistOverlay = useDeferredMount(isWishlistOpen);
+  const searchOverlay = useDeferredMount(isSearchOpen);
+  const profileOverlay = useDeferredMount(isProfileOpen);
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 40) {
@@ -221,15 +255,17 @@ export default function Header() {
 
   // Focus search input when modal opens
   useEffect(() => {
-    if (isSearchOpen && searchInputRef.current) {
-      setTimeout(() => {
-        searchInputRef.current?.focus();
-      }, 50);
+    if (isSearchOpen) {
+      if (searchOverlay.shown && searchInputRef.current) {
+        setTimeout(() => {
+          searchInputRef.current?.focus();
+        }, 50);
+      }
     } else {
       setSearchQuery('');
       setSearchResults([]);
     }
-  }, [isSearchOpen]);
+  }, [isSearchOpen, searchOverlay.shown]);
 
   const getSearchableProducts = () => {
     return dbProducts.map(p => ({
@@ -712,7 +748,8 @@ export default function Header() {
       </header>
 
       {/* Slide-out Mobile Navigation */}
-      <div className={`${styles.mobileMenu} ${isMobileMenuOpen ? styles.mobileMenuOpen : ''}`}>
+      {mobileMenuOverlay.mounted && (
+      <div className={`${styles.mobileMenu} ${mobileMenuOverlay.shown ? styles.mobileMenuOpen : ''}`}>
         <nav className={styles.mobileNavLinks}>
           <Link 
             href="/" 
@@ -852,13 +889,16 @@ export default function Header() {
           )}
         </nav>
       </div>
+      )}
 
       {/* Slide-out Wishlist/Liked Items Drawer Overlay */}
-      <div 
-        className={`${styles.drawerOverlay} ${isWishlistOpen ? styles.overlayOpen : ''}`} 
-        onClick={() => setIsWishlistOpen(false)} 
+      {wishlistOverlay.mounted && (
+      <>
+      <div
+        className={`${styles.drawerOverlay} ${wishlistOverlay.shown ? styles.overlayOpen : ''}`}
+        onClick={() => setIsWishlistOpen(false)}
       />
-      <div className={`${styles.cartDrawer} ${isWishlistOpen ? styles.drawerOpen : ''}`}>
+      <div className={`${styles.cartDrawer} ${wishlistOverlay.shown ? styles.drawerOpen : ''}`}>
         <div className={styles.drawerHeader}>
           <h3>Wishlist ({wishlistItems?.length || 0})</h3>
           <button 
@@ -976,9 +1016,12 @@ export default function Header() {
           </div>
         )}
       </div>
+      </>
+      )}
 
       {/* Search Modal Overlay */}
-      <div className={`${styles.searchOverlay} ${isSearchOpen ? styles.searchOpen : ''}`}>
+      {searchOverlay.mounted && (
+      <div className={`${styles.searchOverlay} ${searchOverlay.shown ? styles.searchOpen : ''}`}>
         <button onClick={() => setIsSearchOpen(false)} className={styles.closeSearchBtn} aria-label="Close Search">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -1073,9 +1116,11 @@ export default function Header() {
           )}
         </div>
       </div>
+      )}
 
       {/* Profile/Account Modal Overlay */}
-      <div className={`${styles.profileOverlay} ${isProfileOpen ? styles.profileOpen : ''}`} onClick={(e) => {
+      {profileOverlay.mounted && (
+      <div className={`${styles.profileOverlay} ${profileOverlay.shown ? styles.profileOpen : ''}`} onClick={(e) => {
         if (e.target === e.currentTarget) handleCloseProfile();
       }}>
         <div className={styles.profileModalCard}>
@@ -1395,6 +1440,7 @@ export default function Header() {
           )}
         </div>
       </div>
+      )}
     </>
   );
 }

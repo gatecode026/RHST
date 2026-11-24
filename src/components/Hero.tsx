@@ -53,11 +53,23 @@ export default function Hero() {
     setCurrent((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
   };
 
+  // Start autoplay only after the first user interaction. Rotating slides before that
+  // keeps painting new large elements, which pushes Largest Contentful Paint out by seconds.
+  const [autoplay, setAutoplay] = useState(false);
+
   useEffect(() => {
-    if (slides.length <= 1) return;
+    if (slides.length <= 1 || autoplay) return;
+    const events = ['pointerdown', 'keydown', 'scroll', 'touchstart'] as const;
+    const start = () => setAutoplay(true);
+    events.forEach((e) => window.addEventListener(e, start, { once: true, passive: true }));
+    return () => events.forEach((e) => window.removeEventListener(e, start));
+  }, [slides.length, autoplay]);
+
+  useEffect(() => {
+    if (slides.length <= 1 || !autoplay) return;
     const timer = setInterval(nextSlide, 6000);
     return () => clearInterval(timer);
-  }, [slides.length]);
+  }, [slides.length, autoplay]);
 
   if (slides.length === 0) return null;
 
@@ -88,12 +100,11 @@ export default function Hero() {
                       alt={slide.title}
                       width={500}
                       height={500}
-                      priority={idx === 0}
-                      fetchPriority={idx === 0 ? "high" : "auto"}
+                      preload={idx === 0}
+                      fetchPriority={idx === 0 ? "high" : "low"}
                       loading={idx === 0 ? "eager" : "lazy"}
-                      decoding={idx === 0 ? "sync" : "async"}
                       className={styles.heroImage}
-                      sizes="(max-width: 480px) 250px, (max-width: 900px) 320px, 500px"
+                      sizes="(max-width: 425px) 260px, (max-width: 900px) 370px, 575px"
                     />
                     <div className={styles.circleBg} />
                   </div>

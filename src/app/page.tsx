@@ -16,7 +16,9 @@ import { getCanonicalUrl } from '@/lib/seo';
 import { getHomeInitialData } from '@/lib/serverData';
 import { getOrganizationSchema } from '@/lib/schema';
 
-export const dynamic = 'force-dynamic';
+// Serve the home page from cache and regenerate in the background at most every 5 minutes,
+// instead of querying MongoDB on every request (was the main cause of slow document response).
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "VALNQIX | B2B IT Hardware, Suppliers & Marketplace Directory",
@@ -32,14 +34,6 @@ export default async function Home() {
 
   return (
     <>
-      {/* High-Priority Preload for Above-The-Fold Mobile LCP Hero Image */}
-      <link
-        rel="preload"
-        as="image"
-        href="https://ik.imagekit.io/zp0tch54w/RHST/IMG.png?updatedAt=1781696174888"
-        fetchPriority="high"
-      />
-
       {/* Organization Structured Data for Search Engines & AI Crawlers */}
       <script
         type="application/ld+json"

@@ -1,7 +1,15 @@
 import type { Metadata } from "next";
+import { Outfit } from "next/font/google";
 import { CartProvider } from "@/context/CartContext";
 import { SITE_URL } from "@/lib/seo";
 import "./globals.css";
+
+// Self-hosted, non-render-blocking font (replaces the Google Fonts <link> stylesheet)
+const outfit = Outfit({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-outfit",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -21,15 +29,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800&display=swap"
-        />
-      </head>
+    <html lang="en" className={outfit.variable} suppressHydrationWarning>
       <body suppressHydrationWarning>
         <CartProvider>
           {children}

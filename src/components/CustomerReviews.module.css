@@ -39,7 +39,7 @@
 }
 
 .text {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-sans);
   font-size: 1.05rem;
   font-weight: 300;
   line-height: 1.5;
@@ -59,7 +59,7 @@
 }
 
 .author {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-sans);
   font-size: 1.05rem;
   font-weight: 500;
   color: #1a1a1a;
@@ -75,7 +75,7 @@
 }
 
 .title {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-sans);
   font-size: 1.8rem;
   font-weight: 300;
   letter-spacing: 0.12em;

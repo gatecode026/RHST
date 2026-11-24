@@ -48,7 +48,7 @@
 }
 
 .info h3 {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 200;
   font-size: 20px;
   line-height: 100%;
@@ -60,7 +60,7 @@
 }
 
 .info p {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 200;
   font-size: 18px;
   line-height: 100%;
