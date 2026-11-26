@@ -22,16 +22,15 @@ export async function GET(request: Request) {
     const db = await getDb();
     const collection = db.collection('coupons');
 
-    // Auto seed if empty
-    const count = await collection.countDocuments();
-    if (count === 0) {
-      await collection.insertMany(DEFAULT_COUPONS);
-    }
+    const couponQuery = { code: code.toUpperCase(), isActive: true };
+    let coupon = await collection.findOne(couponQuery);
 
-    const coupon = await collection.findOne({ 
-      code: code.toUpperCase(), 
-      isActive: true 
-    });
+    // Auto-seed the default coupons only when the collection is completely empty.
+    // Checked only when no coupon matched, instead of running a count on every validation.
+    if (!coupon && (await collection.countDocuments()) === 0) {
+      await collection.insertMany(DEFAULT_COUPONS);
+      coupon = await collection.findOne(couponQuery);
+    }
 
     if (!coupon) {
       return NextResponse.json({ success: false, error: 'Invalid or inactive coupon code.' }, { status: 404 });

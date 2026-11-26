@@ -85,12 +85,6 @@ export default function BlogClient({ initialBlogs = [] }: { initialBlogs?: any[]
     setCurrentPage(1);
   };
 
-  const handleTagSelect = (tag: string | null) => {
-    setSelectedTag(tag);
-    setSelectedCategory(null);
-    setCurrentPage(1);
-  };
-
   const clearFilters = () => {
     setSearchQuery('');
     setSelectedCategory(null);

@@ -31,7 +31,7 @@ export default function Categories({
     if (initialCategories.length > 0) return;
     const fetchCategories = async () => {
       try {
-        const res = await fetch('/api/categories?t=' + Date.now(), { cache: 'no-store' });
+        const res = await fetch('/api/categories');
         const data = await res.json();
         if (data.success) {
           setCategories(data.categories);

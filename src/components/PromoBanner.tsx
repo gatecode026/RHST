@@ -3,20 +3,26 @@
 import React, { useState, useEffect } from 'react';
 import styles from './PromoBanner.module.css';
 
-export default function PromoBanner() {
-  const [banner, setBanner] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+export default function PromoBanner({ initialBanner }: { initialBanner?: any }) {
+  // When the server already provided the banner we render it immediately and skip the client request
+  const hasInitial = initialBanner !== undefined;
+  const [banner, setBanner] = useState<any>(hasInitial ? initialBanner : null);
+  const [loading, setLoading] = useState(!hasInitial);
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
     minutes: 0,
     seconds: 0
   });
+  // Server HTML can't know the current time; keep the countdown hidden (space reserved) until it is computed
+  const [timerReady, setTimerReady] = useState(false);
+  useEffect(() => setTimerReady(true), []);
 
   useEffect(() => {
+    if (hasInitial) return;
     const fetchBanner = async () => {
       try {
-        const res = await fetch('/api/promo-banner?t=' + Date.now(), { cache: 'no-store' });
+        const res = await fetch('/api/promo-banner');
         const data = await res.json();
         if (data.success && data.banner) {
           setBanner(data.banner);
@@ -28,7 +34,7 @@ export default function PromoBanner() {
       }
     };
     fetchBanner();
-  }, []);
+  }, [hasInitial]);
 
   useEffect(() => {
     if (!banner || !banner.expiryDate || !banner.isActive) return;
@@ -123,7 +129,7 @@ export default function PromoBanner() {
             )}
 
             {/* Countdown Timer */}
-            <div className={styles.countdown}>
+            <div className={styles.countdown} style={timerReady ? undefined : { visibility: 'hidden' }}>
               <div className={styles.timeBox}>
                 <span className={styles.timeVal}>{timeLeft.days.toString().padStart(2, '0')}</span>
                 <span className={styles.timeLabel}>Days</span>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { cache } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
@@ -10,7 +10,15 @@ import { getCanonicalUrl } from '@/lib/seo';
 import { isNonItSlug } from '@/lib/nonItFilter';
 import { getProductSchema, getBreadcrumbSchema } from '@/lib/schema';
 
-export const dynamic = 'force-dynamic';
+// Cached page, regenerated in the background at most every 5 minutes. Admin product edits and new
+// reviews refresh it immediately (see lib/revalidatePages.ts and the review POST handler).
+export const revalidate = 300;
+
+// Required for runtime caching (ISR) of dynamic routes: build no product pages up front,
+// each one is rendered and cached the first time it is visited.
+export async function generateStaticParams() {
+  return [];
+}
 
 // Mock data catalogs to resolve mock IDs
 const BASE_CATALOG_PRODUCTS = [
@@ -84,9 +92,11 @@ const DEFAULT_REVIEWS = [
   }
 ];
 
-// Server helper to load product by ID or slug directly
-async function getProduct(id: string) {
+// Server helper to load product by ID or slug directly.
+// Wrapped in cache() so generateMetadata() and the page share ONE lookup per request (it used to run twice).
+const getProduct = cache(async (id: string) => {
   let product: any = null;
+  let dbFailed = false;
 
   const isObjectId = id.match(/^[0-9a-fA-F]{24}$/);
   const bsName = id.startsWith('bs-') ? {
@@ -117,14 +127,16 @@ async function getProduct(id: string) {
       }
       let dbProduct = await db.collection('products').findOne(query);
 
-      // Robust fallback matching by generated slug in memory
+      // Robust fallback matching by generated slug in memory.
+      // Only slug/name are loaded for the scan (not every full product document); the full
+      // document is fetched afterwards for the single match.
       if (!dbProduct && !isObjectId && !bsName) {
-        const allDbProducts = await db.collection('products').find().toArray();
+        const allDbProducts = await db.collection('products').find({}, { projection: { slug: 1, name: 1 } }).toArray();
         const matched = allDbProducts.find(p => {
           const genSlug = p.slug || p.name.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-');
           return genSlug === id.toLowerCase();
         });
-        dbProduct = matched || null;
+        dbProduct = matched ? await db.collection('products').findOne({ _id: matched._id }) : null;
       }
 
       if (dbProduct) {
@@ -148,6 +160,7 @@ async function getProduct(id: string) {
       }
     } catch (e) {
       console.error('Failed to get database product in SSR:', e);
+      dbFailed = true;
     }
   }
 
@@ -186,7 +199,12 @@ async function getProduct(id: string) {
     }
   }
 
-  if (!product) return null;
+  if (!product) {
+    // A database failure must not look like "product not found": that 404 would be cached for the
+    // revalidate window. Throwing keeps the failure uncached so the next request retries.
+    if (dbFailed) throw new Error(`Product lookup failed for "${id}": database unavailable`);
+    return null;
+  }
 
   // Retrieve reviews
   let reviews = [...DEFAULT_REVIEWS];
@@ -212,7 +230,7 @@ async function getProduct(id: string) {
     ...product,
     reviews
   };
-}
+});
 
 interface PageProps {
   params: Promise<{ id: string }>;

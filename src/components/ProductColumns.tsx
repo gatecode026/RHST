@@ -41,7 +41,7 @@ export default function ProductColumns({ initialProducts = [] }: { initialProduc
     if (initialProducts.length > 0) return;
     const fetchProducts = async () => {
       try {
-        const res = await fetch('/api/products?columns=true&limit=12', { cache: 'no-store' });
+        const res = await fetch('/api/products?columns=true&limit=12');
         const data = await res.json();
         if (data.success && Array.isArray(data.products)) {
           const seen = new Set<string>();
@@ -95,12 +95,12 @@ export default function ProductColumns({ initialProducts = [] }: { initialProduc
 
   const formatPrice = (priceVal: any): string => {
     if (typeof priceVal === 'number') {
-      return `₹${priceVal.toLocaleString()}`;
+      return `₹${priceVal.toLocaleString('en-IN')}`;
     }
     if (typeof priceVal === 'string') {
       if (!priceVal.startsWith('₹')) {
         const num = parseInt(priceVal.replace(/[^\d]/g, ''), 10) || 0;
-        return `₹${num.toLocaleString()}`;
+        return `₹${num.toLocaleString('en-IN')}`;
       }
       return priceVal;
     }
@@ -145,7 +145,7 @@ export default function ProductColumns({ initialProducts = [] }: { initialProduc
     const col3 = takeDistinct(p => parsePrice(p.price) > 5000, 3);
     const col4 = takeDistinct(p => (p.discount && p.discount > 0) || !!p.onOffer, 3).map(p => ({
       ...p,
-      oldPrice: p.mrp && p.mrp > parsePrice(p.price) ? `₹${p.mrp.toLocaleString()}` : undefined
+      oldPrice: p.mrp && p.mrp > parsePrice(p.price) ? `₹${p.mrp.toLocaleString('en-IN')}` : undefined
     }));
 
     return [

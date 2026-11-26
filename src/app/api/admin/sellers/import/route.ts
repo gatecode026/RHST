@@ -1,3 +1,4 @@
+import { withRevalidate, PAGES_USING } from '@/lib/revalidatePages';
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/mongodb';
 import { logActivity } from '@/lib/activity';
@@ -5,7 +6,7 @@ import { assignSellersToProducts } from '@/lib/sellers';
 
 export const dynamic = 'force-dynamic';
 
-export async function POST(request: Request) {
+async function handlePOST(request: Request) {
   try {
     const body = await request.json();
     const { sellers } = body;
@@ -96,3 +97,5 @@ export async function POST(request: Request) {
   }
 }
 
+
+export const POST = withRevalidate(handlePOST, PAGES_USING.productSellers);

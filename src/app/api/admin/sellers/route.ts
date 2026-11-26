@@ -1,3 +1,4 @@
+import { withRevalidate, PAGES_USING } from '@/lib/revalidatePages';
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
@@ -66,7 +67,7 @@ export async function GET(request: Request) {
   }
 }
 
-export async function POST(request: Request) {
+async function handlePOST(request: Request) {
   try {
     const body = await request.json();
     const {
@@ -130,7 +131,7 @@ export async function POST(request: Request) {
   }
 }
 
-export async function PUT(request: Request) {
+async function handlePUT(request: Request) {
   try {
     const body = await request.json();
     const {
@@ -210,7 +211,7 @@ export async function PUT(request: Request) {
   }
 }
 
-export async function DELETE(request: Request) {
+async function handleDELETE(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
@@ -240,3 +241,9 @@ export async function DELETE(request: Request) {
   }
 }
 
+
+export const POST = withRevalidate(handlePOST, PAGES_USING.sellers);
+
+export const PUT = withRevalidate(handlePUT, PAGES_USING.sellers);
+
+export const DELETE = withRevalidate(handleDELETE, PAGES_USING.sellers);

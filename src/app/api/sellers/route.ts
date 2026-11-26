@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/mongodb';
+import { PUBLIC_API_CACHE_HEADERS } from '@/lib/cacheHeaders';
 
 export const dynamic = 'force-dynamic';
 
@@ -113,7 +114,7 @@ export async function GET(request: Request) {
         limit,
         totalPages: Math.ceil(total / limit) || 1
       }
-    });
+    }, { headers: PUBLIC_API_CACHE_HEADERS });
   } catch (error: any) {
     console.error('Error fetching sellers:', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });

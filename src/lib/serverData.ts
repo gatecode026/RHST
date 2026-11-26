@@ -290,20 +290,32 @@ async function getDbWithTimeout(timeoutMs = 4000) {
 /**
  * Server-side loader for Products Catalog SSR
  */
-export async function getInitialProductsData(limit = 24) {
+// Only the fields the SSR product mapper below actually reads (avoids pulling whole documents).
+const PRODUCT_LIST_PROJECTION = {
+  slug: 1, name: 1, price: 1, numericPrice: 1, image: 1, link: 1, category: 1, brand: 1,
+  sku: 1, stock: 1, status: 1, description: 1, mrp: 1, discount: 1,
+  sellerName: 1, sellerLocation: 1, sellerRating: 1, sellerVerified: 1, sellerTrustScore: 1
+};
+
+/**
+ * @param options.lite Skip the total count, categories and brands queries. Used by the home page,
+ *                     which only needs the product cards (those extra queries were discarded there).
+ */
+export async function getInitialProductsData(limit = 24, options: { lite?: boolean } = {}) {
+  const lite = !!options.lite;
   try {
     const db = await getDbWithTimeout();
     const collection = db.collection('products');
 
     const [docs, totalCount, categoriesDoc, brandsDoc] = await Promise.all([
       collection
-        .find({ status: { $ne: 'DRAFT' } })
+        .find({ status: { $ne: 'DRAFT' } }, { projection: PRODUCT_LIST_PROJECTION })
         .sort({ _id: -1 })
         .limit(limit)
         .toArray(),
-      collection.estimatedDocumentCount().catch(() => 14592),
-      db.collection('categories').find({}).toArray().catch(() => []),
-      db.collection('brands').find({}).toArray().catch(() => [])
+      lite ? Promise.resolve(0) : collection.estimatedDocumentCount().catch(() => 14592),
+      lite ? Promise.resolve([] as any[]) : db.collection('categories').find({}).toArray().catch(() => [] as any[]),
+      lite ? Promise.resolve([] as any[]) : db.collection('brands').find({}).toArray().catch(() => [] as any[])
     ]);
 
     if (!docs || docs.length === 0) {
@@ -350,7 +362,8 @@ export async function getInitialProductsData(limit = 24) {
       products: formattedProducts,
       total: totalCount || formattedProducts.length,
       categories: formattedCategories.length > 0 ? formattedCategories : FALLBACK_SSR_CATEGORIES,
-      brands: brandsDoc || []
+      // Plain objects only: raw Mongo documents (ObjectId) cannot be passed to Client Components
+      brands: (brandsDoc || []).map(toPlainBrand)
     };
   } catch (error) {
     console.warn('Failed to load initial products in SSR, serving fallbacks:', error);
@@ -423,6 +436,10 @@ export async function getInitialSuppliersData(limit = 24) {
   }
 }
 
+export const BLOG_LIST_PROJECTION = {
+  tag: 1, title: 1, excerpt: 1, image: 1, category: 1, tags: 1, authorName: 1, createdAt: 1
+};
+
 /**
  * Server-side loader for Blog List SSR
  */
@@ -431,8 +448,9 @@ export async function getInitialBlogsData() {
     const db = await getDbWithTimeout();
     const collection = db.collection('blogs');
 
+    // List cards only need these fields - skip the (large) article body blocks
     const blogs = await collection
-      .find({ status: 'Published' })
+      .find({ status: 'Published' }, { projection: BLOG_LIST_PROJECTION })
       .sort({ sortOrder: 1, createdAt: -1 })
       .limit(12)
       .toArray();
@@ -459,15 +477,61 @@ export async function getInitialBlogsData() {
   }
 }
 
+function toPlainBrand(doc: any) {
+  return {
+    id: doc._id.toString(),
+    name: doc.name,
+    slug: doc.slug || (doc.name || '').toLowerCase().replace(/\s+/g, '-'),
+    description: doc.description || '',
+    image: doc.image || '/images/default_brand.png',
+    status: doc.status || 'Visible'
+  };
+}
+
+/** Visible brands for the home page marquee. Returns undefined on failure so the client can fall back to fetching. */
+export async function getInitialBrands() {
+  try {
+    const db = await getDbWithTimeout();
+    const brands = await db.collection('brands').find({ status: { $ne: 'Hidden' } }).toArray();
+    return brands.map(toPlainBrand);
+  } catch {
+    return undefined;
+  }
+}
+
+/** Promo banner for the home page. Returns undefined when unavailable so the client falls back to fetching. */
+export async function getInitialPromoBanner() {
+  try {
+    const db = await getDbWithTimeout();
+    const banner = await db.collection('promo_banner').findOne({});
+    if (!banner) return undefined;
+    return {
+      id: banner._id.toString(),
+      badgeText: banner.badgeText,
+      title: banner.title,
+      description: banner.description,
+      buttonText: banner.buttonText,
+      buttonLink: banner.buttonLink,
+      imageUrl: banner.imageUrl,
+      expiryDate: banner.expiryDate,
+      isActive: banner.isActive
+    };
+  } catch {
+    return undefined;
+  }
+}
+
 /**
  * Server-side loader for Home Page SSR components
  */
 export async function getHomeInitialData() {
   try {
-    const [productsData, categories, blogs] = await Promise.all([
-      getInitialProductsData(20),
+    const [productsData, categories, blogs, brands, promoBanner] = await Promise.all([
+      getInitialProductsData(20, { lite: true }),
       getInitialCategories(),
-      getInitialBlogsData()
+      getInitialBlogsData(),
+      getInitialBrands(),
+      getInitialPromoBanner()
     ]);
 
     // Only send the fields the home page cards actually use. Every prop passed to a
@@ -495,7 +559,9 @@ export async function getHomeInitialData() {
       categories: categories.length > 0 ? categories : FALLBACK_SSR_CATEGORIES,
       bestSelling: bestSelling.length > 0 ? bestSelling : FALLBACK_SSR_PRODUCTS.slice(0, 8),
       columnsProducts: columnsProducts.length > 0 ? columnsProducts : FALLBACK_SSR_PRODUCTS,
-      blogs: blogs.length > 0 ? blogs : FALLBACK_SSR_BLOGS
+      blogs: blogs.length > 0 ? blogs : FALLBACK_SSR_BLOGS,
+      brands,
+      promoBanner
     };
   } catch (error) {
     console.warn('Failed to load home data in SSR:', error);
@@ -503,7 +569,9 @@ export async function getHomeInitialData() {
       categories: FALLBACK_SSR_CATEGORIES,
       bestSelling: FALLBACK_SSR_PRODUCTS.slice(0, 8),
       columnsProducts: FALLBACK_SSR_PRODUCTS,
-      blogs: FALLBACK_SSR_BLOGS
+      blogs: FALLBACK_SSR_BLOGS,
+      brands: undefined,
+      promoBanner: undefined
     };
   }
 }
