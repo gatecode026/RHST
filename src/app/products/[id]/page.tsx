@@ -10,9 +10,11 @@ import { getCanonicalUrl } from '@/lib/seo';
 import { isNonItSlug } from '@/lib/nonItFilter';
 import { getProductSchema, getBreadcrumbSchema } from '@/lib/schema';
 
-// Cached page, regenerated in the background at most every 5 minutes. Admin product edits and new
-// reviews refresh it immediately (see lib/revalidatePages.ts and the review POST handler).
-export const revalidate = 300;
+// Cached page, regenerated in the background at most once an hour. Everything the site itself changes
+// refreshes just that product's page immediately: admin product edits, purchases (stock) and new
+// reviews (see lib/revalidatePages.ts, the checkout route and the review POST handler). The hourly
+// window is only a safety net for changes made outside the app (e.g. direct database scripts).
+export const revalidate = 3600;
 
 // Required for runtime caching (ISR) of dynamic routes: build no product pages up front,
 // each one is rendered and cached the first time it is visited.
@@ -127,13 +129,16 @@ const getProduct = cache(async (id: string) => {
       }
       let dbProduct = await db.collection('products').findOne(query);
 
-      // Robust fallback matching by generated slug in memory.
-      // Only slug/name are loaded for the scan (not every full product document); the full
-      // document is fetched afterwards for the single match.
+      // Fallback: match legacy products that have NO stored slug by their name-generated slug.
+      // Products that have a slug were already matched by the query above, so only slug-less
+      // ones can match here - load just those (normally none) instead of scanning every product.
       if (!dbProduct && !isObjectId && !bsName) {
-        const allDbProducts = await db.collection('products').find({}, { projection: { slug: 1, name: 1 } }).toArray();
-        const matched = allDbProducts.find(p => {
-          const genSlug = p.slug || p.name.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-');
+        const slugless = await db
+          .collection('products')
+          .find({ $or: [{ slug: { $exists: false } }, { slug: null }, { slug: '' }] }, { projection: { name: 1 } })
+          .toArray();
+        const matched = slugless.find(p => {
+          const genSlug = (p.name || '').toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-');
           return genSlug === id.toLowerCase();
         });
         dbProduct = matched ? await db.collection('products').findOne({ _id: matched._id }) : null;

@@ -488,7 +488,7 @@ function ProductsCatalogContent({
                   <div className={styles.productsGrid}>
                     {paginatedProducts.map((prod) => (
                       <div key={prod.id} className={styles.card}>
-                        <Link 
+                        <Link prefetch={false} 
                           href={`/products/${prod.slug || prod.id}`} 
                           className={styles.imageLink}
                           onClick={() => {
@@ -503,7 +503,7 @@ function ProductsCatalogContent({
                           </div>
                         </Link>
                         <div className={styles.info}>
-                          <Link 
+                          <Link prefetch={false} 
                             href={`/products/${prod.slug || prod.id}`} 
                             className={styles.nameLink}
                             onClick={() => {

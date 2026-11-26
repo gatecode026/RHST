@@ -47,5 +47,12 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/products', '/products/:path*', '/suppliers'],
+  matcher: [
+    // /products and /suppliers only need this middleware when a ?category= filter is present
+    // (check 1 above), so plain visits to those pages no longer invoke it at all.
+    { source: '/products', has: [{ type: 'query', key: 'category' }] },
+    { source: '/suppliers', has: [{ type: 'query', key: 'category' }] },
+    // Every product slug must be checked for the 410 Gone rule (check 2 above).
+    '/products/:path+',
+  ],
 };

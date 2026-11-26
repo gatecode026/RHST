@@ -199,7 +199,7 @@ export default function ProductColumns({ initialProducts = [] }: { initialProduc
                     className={styles.productRow}
                     style={{ position: 'relative' }}
                   >
-                    <Link
+                    <Link prefetch={false}
                       href={`/products/${prod.slug || prod.id}`}
                       className={styles.imageWrapper}
                       onClick={() => {
@@ -222,7 +222,7 @@ export default function ProductColumns({ initialProducts = [] }: { initialProduc
                     </Link>
 
                     <div className={styles.info}>
-                      <Link
+                      <Link prefetch={false}
                         href={`/products/${prod.slug || prod.id}`}
                         style={{ textDecoration: 'none', color: 'inherit' }}
                       >

@@ -7,7 +7,11 @@ export type RevalidateTarget = string | readonly [string, 'page' | 'layout'];
 
 /** Pages that render data from each admin-managed collection. */
 export const PAGES_USING = {
-  products: ['/', '/products', ['/products/[id]', 'page']],
+  // A single product edit: only the listing pages. The edited product's own page is refreshed by
+  // revalidateProductPages() so we don't invalidate every cached product page for one edit.
+  products: ['/', '/products'],
+  // Bulk import: many products can change at once, so refresh every cached product page too.
+  productsBulk: ['/', '/products', ['/products/[id]', 'page']],
   categories: ['/', '/products'],
   brands: ['/', '/products'],
   blogs: ['/', '/blog'],
@@ -39,6 +43,14 @@ export function withRevalidate(handler: Handler, targets: readonly RevalidateTar
     if (response.ok) revalidateTargets(targets);
     return response;
   };
+}
+
+/**
+ * Refresh the cached page(s) of ONE product, by slug and/or id (the page can be cached under either URL).
+ */
+export function revalidateProductPages(...keys: Array<string | null | undefined>) {
+  const paths = [...new Set(keys.filter((k): k is string => !!k))].map((k) => '/products/' + k);
+  revalidateTargets(paths);
 }
 
 export { revalidateTargets };

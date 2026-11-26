@@ -365,4 +365,4 @@ async function handlePOST(request: Request) {
   }
 }
 
-export const POST = withRevalidate(handlePOST, PAGES_USING.products);
+export const POST = withRevalidate(handlePOST, PAGES_USING.productsBulk);
