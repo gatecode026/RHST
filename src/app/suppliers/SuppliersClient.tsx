@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, Suspense } from 'react';
 import Link from 'next/link';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import EnquiryModal, { EnquiryProduct } from '@/components/EnquiryModal';
@@ -65,7 +65,6 @@ function SuppliersCatalogContent({
   initialTotal = 0,
   initialTotalPages = 1
 }: SuppliersClientProps) {
-  const router = useRouter();
   const searchParams = useSearchParams();
 
   const [sellers, setSellers] = useState<Seller[]>(initialSellers);
@@ -125,7 +124,7 @@ function SuppliersCatalogContent({
         if (activeSort) params.set('sort', activeSort);
         if (searchQuery.trim()) params.set('search', searchQuery.trim());
 
-        const res = await fetch(`/api/sellers?${params.toString()}`, { cache: 'no-store' });
+        const res = await fetch(`/api/sellers?${params.toString()}`);
         const data = await res.json();
 
         if (!isCancelled && data.success) {
@@ -236,7 +235,7 @@ function SuppliersCatalogContent({
               <span>Loading verified suppliers...</span>
             ) : (
               <span>
-                Showing <strong>{sellers.length > 0 ? (currentPage - 1) * 24 + 1 : 0}–{Math.min(currentPage * 24, total)}</strong> of <strong>{total.toLocaleString()}</strong> verified suppliers
+                Showing <strong>{sellers.length > 0 ? (currentPage - 1) * 24 + 1 : 0}–{Math.min(currentPage * 24, total)}</strong> of <strong>{total.toLocaleString('en-IN')}</strong> verified suppliers
               </span>
             )}
           </div>

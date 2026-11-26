@@ -94,20 +94,24 @@ function ProductsCatalogContent({
 
   // Load initial catalog metadata (categories, brands, fast cached facet counts)
   useEffect(() => {
-    // 1. Fetch categories
-    fetch('/api/categories?t=' + Date.now(), { cache: 'no-store' })
-      .then(r => r.json())
-      .then(d => { if (d.success && d.categories) setDbCategories(d.categories); })
-      .catch(e => console.warn('Categories load error:', e));
+    // 1. Categories & 2. brands already arrive with the server-rendered page; only fetch them
+    //    if the server could not provide them.
+    if (initialCategories.length === 0) {
+      fetch('/api/categories')
+        .then(r => r.json())
+        .then(d => { if (d.success && d.categories) setDbCategories(d.categories); })
+        .catch(e => console.warn('Categories load error:', e));
+    }
 
-    // 2. Fetch brands
-    fetch('/api/brands?t=' + Date.now(), { cache: 'no-store' })
-      .then(r => r.json())
-      .then(d => { if (d.success && d.brands) setDbBrands(d.brands); })
-      .catch(e => console.warn('Brands load error:', e));
+    if (initialBrands.length === 0) {
+      fetch('/api/brands')
+        .then(r => r.json())
+        .then(d => { if (d.success && d.brands) setDbBrands(d.brands); })
+        .catch(e => console.warn('Brands load error:', e));
+    }
 
-    // 3. Fetch facets (cached in-memory on server for instant response)
-    fetch('/api/products/facets?t=' + Date.now(), { cache: 'no-store' })
+    // 3. Fetch facets (cached on the server/CDN)
+    fetch('/api/products/facets')
       .then(r => r.json())
       .then(facetData => {
         if (facetData.success) {
@@ -167,7 +171,7 @@ function ProductsCatalogContent({
         if (sortOption && sortOption !== 'default') params.set('sort', sortOption);
         if (searchQuery.trim()) params.set('search', searchQuery.trim());
 
-        const res = await fetch(`/api/products?${params.toString()}`, { cache: 'no-store' });
+        const res = await fetch(`/api/products?${params.toString()}`);
         const data = await res.json();
         if (!isCancelled && data.success) {
           setProducts(data.products || []);

@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 import Categories from '@/components/Categories';
 import Brands from '@/components/Brands';
@@ -46,14 +45,12 @@ interface ProductDetails {
 }
 
 export default function ProductDetailsClient({ initialProduct }: { initialProduct: ProductDetails }) {
-  const router = useRouter();
   const { toggleWishlist, isInWishlist } = useCart();
 
   // Local state for product data
   const [product, setProduct] = useState<ProductDetails>(initialProduct);
   const isWishlisted = isInWishlist(product.id);
   const [activeImage, setActiveImage] = useState(initialProduct.image);
-  const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<'description' | 'info' | 'reviews'>('description');
   const [isEnquiryModalOpen, setIsEnquiryModalOpen] = useState(false);
 
@@ -177,7 +174,7 @@ export default function ProductDetailsClient({ initialProduct }: { initialProduc
         {/* Right Column: Info Details */}
         <div className={styles.infoSection}>
           <h1 className={styles.title}>{product.name}</h1>
-          <div className={styles.price}>₹{product.price.toLocaleString()}/-</div>
+          <div className={styles.price}>₹{product.price.toLocaleString('en-IN')}/-</div>
 
           {/* Rating */}
           <div className={styles.ratingRow}>

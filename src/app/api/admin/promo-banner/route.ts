@@ -1,3 +1,4 @@
+import { withRevalidate, PAGES_USING } from '@/lib/revalidatePages';
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/mongodb';
 import { logActivity } from '@/lib/activity';
@@ -46,7 +47,7 @@ export async function GET() {
   }
 }
 
-export async function POST(request: Request) {
+async function handlePOST(request: Request) {
   try {
     const body = await request.json();
     const { badgeText, title, description, buttonText, buttonLink, imageUrl, expiryDate, isActive } = body;
@@ -80,3 +81,5 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
+
+export const POST = withRevalidate(handlePOST, PAGES_USING.promoBanner);

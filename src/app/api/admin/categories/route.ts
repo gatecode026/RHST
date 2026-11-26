@@ -1,4 +1,4 @@
-import { withHomeRevalidate } from '@/lib/revalidateHome';
+import { withRevalidate, PAGES_USING } from '@/lib/revalidatePages';
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
@@ -150,8 +150,8 @@ async function handleDELETE(request: Request) {
   }
 }
 
-export const POST = withHomeRevalidate(handlePOST);
+export const POST = withRevalidate(handlePOST, PAGES_USING.categories);
 
-export const PUT = withHomeRevalidate(handlePUT);
+export const PUT = withRevalidate(handlePUT, PAGES_USING.categories);
 
-export const DELETE = withHomeRevalidate(handleDELETE);
+export const DELETE = withRevalidate(handleDELETE, PAGES_USING.categories);

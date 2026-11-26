@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { getDb } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 import { isNonItSlug } from '@/lib/nonItFilter';
@@ -308,6 +309,8 @@ export async function POST(
     try {
       const db = await getDb();
       await db.collection('reviews').insertOne(newReview);
+      // The product page is cached (ISR) - refresh it so the new review shows up on reload
+      revalidatePath(`/products/${id}`);
     } catch (dbErr) {
       console.warn('Failed to insert review in DB, returning mock success', dbErr);
     }

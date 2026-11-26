@@ -34,10 +34,13 @@ export async function POST(request: Request) {
       'bs-6': 'Wireless Headphones'
     };
 
+    // Items that exist in the database - remembered here so we don't have to look them up again below
+    const itemsToDecrement: Array<{ query: any; qty: number }> = [];
+
     for (const item of items) {
       let query: any = {};
       const isObjectId = typeof item.id === 'string' && item.id.match(/^[0-9a-fA-F]{24}$/);
-      
+
       const bsName = typeof item.id === 'string' && item.id.startsWith('bs-') ? bsLookup[item.id] : null;
 
       if (isObjectId) {
@@ -48,8 +51,9 @@ export async function POST(request: Request) {
         query = { id: String(item.id) };
       }
 
-      const prod = await productsCollection.findOne(query);
+      const prod = await productsCollection.findOne(query, { projection: { stock: 1 } });
       if (prod) {
+        itemsToDecrement.push({ query, qty: item.qty });
         const currentStock = typeof prod.stock === 'number' ? prod.stock : parseInt(prod.stock || '0', 10);
         if (currentStock < item.qty) {
           return NextResponse.json(
@@ -70,24 +74,8 @@ export async function POST(request: Request) {
     }
 
     // 2. Decrement stock for items found in the database
-    for (const item of items) {
-      let query: any = {};
-      const isObjectId = typeof item.id === 'string' && item.id.match(/^[0-9a-fA-F]{24}$/);
-      
-      const bsName = typeof item.id === 'string' && item.id.startsWith('bs-') ? bsLookup[item.id] : null;
-
-      if (isObjectId) {
-        query = { _id: new ObjectId(item.id) };
-      } else if (bsName) {
-        query = { name: bsName };
-      } else {
-        query = { id: String(item.id) };
-      }
-
-      const exists = await productsCollection.countDocuments(query);
-      if (exists > 0) {
-        await productsCollection.updateOne(query, { $inc: { stock: -item.qty } });
-      }
+    for (const { query, qty } of itemsToDecrement) {
+      await productsCollection.updateOne(query, { $inc: { stock: -qty } });
     }
 
     const orderId = 'ORD-' + Date.now().toString().substring(6) + '-' + Math.floor(1000 + Math.random() * 9000);

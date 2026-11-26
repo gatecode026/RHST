@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { cache } from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Header from '@/components/Header';
@@ -17,10 +17,9 @@ interface PageProps {
   params: Promise<{ id: string }>;
 }
 
-// Dynamic route metadata query
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { id } = await params;
-  const canonicalPath = `/blog/${id}`;
+// One shared lookup for generateMetadata() and the page (cache() dedupes it per request; it used to run twice).
+// Returns null on any database error, which both callers already handle.
+const getBlogById = cache(async (id: string) => {
   try {
     const db = await getDb();
     const collection = db.collection('blogs');
@@ -32,18 +31,26 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       query = { id: id };
     }
 
-    const blog = await collection.findOne(query);
-    if (blog) {
-      return {
-        title: `${blog.title} | VALNQIX Blog`,
-        description: blog.excerpt || `Read the latest blog post "${blog.title}" on VALNQIX E-commerce & IT Solutions.`,
-        alternates: {
-          canonical: getCanonicalUrl(canonicalPath),
-        },
-      };
-    }
+    return await collection.findOne(query);
   } catch (error) {
-    console.error("Error generating metadata:", error);
+    console.error("Error loading blog from database:", error);
+    return null;
+  }
+});
+
+// Dynamic route metadata query
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { id } = await params;
+  const canonicalPath = `/blog/${id}`;
+  const blog = await getBlogById(id);
+  if (blog) {
+    return {
+      title: `${blog.title} | VALNQIX Blog`,
+      description: blog.excerpt || `Read the latest blog post "${blog.title}" on VALNQIX E-commerce & IT Solutions.`,
+      alternates: {
+        canonical: getCanonicalUrl(canonicalPath),
+      },
+    };
   }
   return {
     title: 'Blog Post | VALNQIX Blog',
@@ -58,33 +65,27 @@ export default async function BlogDetailPage({ params }: PageProps) {
   // Await the dynamic params as required by Next.js 15+
   const { id } = await params;
 
-  let blog: any = null;
+  const blog: any = await getBlogById(id);
   let prevPost: any = null;
   let nextPost: any = null;
 
-  try {
-    const db = await getDb();
-    const collection = db.collection('blogs');
-
-    let query: any = {};
-    if (ObjectId.isValid(id)) {
-      query = { $or: [{ _id: new ObjectId(id) }, { id: id }] };
-    } else {
-      query = { id: id };
-    }
-
-    blog = await collection.findOne(query);
-
-    if (blog) {
-      // Find previous and next posts from published list to build dynamic navigation
-      const allBlogs = await collection.find({ status: 'Published' }).sort({ sortOrder: 1, createdAt: -1 }).toArray();
+  if (blog) {
+    try {
+      const db = await getDb();
+      // Find previous and next posts from the published list to build navigation.
+      // Only the title is needed (plus _id, always returned) - not every article's full content.
+      const allBlogs = await db
+        .collection('blogs')
+        .find({ status: 'Published' }, { projection: { title: 1 } })
+        .sort({ sortOrder: 1, createdAt: -1 })
+        .toArray();
       const currentIndex = allBlogs.findIndex(b => b._id.toString() === blog._id.toString());
-      
+
       prevPost = currentIndex > 0 ? allBlogs[currentIndex - 1] : null;
       nextPost = currentIndex < allBlogs.length - 1 ? allBlogs[currentIndex + 1] : null;
+    } catch (error) {
+      console.error("Error loading blog navigation from database:", error);
     }
-  } catch (error) {
-    console.error("Error loading blog details from database:", error);
   }
 
   // Not found handler

@@ -43,19 +43,13 @@ export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
   const {
-    cartItems,
     addToCart,
-    removeFromCart,
-    updateQty,
-    clearCart,
     logoutCleanup,
     isCartOpen,
-    setIsCartOpen,
     isWishlistOpen,
     setIsWishlistOpen,
     isSearchOpen,
     setIsSearchOpen,
-    subtotal,
     wishlistItems,
     removeFromWishlist
   } = useCart();
@@ -88,7 +82,7 @@ export default function Header() {
   useEffect(() => {
     const fetchDbCategories = async () => {
       try {
-        const res = await fetch('/api/categories?t=' + Date.now(), { cache: 'no-store' });
+        const res = await fetch('/api/categories');
         const data = await res.json();
         if (data.success && data.categories) {
           setDbCategories(data.categories);
@@ -105,7 +99,7 @@ export default function Header() {
     if (isSearchOpen) {
       const fetchDbProducts = async () => {
         try {
-          const res = await fetch('/api/products?limit=10', { cache: 'no-store' });
+          const res = await fetch('/api/products?limit=10');
           const data = await res.json();
           if (data.success && data.products) {
             setDbProducts(data.products);
@@ -135,58 +129,6 @@ export default function Header() {
 
   const [signInEmail, setSignInEmail] = useState('');
   const [signInPassword, setSignInPassword] = useState('');
-
-  // Checkout local states
-  const [checkoutStatus, setCheckoutStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const [orderId, setOrderId] = useState('');
-
-  // Revamped checkout fields
-  const [step, setStep] = useState<'cart' | 'details'>('cart');
-  const [customerName, setCustomerName] = useState('');
-  const [customerEmail, setCustomerEmail] = useState('');
-  const [customerPhone, setCustomerPhone] = useState('');
-  const [customerAddress, setCustomerAddress] = useState('');
-  const [couponInput, setCouponInput] = useState('');
-  const [couponError, setCouponError] = useState('');
-  const [appliedCoupon, setAppliedCoupon] = useState<{ code: string; discount: number; type: string } | null>(null);
-
-  const handleApplyCoupon = async () => {
-    if (!couponInput.trim()) return;
-    setCouponError('');
-    try {
-      const res = await fetch(`/api/coupons?code=${encodeURIComponent(couponInput.trim())}&subtotal=${subtotal}`);
-      const data = await res.json();
-      if (data.success && data.coupon) {
-        setAppliedCoupon(data.coupon);
-        setCouponError('');
-      } else {
-        setCouponError(data.error || 'Coupon code invalid.');
-        setAppliedCoupon(null);
-      }
-    } catch (e) {
-      setCouponError('Error validating coupon.');
-      setAppliedCoupon(null);
-    }
-  };
-
-  const getDiscountedSubtotal = () => {
-    if (!appliedCoupon) return subtotal;
-    if (appliedCoupon.type === 'percentage') {
-      const discount = (subtotal * appliedCoupon.discount) / 100;
-      return Math.max(0, subtotal - discount);
-    } else {
-      return Math.max(0, subtotal - appliedCoupon.discount);
-    }
-  };
-
-  const getDiscountAmount = () => {
-    if (!appliedCoupon) return 0;
-    if (appliedCoupon.type === 'percentage') {
-      return (subtotal * appliedCoupon.discount) / 100;
-    } else {
-      return appliedCoupon.discount;
-    }
-  };
 
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -231,15 +173,6 @@ export default function Header() {
       window.removeEventListener('focus', syncUser);
     };
   }, []);
-
-  // Sync drawer checkout fields if logged in
-  useEffect(() => {
-    if (currentUser) {
-      setCustomerName(prev => prev || currentUser.name);
-      setCustomerEmail(prev => prev || currentUser.email);
-      setCustomerPhone(prev => prev || currentUser.phone);
-    }
-  }, [currentUser]);
 
   // Lock body scroll when any overlay/drawer is open to prevent background scrolling/bleeding
   useEffect(() => {
@@ -310,61 +243,6 @@ export default function Header() {
     const query = e.target.value;
     setSearchQuery(query);
     executeSearch(query);
-  };
-
-  const handleCheckout = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (cartItems.length === 0) return;
-    if (!customerName || !customerEmail || !customerPhone || !customerAddress) {
-      alert('Please fill out all delivery fields.');
-      return;
-    }
-    setCheckoutStatus('loading');
-
-    try {
-      const res = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          items: cartItems,
-          subtotal: getDiscountedSubtotal(),
-          customer: {
-            name: customerName,
-            email: customerEmail,
-            phone: customerPhone,
-            address: customerAddress
-          },
-          couponCode: appliedCoupon?.code || null,
-          discountApplied: getDiscountAmount()
-        })
-      });
-
-      const data = await res.json();
-      if (data.success) {
-        setCheckoutStatus('success');
-        setOrderId(data.orderId);
-        clearCart();
-        // Reset states
-        setCustomerName('');
-        setCustomerEmail('');
-        setCustomerPhone('');
-        setCustomerAddress('');
-        setCouponInput('');
-        setAppliedCoupon(null);
-        setStep('cart');
-        setTimeout(() => {
-          setCheckoutStatus('idle');
-          setIsCartOpen(false);
-        }, 6000);
-      } else {
-        setCheckoutStatus('error');
-      }
-    } catch (err) {
-      console.error('Checkout error:', err);
-      setCheckoutStatus('error');
-    }
   };
 
   const handleSignUpSubmit = async (e: React.FormEvent) => {
@@ -471,8 +349,6 @@ export default function Header() {
       }, 100);
     }
   };
-
-  const totalCartCount = cartItems.reduce((acc, item) => acc + item.qty, 0);
 
   return (
     <>
@@ -959,7 +835,7 @@ export default function Header() {
                     </Link>
                   </h4>
                   <p style={{ fontSize: '14px', color: 'var(--primary)', fontWeight: 600, margin: '0 0 8px 0' }}>
-                    ₹{item.price.toLocaleString()}
+                    ₹{item.price.toLocaleString('en-IN')}
                   </p>
                   <Link
                     href={`/products/${item.slug || item.id}`}
@@ -1078,7 +954,7 @@ export default function Header() {
                         <img src={prod.image} alt={prod.name} width={45} height={45} loading="lazy" decoding="async" style={{ width: '45px', height: '45px', objectFit: 'contain', borderRadius: '4px', border: '1px solid #eee' }} />
                         <div>
                           <div style={{ fontSize: '15px', color: '#333', fontWeight: 500 }}>{prod.name}</div>
-                          <div style={{ fontSize: '14px', color: 'var(--primary)', fontWeight: 600 }}>₹{prod.price.toLocaleString()}</div>
+                          <div style={{ fontSize: '14px', color: 'var(--primary)', fontWeight: 600 }}>₹{prod.price.toLocaleString('en-IN')}</div>
                         </div>
                       </Link>
                       <button

@@ -8,17 +8,7 @@ import { useCart } from '@/context/CartContext';
 import styles from './Wishlist.module.css';
 
 export default function WishlistClient() {
-  const { wishlistItems, removeFromWishlist, addToCart } = useCart();
-
-  const handleAddToCart = (item: any) => {
-    addToCart({
-      id: item.id,
-      name: item.name,
-      price: item.price,
-      image: item.image,
-      stock: item.stock
-    });
-  };
+  const { wishlistItems, removeFromWishlist } = useCart();
 
   // Restore scroll position on wishlist page mount
   React.useEffect(() => {
@@ -150,7 +140,7 @@ export default function WishlistClient() {
                       {/* Price Column */}
                       <td>
                         <span className={styles.productPrice}>
-                          ₹{item.price.toLocaleString()}/-
+                          ₹{item.price.toLocaleString('en-IN')}/-
                         </span>
                       </td>
 

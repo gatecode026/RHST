@@ -616,9 +616,9 @@ export default function ProfileClient() {
                             <img src={item.image || '/images/default_product.png'} alt={item.name} className={styles.orderItemImg} />
                             <div className={styles.orderItemMeta}>
                               <h5>{item.name}</h5>
-                              <p>Qty: {item.qty} × ₹{item.price.toLocaleString()}</p>
+                              <p>Qty: {item.qty} × ₹{item.price.toLocaleString('en-IN')}</p>
                             </div>
-                            <span className={styles.orderItemTotal}>₹{(item.price * item.qty).toLocaleString()}</span>
+                            <span className={styles.orderItemTotal}>₹{(item.price * item.qty).toLocaleString('en-IN')}</span>
                           </div>
                         ))}
                       </div>

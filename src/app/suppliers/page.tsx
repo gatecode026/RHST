@@ -5,6 +5,10 @@ import { getCanonicalUrl } from '@/lib/seo';
 import { getInitialSuppliersData } from '@/lib/serverData';
 import { getBreadcrumbSchema } from '@/lib/schema';
 
+// Cached page, regenerated in the background at most every 10 minutes (admin edits refresh it immediately).
+// Previously it was frozen at build time, so changes only showed up after a redeploy.
+export const revalidate = 600;
+
 export const metadata: Metadata = {
   title: 'Verified Suppliers & Manufacturers Across India | VALNQIX Directory',
   description: 'Connect directly with verified IT hardware distributors, manufacturers, and wholesalers with GST verification and lowest wholesale price quotes.',

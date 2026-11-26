@@ -1,3 +1,4 @@
+import { withRevalidate, PAGES_USING } from '@/lib/revalidatePages';
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
@@ -22,7 +23,7 @@ export async function GET() {
   }
 }
 
-export async function POST(request: Request) {
+async function handlePOST(request: Request) {
   try {
     const body = await request.json();
     const { name, slug, description, image } = body;
@@ -57,7 +58,7 @@ export async function POST(request: Request) {
   }
 }
 
-export async function PUT(request: Request) {
+async function handlePUT(request: Request) {
   try {
     const body = await request.json();
     const { id, name, slug, description, image, status } = body;
@@ -104,7 +105,7 @@ export async function PUT(request: Request) {
   }
 }
 
-export async function DELETE(request: Request) {
+async function handleDELETE(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
@@ -132,3 +133,9 @@ export async function DELETE(request: Request) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
+
+export const POST = withRevalidate(handlePOST, PAGES_USING.brands);
+
+export const PUT = withRevalidate(handlePUT, PAGES_USING.brands);
+
+export const DELETE = withRevalidate(handleDELETE, PAGES_USING.brands);

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/mongodb';
+import { PUBLIC_API_CACHE_HEADERS } from '@/lib/cacheHeaders';
 
 export const dynamic = 'force-dynamic';
 
@@ -116,12 +117,23 @@ export async function GET() {
     const db = await getDb();
     const collection = db.collection('blogs');
 
-    const count = await collection.countDocuments();
-    if (count === 0) {
-      await collection.insertMany(DEFAULT_BLOGS);
-    }
+    // List cards only need these fields - skip the (large) article body blocks
+    const listBlogs = () =>
+      collection
+        .find({ status: 'Published' }, {
+          projection: { tag: 1, title: 1, excerpt: 1, image: 1, category: 1, tags: 1, authorName: 1, createdAt: 1 }
+        })
+        .sort({ sortOrder: 1, createdAt: -1 })
+        .toArray();
 
-    const blogs = await collection.find({ status: 'Published' }).sort({ sortOrder: 1, createdAt: -1 }).toArray();
+    let blogs = await listBlogs();
+
+    // Auto-seed the defaults only when the collection is completely empty.
+    // Checked only when nothing was found, instead of running a count on every request.
+    if (blogs.length === 0 && (await collection.countDocuments()) === 0) {
+      await collection.insertMany(DEFAULT_BLOGS);
+      blogs = await listBlogs();
+    }
     const formatted = blogs.map(doc => ({
       id: doc._id.toString(),
       tag: doc.tag || 'Laptops & Computers',
@@ -135,7 +147,7 @@ export async function GET() {
       createdAt: doc.createdAt
     }));
 
-    return NextResponse.json({ success: true, blogs: formatted });
+    return NextResponse.json({ success: true, blogs: formatted }, { headers: PUBLIC_API_CACHE_HEADERS });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }

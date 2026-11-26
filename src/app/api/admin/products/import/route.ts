@@ -1,4 +1,4 @@
-import { withHomeRevalidate } from '@/lib/revalidateHome';
+import { withRevalidate, PAGES_USING } from '@/lib/revalidatePages';
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/mongodb';
 import { logActivity } from '@/lib/activity';
@@ -365,4 +365,4 @@ async function handlePOST(request: Request) {
   }
 }
 
-export const POST = withHomeRevalidate(handlePOST);
+export const POST = withRevalidate(handlePOST, PAGES_USING.products);

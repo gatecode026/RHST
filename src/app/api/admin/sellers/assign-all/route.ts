@@ -1,10 +1,11 @@
+import { withRevalidate, PAGES_USING } from '@/lib/revalidatePages';
 import { NextResponse } from 'next/server';
 import { assignSellersToProducts } from '@/lib/sellers';
 import { logActivity } from '@/lib/activity';
 
 export const dynamic = 'force-dynamic';
 
-export async function POST(request: Request) {
+async function handlePOST(request: Request) {
   try {
     let body: any = {};
     try {
@@ -37,3 +38,5 @@ export async function POST(request: Request) {
   }
 }
 
+
+export const POST = withRevalidate(handlePOST, PAGES_USING.productSellers);

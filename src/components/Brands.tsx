@@ -10,14 +10,17 @@ interface Brand {
   status: string;
 }
 
-export default function Brands() {
-  const [brands, setBrands] = useState<Brand[]>([]);
-  const [loading, setLoading] = useState(true);
+export default function Brands({ initialBrands }: { initialBrands?: Brand[] }) {
+  // When the server already provided the (visible) brands we render immediately and skip the client request
+  const hasInitial = initialBrands !== undefined;
+  const [brands, setBrands] = useState<Brand[]>(hasInitial ? initialBrands : []);
+  const [loading, setLoading] = useState(!hasInitial);
 
   useEffect(() => {
+    if (hasInitial) return;
     const fetchBrands = async () => {
       try {
-        const res = await fetch('/api/brands?t=' + Date.now(), { cache: 'no-store' });
+        const res = await fetch('/api/brands');
         const data = await res.json();
         if (data.success) {
           // Filter to only visible brands
@@ -31,7 +34,7 @@ export default function Brands() {
       }
     };
     fetchBrands();
-  }, []);
+  }, [hasInitial]);
 
   if (loading) {
     return (

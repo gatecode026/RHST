@@ -74,7 +74,7 @@ export default function EnquiryModal({ isOpen, onClose, product }: EnquiryModalP
   const sellerName = product.sellerName || 'Apex Tech Systems Pvt Ltd';
   const sellerLocation = product.sellerLocation || 'Jaipur, Rajasthan';
   const displayPrice = typeof product.price === 'number'
-    ? `₹${product.price.toLocaleString()}`
+    ? `₹${product.price.toLocaleString('en-IN')}`
     : product.price || 'Price on Request';
 
   const handleSubmit = async (e: React.FormEvent) => {

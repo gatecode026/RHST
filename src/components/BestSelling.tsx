@@ -35,7 +35,7 @@ export default function BestSelling({ initialProducts = [] }: { initialProducts?
     if (initialProducts.length > 0) return;
     const fetchProducts = async () => {
       try {
-        const res = await fetch('/api/products?banner=true&limit=8', { cache: 'no-store' });
+        const res = await fetch('/api/products?banner=true&limit=8');
         const data = await res.json();
         if (data.success && Array.isArray(data.products)) {
           const seen = new Set<string>();

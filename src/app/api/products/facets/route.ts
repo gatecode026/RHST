@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/mongodb';
+import { PUBLIC_API_CACHE_HEADERS } from '@/lib/cacheHeaders';
 
 export const dynamic = 'force-dynamic';
 
@@ -10,7 +11,7 @@ const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes cache
 export async function GET() {
   try {
     if (cachedFacetsResponse && Date.now() - lastCacheTime < CACHE_TTL_MS) {
-      return NextResponse.json(cachedFacetsResponse);
+      return NextResponse.json(cachedFacetsResponse, { headers: PUBLIC_API_CACHE_HEADERS });
     }
 
     const db = await getDb();
@@ -83,10 +84,10 @@ export async function GET() {
     cachedFacetsResponse = responseData;
     lastCacheTime = Date.now();
 
-    return NextResponse.json(responseData);
+    return NextResponse.json(responseData, { headers: PUBLIC_API_CACHE_HEADERS });
   } catch (error: any) {
     if (cachedFacetsResponse) {
-      return NextResponse.json(cachedFacetsResponse);
+      return NextResponse.json(cachedFacetsResponse, { headers: PUBLIC_API_CACHE_HEADERS });
     }
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }

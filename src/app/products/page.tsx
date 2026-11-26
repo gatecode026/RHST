@@ -7,6 +7,10 @@ import { getCanonicalUrl } from '@/lib/seo';
 import { getInitialProductsData } from '@/lib/serverData';
 import { getBreadcrumbSchema } from '@/lib/schema';
 
+// Cached page, regenerated in the background at most every 10 minutes (admin edits refresh it immediately).
+// Previously it was frozen at build time, so changes only showed up after a redeploy.
+export const revalidate = 600;
+
 export const metadata: Metadata = {
   title: 'Products Catalog | VALNQIX E-commerce & IT Solutions',
   description: 'Browse thousands of verified IT hardware products, components, computers, networking equipment, and accessories on VALNQIX.',
