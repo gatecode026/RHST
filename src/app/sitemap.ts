@@ -139,11 +139,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   try {
     // Connect with a 6-second timeout guard to prevent build/crawler hangs
-    const dbPromise = getDb();
-    const timeoutPromise = new Promise((_, reject) =>
-      setTimeout(() => reject(new Error('Sitemap DB connection timed out')), 6000)
-    );
-    const db = (await Promise.race([dbPromise, timeoutPromise])) as any;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      timer = setTimeout(() => reject(new Error('Sitemap DB connection timed out')), 6000);
+    });
+    let db: any;
+    try {
+      db = await Promise.race([getDb(), timeoutPromise]);
+    } finally {
+      clearTimeout(timer); // don't leave the timer pending after the DB has answered
+    }
 
     // 2. Dynamic Categories
     let categoryRoutes: MetadataRoute.Sitemap = [];

@@ -280,11 +280,15 @@ export const FALLBACK_SSR_SELLERS = [
 
 // Server function with timeout protection
 async function getDbWithTimeout(timeoutMs = 4000) {
-  const dbPromise = getDb();
-  const timeoutPromise = new Promise((_, reject) =>
-    setTimeout(() => reject(new Error('DB connection timed out for SSR')), timeoutMs)
-  );
-  return (await Promise.race([dbPromise, timeoutPromise])) as any;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    timer = setTimeout(() => reject(new Error('DB connection timed out for SSR')), timeoutMs);
+  });
+  try {
+    return (await Promise.race([getDb(), timeoutPromise])) as any;
+  } finally {
+    clearTimeout(timer); // don't leave the timer pending after the DB has answered
+  }
 }
 
 /**
