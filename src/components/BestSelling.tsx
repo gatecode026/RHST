@@ -114,7 +114,7 @@ export default function BestSelling({ initialProducts = [] }: { initialProducts?
                   key={prod.id} 
                   className={styles.card}
                 >
-                  <Link 
+                  <Link prefetch={false} 
                     href={`/products/${prod.slug || prod.id}`} 
                     className={styles.imageWrapper}
                     onClick={() => {
@@ -137,7 +137,7 @@ export default function BestSelling({ initialProducts = [] }: { initialProducts?
                   </Link>
 
                   <div className={styles.info}>
-                    <Link 
+                    <Link prefetch={false} 
                       href={`/products/${prod.slug || prod.id}`}
                       style={{ textDecoration: 'none', color: 'inherit' }}
                     >

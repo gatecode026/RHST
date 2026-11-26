@@ -117,11 +117,17 @@ export async function GET(
       }
       let dbProduct = await db.collection('products').findOne(query);
 
-      // Robust fallback matching by generated slug in memory
+      // Fallback: match legacy products that have NO stored slug by their name-generated slug.
+      // Products that have a slug were already matched by the query above, so only slug-less
+      // ones can match here. Previously this loaded EVERY product document (~14.5k, 8-9 s per
+      // unknown URL on a public endpoint); now only the (normally zero) slug-less products load.
       if (!dbProduct && !isObjectId && !bsName) {
-        const allDbProducts = await db.collection('products').find().toArray();
-        const matched = allDbProducts.find(p => {
-          const genSlug = p.slug || p.name.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-');
+        const slugless = await db
+          .collection('products')
+          .find({ $or: [{ slug: { $exists: false } }, { slug: null }, { slug: '' }] })
+          .toArray();
+        const matched = slugless.find(p => {
+          const genSlug = (p.name || '').toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-');
           return genSlug === id.toLowerCase();
         });
         dbProduct = matched || null;
@@ -244,7 +250,11 @@ export async function GET(
           }
         );
       }
-      return NextResponse.json({ success: false, error: 'Product not found' }, { status: 404 });
+      // Short shared cache so repeated probes of the same unknown URL don't each hit the database
+      return NextResponse.json(
+        { success: false, error: 'Product not found' },
+        { status: 404, headers: { 'Cache-Control': 'public, s-maxage=60' } }
+      );
     }
 
     // Fetch dynamic reviews from database if available

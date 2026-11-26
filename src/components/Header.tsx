@@ -131,6 +131,9 @@ export default function Header() {
   const [signInPassword, setSignInPassword] = useState('');
 
   const searchInputRef = useRef<HTMLInputElement>(null);
+  // Live-search request control: debounce typing and cancel superseded in-flight requests
+  const searchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const searchAbortRef = useRef<AbortController | null>(null);
 
   // Overlays are only mounted once first opened (keeps initial DOM / hydration small)
   const mobileMenuOverlay = useDeferredMount(isMobileMenuOpen);
@@ -195,6 +198,8 @@ export default function Header() {
         }, 50);
       }
     } else {
+      if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current);
+      searchAbortRef.current?.abort();
       setSearchQuery('');
       setSearchResults([]);
     }
@@ -212,12 +217,16 @@ export default function Header() {
   };
 
   const executeSearch = async (query: string) => {
+    // A newer search supersedes any request still in flight
+    searchAbortRef.current?.abort();
     if (query.trim() === '') {
       setSearchResults([]);
       return;
     }
+    const controller = new AbortController();
+    searchAbortRef.current = controller;
     try {
-      const res = await fetch(`/api/products?search=${encodeURIComponent(query.trim())}&limit=8`);
+      const res = await fetch(`/api/products?search=${encodeURIComponent(query.trim())}&limit=8`, { signal: controller.signal });
       const data = await res.json();
       if (data.success && data.products) {
         const formatted = data.products.map((p: any) => ({
@@ -230,7 +239,9 @@ export default function Header() {
         }));
         setSearchResults(formatted);
       }
-    } catch {
+    } catch (err) {
+      // Cancelled because a newer search started - not a failure, keep the newer search's results
+      if ((err as { name?: string })?.name === 'AbortError') return;
       const pool = getSearchableProducts();
       const filtered = pool.filter(p =>
         p.name.toLowerCase().includes(query.toLowerCase())
@@ -242,7 +253,13 @@ export default function Header() {
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
     setSearchQuery(query);
-    executeSearch(query);
+    if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current);
+    if (query.trim() === '') {
+      executeSearch(query); // clearing the box is immediate
+      return;
+    }
+    // Wait for a pause in typing instead of one API request per keystroke
+    searchDebounceRef.current = setTimeout(() => executeSearch(query), 300);
   };
 
   const handleSignUpSubmit = async (e: React.FormEvent) => {
@@ -403,8 +420,9 @@ export default function Header() {
                     const subs = getSubcategories(mainCat);
                     return (
                       <div key={mainCat} className={styles.nestedDropdown}>
-                        <Link 
-                          href={`/products?category=${encodeURIComponent(mainCat)}`} 
+                        <Link
+                          prefetch={false}
+                          href={`/products?category=${encodeURIComponent(mainCat)}`}
                           className={styles.nestedDropdownBtn}
                         >
                           {mainCat} <span className={styles.rightChevron}>▸</span>
@@ -412,7 +430,7 @@ export default function Header() {
                         {subs.length > 0 && (
                           <div className={styles.nestedDropdownContent}>
                             {subs.map((sub) => (
-                              <Link key={sub.name} href={sub.link}>
+                              <Link key={sub.name} prefetch={false} href={sub.link}>
                                 {sub.name}
                               </Link>
                             ))}
@@ -439,13 +457,13 @@ export default function Header() {
                   >
                     🏢 All 1,000+ Verified Suppliers →
                   </Link>
-                  <Link href="/suppliers?category=Laptops%20%26%20Computers">Laptops & Computers Suppliers</Link>
-                  <Link href="/suppliers?category=Electronics">Electronics & IT Hardware</Link>
-                  <Link href="/suppliers?category=Television">Commercial Displays & Televisions</Link>
-                  <Link href="/suppliers?category=Speaker%27s">Audio & Sound Systems</Link>
-                  <Link href="/suppliers?category=Camera">Camera & Surveillance Equipment</Link>
-                  <Link href="/suppliers?category=Storage%20Devices">Storage Devices & Networking</Link>
-                  <Link href="/suppliers?category=Keyboard%20%26%20Mouse">Keyboard, Mouse & Peripherals</Link>
+                  <Link prefetch={false} href="/suppliers?category=Laptops%20%26%20Computers">Laptops & Computers Suppliers</Link>
+                  <Link prefetch={false} href="/suppliers?category=Electronics">Electronics & IT Hardware</Link>
+                  <Link prefetch={false} href="/suppliers?category=Television">Commercial Displays & Televisions</Link>
+                  <Link prefetch={false} href="/suppliers?category=Speaker%27s">Audio & Sound Systems</Link>
+                  <Link prefetch={false} href="/suppliers?category=Camera">Camera & Surveillance Equipment</Link>
+                  <Link prefetch={false} href="/suppliers?category=Storage%20Devices">Storage Devices & Networking</Link>
+                  <Link prefetch={false} href="/suppliers?category=Keyboard%20%26%20Mouse">Keyboard, Mouse & Peripherals</Link>
                 </div>
               </div>
               <div className={styles.dropdown}>
@@ -680,12 +698,12 @@ export default function Header() {
             </Link>
             <div className={styles.mobileSubLinks}>
               <Link href="/suppliers" onClick={() => setIsMobileMenuOpen(false)} style={{ color: "#16a34a", fontWeight: 600 }}>All Verified Suppliers →</Link>
-              <Link href="/suppliers?category=Laptops%20%26%20Computers" onClick={() => setIsMobileMenuOpen(false)}>Laptops & Computers</Link>
-              <Link href="/suppliers?category=Electronics" onClick={() => setIsMobileMenuOpen(false)}>Electronics & IT Hardware</Link>
-              <Link href="/suppliers?category=Television" onClick={() => setIsMobileMenuOpen(false)}>Televisions & Displays</Link>
-              <Link href="/suppliers?category=Speaker%27s" onClick={() => setIsMobileMenuOpen(false)}>Audio & Speakers</Link>
-              <Link href="/suppliers?category=Camera" onClick={() => setIsMobileMenuOpen(false)}>Camera & Optics</Link>
-              <Link href="/suppliers?category=Storage%20Devices" onClick={() => setIsMobileMenuOpen(false)}>Storage Devices</Link>
+              <Link prefetch={false} href="/suppliers?category=Laptops%20%26%20Computers" onClick={() => setIsMobileMenuOpen(false)}>Laptops & Computers</Link>
+              <Link prefetch={false} href="/suppliers?category=Electronics" onClick={() => setIsMobileMenuOpen(false)}>Electronics & IT Hardware</Link>
+              <Link prefetch={false} href="/suppliers?category=Television" onClick={() => setIsMobileMenuOpen(false)}>Televisions & Displays</Link>
+              <Link prefetch={false} href="/suppliers?category=Speaker%27s" onClick={() => setIsMobileMenuOpen(false)}>Audio & Speakers</Link>
+              <Link prefetch={false} href="/suppliers?category=Camera" onClick={() => setIsMobileMenuOpen(false)}>Camera & Optics</Link>
+              <Link prefetch={false} href="/suppliers?category=Storage%20Devices" onClick={() => setIsMobileMenuOpen(false)}>Storage Devices</Link>
             </div>
           </div>
 

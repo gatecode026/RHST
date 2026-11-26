@@ -1,4 +1,4 @@
-import { withRevalidate, PAGES_USING } from '@/lib/revalidatePages';
+import { withRevalidate, PAGES_USING, revalidateProductPages } from '@/lib/revalidatePages';
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
@@ -214,6 +214,7 @@ async function handlePOST(request: Request) {
     const result = await db.collection('products').insertOne(newProduct);
 
     await logActivity('Created Product', `Name: "${name}" (SKU: ${newProduct.sku})`);
+    revalidateProductPages(calculatedSlug, result.insertedId.toString());
 
     return NextResponse.json({
       success: true,
@@ -312,6 +313,7 @@ async function handlePUT(request: Request) {
     }
 
     await logActivity('Updated Product', `Name: "${name}" (SKU: ${updateData.sku})`);
+    revalidateProductPages(calculatedSlug, id);
 
     return NextResponse.json({
       success: true,
@@ -348,6 +350,7 @@ async function handleDELETE(request: Request) {
 
     await collection.deleteOne({ _id: new ObjectId(id) });
     await logActivity('Deleted Product', `Name: "${product.name}" (SKU: ${product.sku || 'N/A'})`);
+    revalidateProductPages(product.slug, id);
 
     return NextResponse.json({ success: true });
   } catch (error: any) {

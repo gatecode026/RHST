@@ -327,7 +327,7 @@ export default async function BlogDetailPage({ params }: PageProps) {
               {/* Prev / Next Article navigation links */}
               <div className={styles.articleNav}>
                 {prevPost ? (
-                  <Link href={`/blog/${prevPost._id.toString()}`} className={styles.navLink}>
+                  <Link prefetch={false} href={`/blog/${prevPost._id.toString()}`} className={styles.navLink}>
                     <span className={styles.navLinkText}>← Previous Post</span>
                     <span className={styles.navLinkTitle}>{prevPost.title}</span>
                   </Link>
@@ -335,7 +335,7 @@ export default async function BlogDetailPage({ params }: PageProps) {
                   <div style={{ flex: 1 }} />
                 )}
                 {nextPost ? (
-                  <Link href={`/blog/${nextPost._id.toString()}`} className={`${styles.navLink} ${styles.navLinkRight}`}>
+                  <Link prefetch={false} href={`/blog/${nextPost._id.toString()}`} className={`${styles.navLink} ${styles.navLinkRight}`}>
                     <span className={styles.navLinkText}>Next Post →</span>
                     <span className={styles.navLinkTitle}>{nextPost.title}</span>
                   </Link>

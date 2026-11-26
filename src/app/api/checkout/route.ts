@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/mongodb';
+import { revalidateProductPages } from '@/lib/revalidatePages';
 import { ObjectId } from 'mongodb';
 
 export async function POST(request: Request) {
@@ -35,7 +36,7 @@ export async function POST(request: Request) {
     };
 
     // Items that exist in the database - remembered here so we don't have to look them up again below
-    const itemsToDecrement: Array<{ query: any; qty: number }> = [];
+    const itemsToDecrement: Array<{ query: any; qty: number; slug?: string; id: string }> = [];
 
     for (const item of items) {
       let query: any = {};
@@ -51,9 +52,9 @@ export async function POST(request: Request) {
         query = { id: String(item.id) };
       }
 
-      const prod = await productsCollection.findOne(query, { projection: { stock: 1 } });
+      const prod = await productsCollection.findOne(query, { projection: { stock: 1, slug: 1 } });
       if (prod) {
-        itemsToDecrement.push({ query, qty: item.qty });
+        itemsToDecrement.push({ query, qty: item.qty, slug: prod.slug, id: String(item.id) });
         const currentStock = typeof prod.stock === 'number' ? prod.stock : parseInt(prod.stock || '0', 10);
         if (currentStock < item.qty) {
           return NextResponse.json(
@@ -76,6 +77,11 @@ export async function POST(request: Request) {
     // 2. Decrement stock for items found in the database
     for (const { query, qty } of itemsToDecrement) {
       await productsCollection.updateOne(query, { $inc: { stock: -qty } });
+    }
+
+    // Product pages are cached (ISR): refresh just the purchased products so their stock is not shown stale
+    for (const { slug, id } of itemsToDecrement) {
+      revalidateProductPages(slug, id);
     }
 
     const orderId = 'ORD-' + Date.now().toString().substring(6) + '-' + Math.floor(1000 + Math.random() * 9000);

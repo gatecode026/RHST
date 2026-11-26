@@ -112,7 +112,7 @@ export default function OurBlog({ className = '', initialBlogs = [] }: { classNa
               const blogUrl = post.link || `/blog/${post.id || post._id}`;
               return (
                 <div key={post.id || post._id} className={styles.card}>
-                  <Link href={blogUrl} style={{ display: 'block', width: '100%' }}>
+                  <Link prefetch={false} href={blogUrl} style={{ display: 'block', width: '100%' }}>
                     <div className={styles.imageWrapper}>
                       <img
                         src={getOptimizedBlogImage(post.image)}
@@ -139,7 +139,7 @@ export default function OurBlog({ className = '', initialBlogs = [] }: { classNa
                       textOverflow: 'ellipsis',
                       height: '52px'
                     }}>
-                      <Link href={blogUrl} style={{ color: 'inherit', textDecoration: 'none' }}>
+                      <Link prefetch={false} href={blogUrl} style={{ color: 'inherit', textDecoration: 'none' }}>
                         {post.title}
                       </Link>
                     </h3>
@@ -151,7 +151,7 @@ export default function OurBlog({ className = '', initialBlogs = [] }: { classNa
                       textOverflow: 'ellipsis',
                       height: '66px'
                     }}>{post.excerpt}</p>
-                    <Link href={blogUrl} className={styles.readMore}>
+                    <Link prefetch={false} href={blogUrl} className={styles.readMore}>
                       Read More
                     </Link>
                   </div>
